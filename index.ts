@@ -3,13 +3,13 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import express,{ Request, Response } from 'express';
-//const connectDb = require("./configs/dbConnection");
+const connectMongoDB = require("./src/configs/mongoDB");
 const errorHandler = require("./src/middlewares/errorHandler");
 const {corsOptions} = require("./src/configs/cors")
 const cors = require("cors");
 
 
-//connectDb();
+connectMongoDB();
 const app = express();
 
 const port = process.env.PORT || 6000;
