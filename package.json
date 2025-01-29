@@ -31,6 +31,7 @@
     "jwt-decode": "^4.0.0",
     "mongoose": "^8.9.5",
     "nanoid": "^5.0.9",
+    "nanoid-dictionary": "^4.3.0",
     "node-localstorage": "^3.0.5",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0"
