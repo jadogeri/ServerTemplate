@@ -15,7 +15,7 @@ function isValidPassword(password: string) {
 
   function isValidUsername(username: string) {
     // Define the rules for a valid username
-    const regex = /^[a-zA-Z0-9_]{3,16}$/; // Must start with a letter, contain only letters, numbers, and underscores, and be between 3 and 16 characters long
+    const regex = /^[a-zA-Z][a-zA-Z0-9_]{3,16}$/; // Must start with a letter, contain only letters, numbers, and underscores, and be between 3 and 16 characters long
   
     // Test the username against the regex
     return regex.test(username); 

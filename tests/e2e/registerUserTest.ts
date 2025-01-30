@@ -5,6 +5,7 @@ const {BASE_URL}  = require("../constants")
 
 
 export const registerUserTest = () => {
+  
 
   test('registers user Tesing in isolation', async () => {
 
@@ -28,10 +29,7 @@ export const registerUserTest = () => {
 
     expect(res.statusCode).toEqual(201);
  
-  },30000)
-
-
-  
+  },30000)  
 }
 
 
