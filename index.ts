@@ -34,3 +34,4 @@ if (process.env.NODE_ENV !== 'test') {
     console.log(`Backend is running on http://localhost:${port}`)
   })
 }
+
