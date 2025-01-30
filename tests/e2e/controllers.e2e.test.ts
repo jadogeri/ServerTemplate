@@ -1,7 +1,8 @@
 import { LocalStorage } from "node-localstorage";
 import { registerUserTest } from "./registerUserTest";
-/*
+
 import { loginUserTest } from "./loginUserTest";
+/*
 import { currentUserTest } from "./currentUserTest";
 import { createContactTest } from "./createContactTest";
 import { getContactTest } from "./getContactTest";
@@ -18,10 +19,9 @@ import {deactivateUserTest } from "./deactivateUserTest";
 describe('testing user and contact api requests', () => {
   
     global.localStorage = new LocalStorage('./tests/storage');
-    registerUserTest();
-
-    /*
+   //registerUserTest();  
     loginUserTest();
+      /*
     currentUserTest()
     createContactTest()
     getContactTest();

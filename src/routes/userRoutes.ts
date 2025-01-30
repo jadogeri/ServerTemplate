@@ -4,7 +4,7 @@ const express = require("express");
 const { registerUser, loginUser, logoutUser, resetUser, forgotUser, deactivateUser, currentUser } = require("../controllers/userController/index");
 */
 
-const { registerUser} = require("../controllers/userController/index");
+const { registerUser, loginUser} = require("../controllers/userController/index");
 
 
 const validateToken = require("../middlewares/validateTokenHandler");
@@ -13,9 +13,8 @@ const router = express.Router();
 
 router.post("/register", registerUser);
 
-
-/*
 router.post("/login",loginUser);
+/*
 
 router.delete("/deactivate", deactivateUser);
 

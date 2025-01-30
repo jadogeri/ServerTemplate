@@ -1,0 +1,2 @@
+https://dev.to/ali_adeku/guide-to-writing-integration-tests-in-express-js-with-jest-and-supertest-1059#:~:text=In%20the%20root%20directory%20of,all%20your%20integration%20test%20files.
+https://dev.to/remrkabledev/testing-with-mongodb-memory-server-4ja2
