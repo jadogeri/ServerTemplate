@@ -1,21 +1,18 @@
 const mockingoose = require('mockingoose');
 const UserModel = require("../../../src/models/userModel");
-import * as userService from "../../../src/services/userService"
+import {getByEmail, 
+        getByUsername, 
+        create, 
+        remove ,
+        update } from "../../../src/services/userService"
+const users = require("../../__mocks__/users")
 
 
-// books.test.js
 
-const BooksModel = require('../models/books');
-const {
-  fetchBooks,
-  fetchBook,
-  createBook,
-} = require('./books');
-
-describe('Books service', () => {
-  describe('fetchBooks', () => {
-    it ('should return the list of books', async () => {
-      mockingoose(BooksModel).toReturn([
+describe('Users service', () => {
+  describe('createUser', () => {
+    it ('should create a user list', async () => {
+      mockingoose(UserModel).toReturn([
         {
           title: 'Book 1',
           author: {
@@ -33,26 +30,66 @@ describe('Books service', () => {
           year: 2022,
         }
       ], 'find');
-      const results = await fetchBooks();
-      expect(results[0].title).toBe('Book 1');
+      for( let i = 0; i < users.length; i++){
+        const user = users[i]
+        const {username, email, password, phone} = user
+        const registeredUser = await create(username,email,password,phone)
+        expect(registeredUser.username).toBe(user.username)
+      }
     });
   });
 });
+////////////////////////////
 
+/*
+import mongoose from 'mongoose';
+import mockingoose from 'mockingoose';
+import User from './user.model'; // Your User model
 
-describe('fetchBook', () => {
-    it ('should return a book', async () => {
-      mockingoose(BooksModel).toReturn(
-        {
-          _id: 1,
-          title: 'Book 1',
-          author: {
-            firstname: 'John',
-            lastname: 'Doe'
-          },
-          year: 2021,
-        }, 'findOne');
-      const results = await fetchBook(1);
-      expect(results.title).toBe('test');
-    });
+describe('User Model', () => {
+  // Create
+  it('should create a new user', async () => {
+    const mockUser = { name: 'John Doe', email: 'john@example.com' };
+    mockingoose(User).toReturn(mockUser, 'save');
+
+    const user = new User(mockUser);
+    const savedUser = await user.save();
+
+    expect(savedUser).toMatchObject(mockUser);
   });
+
+  // Read
+  it('should find a user by id', async () => {
+    const mockUser = { _id: 'some-user-id', name: 'Jane Doe' };
+    mockingoose(User).toReturn(mockUser, 'findOne');
+
+    const user = await User.findById('some-user-id');
+
+    expect(user).toMatchObject(mockUser);
+  });
+
+  // Update
+  it('should update a user', async () => {
+    const mockUser = { _id: 'some-user-id', name: 'Jane Doe' };
+    mockingoose(User).toReturn(mockUser, 'findOneAndUpdate');
+
+    const updatedUser = await User.findOneAndUpdate(
+      { _id: 'some-user-id' },
+      { name: 'Updated Name' },
+      { new: true }
+    );
+
+    expect(updatedUser).toMatchObject({ _id: 'some-user-id', name: 'Updated Name' });
+  });
+
+  // Delete
+  it('should delete a user', async () => {
+    mockingoose(User).toReturn(true, 'findOneAndDelete');
+
+    const result = await User.findOneAndDelete({ _id: 'some-user-id' });
+
+    expect(result).toBeTruthy();
+  });
+});
+
+  */

@@ -8,8 +8,20 @@ const errorHandler = require("./src/middlewares/errorHandler");
 const {corsOptions} = require("./src/configs/cors")
 const cors = require("cors");
 
+import mongoose from 'mongoose';
+import { MongoMemoryServer } from 'mongodb-memory-server';
 
-connectMongoDB();
+const mongoServer = MongoMemoryServer.create();
+
+(async () => {
+  await mongoose.connect((await mongoServer).getUri(), { dbName: "verifyMASTER" });
+
+  // your code here
+  console.log("started server here")
+  
+  //await mongoose.disconnect();
+})();
+//connectMongoDB();
 const app = express();
 
 const port = process.env.PORT || 6000;
