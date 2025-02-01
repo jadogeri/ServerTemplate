@@ -3,8 +3,6 @@ const dotenv = require("dotenv")
 dotenv.config();
 
 import express,{ Request, Response } from 'express';
-import MongoDatabase from './src/entities/MongoDatabase';
-import { MongoDBMemoryServer } from './src/entities/MongoDBMemoryServer';
 const errorHandler = require("./src/middlewares/errorHandler");
 const {corsOptions} = require("./src/configs/cors")
 const cors = require("cors");
@@ -26,13 +24,6 @@ app.use(cors(corsOptions))
 app.get('/', (req: Request, res : Response) => {
   res.send({message:"home"});
 });
-
-MongoDatabase.getInstance()
-const t = MongoDBMemoryServer.getInstance();
-
-t.connect();
-t.closeDatabase();
-
 
 
 if (process.env.NODE_ENV !== 'test') {

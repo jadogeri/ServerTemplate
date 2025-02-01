@@ -8,15 +8,20 @@ const userSchema : Schema = new Schema<IUser>({
     type: String,
     required: [true, "Please add the user name"],
     unique: [true, "username already taken"],
+    trim: true,
   },
   email: {
     type: String,
     required: [true, "Please add the user email address"],
     unique: [true, "Email address already taken"],
+    lowercase: true,
+    trim: true,
   },
   password: {
     type: String,
     required: [true, "Please add the user password"],
+    lowercase: true,
+    trim: true,
   },
   phone: {
     type: String,
