@@ -14,13 +14,12 @@ const userSchema : Schema = new Schema<IUser>({
     type: String,
     required: [true, "Please add the user email address"],
     unique: [true, "Email address already taken"],
-    lowercase: true,
+    //lowercase: true,
     trim: true,
   },
   password: {
     type: String,
     required: [true, "Please add the user password"],
-    lowercase: true,
     trim: true,
   },
   phone: {

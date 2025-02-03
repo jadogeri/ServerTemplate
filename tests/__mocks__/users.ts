@@ -1,4 +1,6 @@
-const users = [
+import { IUser } from "../../src/interfaces/IUser"
+
+const users: IUser[] = [
     {
         "username" : "Bruce Wayne",
         "email" :  "BruceWayne@gmail.com",
@@ -28,4 +30,4 @@ const users = [
 
 ]
 
-module.exports = {users}
+module.exports = users

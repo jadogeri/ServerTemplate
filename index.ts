@@ -4,7 +4,6 @@ dotenv.config();
 
 import express,{ Request, Response } from 'express';
 import MongoDatabase from './src/entities/MongoDatabase';
-import { MongoDBMemoryServer } from './src/entities/MongoDBMemoryServer';
 const errorHandler = require("./src/middlewares/errorHandler");
 const {corsOptions} = require("./src/configs/cors")
 const cors = require("cors");
@@ -28,10 +27,6 @@ app.get('/', (req: Request, res : Response) => {
 });
 
 MongoDatabase.getInstance()
-const t = MongoDBMemoryServer.getInstance();
-
-t.connect();
-t.closeDatabase();
 
 
 
@@ -40,4 +35,6 @@ if (process.env.NODE_ENV !== 'test') {
     console.log(`Backend is running on http://localhost:${port}`)
   })
 }
+
+
 
