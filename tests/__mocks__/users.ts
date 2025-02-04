@@ -24,7 +24,7 @@ const users: IUser[] = [
         "username" : "Tony Stark",
         "email" :  "TonyStark@gmail.com",
         "password" : "robD0wn@yJR1",
-        "phone" : "1345609879"
+        "phone" : "1345609879",
 
     }
 

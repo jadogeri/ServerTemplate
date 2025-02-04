@@ -80,41 +80,16 @@ describe('User Model', () => {
 
       //Assert
       expect(foundUsers.length).toBe(4)
+      expect(foundUsers).toBeDefined()
       
-      // expect(foundUser).toHaveProperty("_id");
-      // expect(foundUser).toHaveProperty("username");
-      // expect(foundUser).toHaveProperty("email");
-      // expect(foundUser).toHaveProperty("password");
-      // expect(foundUser).toHaveProperty("phone");
-
-      // validateStringEquality(foundUser?.email,user.email);
-      // validateStringEquality(foundUser?.phone,user.phone);
-      // validateStringEquality(foundUser?.username,user.username);
-      // validateStringEquality(foundUser?.username,user.username);
-
-
-
-
-
-      //let savedUser : IUser = {email,username,phone,password}
-      //log("saved user ==", savedUser)
-      /*
-      const mockUser = { _id: 'some-user-id', name: 'Jane Doe' };
-      mockingoose(User).toReturn(mockUser, 'findOne');
-
-      const user = await User.findById('some-user-id');
-
-      expect(user).toMatchObject(mockUser);
-      */
+  
     });
 
     test('should find a user by id', async () => {
-
       
       let mockUser0 : IUser =  users[0];   
 
-      //Act
-  
+      //Act 
         
       const user0 = new User(mockUser0);
       log("user created new User ===", user0)
@@ -138,27 +113,81 @@ describe('User Model', () => {
   });
 
   // Update
-  it('should update a user', async () => {
-    const mockUser = { _id: 'some-user-id', name: 'Jane Doe' };
-    mockingoose(User).toReturn(mockUser, 'findOneAndUpdate');
+  describe("Update User", ()=>{
+
+  test('should update a user', async () => {
+
+    const user : IUser =  users[0];   
+    const mockUser0 = await new User(user).save();
+
+    //Act
+
+    mockingoose(User).toReturn(mockUser0, 'findOneAndUpdate');
 
     const updatedUser = await User.findOneAndUpdate(
-      { _id: 'some-user-id' },
-      { name: 'Updated Name' },
+      { _id: mockUser0._id },
+      { username: 'Dark Knight' },
       { new: true }
     );
 
-    expect(updatedUser).toMatchObject({ _id: 'some-user-id', name: 'Updated Name' });
+    expect(updatedUser?._id).toEqual(mockUser0._id);
+    validateStringEquality(updatedUser?.username,mockUser0.username)
+
   });
 
-  // Delete
-  it('should delete a user', async () => {
-    mockingoose(User).toReturn(true, 'findOneAndDelete');
 
-    const result = await User.findOneAndDelete({ _id: 'some-user-id' });
+  test('should have all properties', async () => {
 
-    expect(result).toBeTruthy();
+    const user : IUser =  users[0];   
+    const mockUser0 = await new User(user).save();
+
+    //Act
+
+    mockingoose(User).toReturn(mockUser0, 'findOneAndUpdate');
+
+    const updatedUser = await User.findOneAndUpdate(
+      { _id: mockUser0._id },
+      { username: 'Dark Knight' },
+      { new: true }
+    );
+
+
+      expect(updatedUser).toHaveProperty("email");
+      expect(updatedUser).toHaveProperty("password");
+      expect(updatedUser).toHaveProperty("phone");
+
   });
+
 });
 
- 
+  // Delete
+  describe("Delete User", ()=>{
+
+    test('return correct mock for deleted User', async () => {
+      const user = users[0];
+      let deleteUser = new User(user);
+      mockingoose(User).toReturn(deleteUser, 'deleteOne');
+
+      let result = await User.deleteOne({ name: 'test' });      
+      expect(result).toBe(deleteUser);
+    });
+
+    test('should delete a user by id', async () => {
+      
+      let mockUser0 : IUser =  users[0];   
+
+      //Act 
+        
+      const user0 = new User(mockUser0);
+      mockingoose(User).toReturn(user0, 'findOneAndDelete');
+
+      const deletedUser  = await User.findOneAndDelete({_id : user0._id});
+      
+      expect(deletedUser).toMatchObject(user0);
+  
+    });
+
+
+
+});
+});

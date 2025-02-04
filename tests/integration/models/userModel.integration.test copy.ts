@@ -111,38 +111,6 @@ describe('User Model', () => {
 
 
 
-      // mockingoose([
-      //   {
-      //     title: 'Book 1',
-      //     author: {
-      //       firstname: 'John',
-      //       lastname: 'Doe'
-      //     },
-      //     year: 2021,
-      //   },
-      //   {
-      //     title: 'Book 2',
-      //     author: {
-      //       firstname: 'Jane',
-      //       lastname: 'Doe'
-      //     },
-      //     year: 2022,
-      //   }
-      // ], 'find');
-      // for( let i = 0; i < users.length; i++){
-      //   const user = users[i]
-      //   const {username, email, password, phone} = user
-      //   const registeredUser = await create(username,email,password,phone)
-      //   console.log("registeredUser === ",registeredUser)
-      //   console.log("dummyuser === ",user)
-      //   expect(registeredUser.username).toBe({})
-
-      // }
-  
-
-
-////////////////////////////
-
 /*
 import mongoose from 'mongoose';
 import mockingoose from 'mockingoose';
