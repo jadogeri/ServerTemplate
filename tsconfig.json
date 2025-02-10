@@ -111,6 +111,6 @@
   },
   "include": [
     "./**/*.ts", "./*.ts", "./**/**.*.ts","./**/**.*.ts","swagger_output.json"
-  ],
+, "jest.config.ts"  ],
   "exclude": ["./node_modules/*","node_modules"]
 }

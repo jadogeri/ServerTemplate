@@ -25,7 +25,7 @@ const validateToken = asyncHandler(async (req : IJwtPayload, res: Response, next
       throw new Error("token has expired");
     }
 
-    const decoded =  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET as jwt.Secret)
+    const decoded =  jwt.verify(token, process.env.JSON_WEB_TOKEN_SECRET as jwt.Secret)
     
     console.log("decoded ==========", decoded)
     console.log('Decoded token :', decode(token));

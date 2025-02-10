@@ -26,6 +26,20 @@ const userSchema : Schema = new Schema<IUser>({
     type: String,
     required: [false, "Please add the user phone number"],
   },
+  isEnabled: {
+    type : Boolean,
+    required : false,
+    default : true
+
+  },
+  failedLogins :{
+    type: Number,
+    required : false,
+    default : 0,
+    min: [0,"Cannot have login attempts less than zero"],
+    max: [0,"Cannot have login attempts greater than 3"]
+
+  }
 },
   {
     timestamps: true,

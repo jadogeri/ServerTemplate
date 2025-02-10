@@ -41,6 +41,12 @@ const errorHandler = (err : Error, req : Request, res : Response, next : NextFun
         message: err.message,
         stackTrace: err.stack,
       });
+    case constants.LOCKED_ACCOUNT:
+      res.json({
+        title: "Locked account",
+        message: err.message,
+        stackTrace: err.stack,
+      });
     default:
       console.log("No Error, All good !");
       break;

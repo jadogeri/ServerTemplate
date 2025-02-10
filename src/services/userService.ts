@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 import User from "../models/userModel";
+import { IUser } from "../interfaces/IUser";
+
 
 
 async function getByEmail(email : string) {
@@ -10,21 +12,16 @@ async function getByUsername(username : string) {
   return User.findOne({ username : username });
 }
 
-async function create(username: string,email : string, password: string, phone? : string) {
-  return  User.create({
-    username: username,
-    email: email,
-    password: password,
-    phone : phone? phone : ""
-  });
+async function create(user : IUser) {
+  return  User.create(user);
 }
 
 async function remove(_id :  mongoose.Types.ObjectId) {
   return User.findByIdAndDelete(_id);
 }
 
-async function update(_id :  mongoose.Types.ObjectId, new_password : string) {
-  return User.findOneAndUpdate({ _id: _id }, {$set: {password: new_password}},{upsert: true});
+async function update(_id :  mongoose.Types.ObjectId, user : IUser) {
+  return User.findOneAndUpdate({ _id: _id }, {$set: user},{upsert: true});
 }
 
-export { getByEmail, getByUsername, create, remove ,update };
+export { getByEmail, getByUsername, create, remove ,update};

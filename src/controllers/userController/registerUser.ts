@@ -27,7 +27,7 @@ export const registerUser = asyncHandler(async (req: Request, res : Response) =>
     errorBroadcaster(res,400,"All fields are mandatory!")
   }
   if(!isValidEmail(email as string)){
-    errorBroadcaster(res,400,"not a  valid email")
+    errorBroadcaster(res,553,"not a  valid email")
 
   }
   if(!isValidUsername(username as string)){
@@ -56,7 +56,9 @@ export const registerUser = asyncHandler(async (req: Request, res : Response) =>
   //Hash password
   const hashedPassword : string = await hash(password as string, parseInt(process.env.BCRYPT_SALT_ROUNDS as string));
   console.log("Hashed Password: ", hashedPassword);
-  const user = await userService.create(username!,email!,hashedPassword,phone)  
+  const unregisteredUser : IUser = req.body 
+  unregisteredUser.password = hashedPassword;
+  const user = await userService.create(unregisteredUser)  
   console.log(`User created ${user}`);
   if (user) {
     res.status(201).json(user);
