@@ -10,6 +10,7 @@ import { Response, Request } from 'express';
 import { IUserAuthorized } from "../../interfaces/IUserAuthorized";
 import { errorBroadcaster } from "../../utils/errorBroadcaster";
 import * as authService from "../../services/authService"
+import { IAuth } from '../../interfaces/IAuth';
 /**
 *@desc Logout a user
 *@route POST /api/users/logout
@@ -29,7 +30,14 @@ export const logoutUser = asyncHandler(async (req: Request, res : Response) => {
     res.status(401).json({ message: "Already logged out" });
   }
   //remove auth from Auth Collection
-  authService.remove(token);
+  
+  let logoutAuth : IAuth = {
+    token : token
+  }
+  await authService.remove(logoutAuth)
+
+
+  
   res.status(200).json({ message: "logout the user" });
 });
 

@@ -51,7 +51,7 @@ export const resetUser = asyncHandler(async (req: Request, res : Response) => {
 
       }
       await userService.update(user._id, updatedUser)
-      res.json({ message: "updated user password" });
+      res.status(200).json({ message: "updated user password" });
     }
 
   }

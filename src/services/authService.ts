@@ -19,8 +19,8 @@ async function update(auth : IAuth) {
                           {upsert: true});
 }
 
-async function remove(token : string) {
-  return Auth.findOneAndDelete({ token : token });
+async function remove(auth : IAuth) {
+  return Auth.findOneAndDelete(auth);
 }
 
 export { getById, getByToken, create, update, remove };
