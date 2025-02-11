@@ -41,15 +41,15 @@ export const deactivateUser = asyncHandler(async (req: Request, res : Response) 
     errorBroadcaster(res,400,"Invalid password or email");
   }
 
-  const authenticatedUser = await authService.getById(registeredUser!._id)
-  if(authenticatedUser){
-    let deactivateAuth : IAuth = {
-      id : authenticatedUser._id
+  
+  
+    const deactivateAuth : IAuth = {
+      id : registeredUser?._id
     }
     await authService.remove(deactivateAuth)
-  }
-  let success = await userService.remove(registeredUser!._id)
-  res.json({ message: success });
+  
+  await userService.remove(registeredUser!._id)
+  res.json({ message: `deactivated acoount with email ${email}` });
 });
 
 

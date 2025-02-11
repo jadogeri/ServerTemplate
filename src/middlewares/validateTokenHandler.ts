@@ -10,11 +10,10 @@ const validateToken = asyncHandler(async (req : IJwtPayload, res: Response, next
 
   let token;
   let authHeader = req.headers.authorization as string;
-  console.log("authheader ==========", authHeader)
+  console.log("authheader = ", authHeader)
   
-  if (!authHeader || !authHeader.startsWith("Bearer")) {
-    res.status(401);
-    throw new Error("User not authorized or token missing");
+  if (!authHeader || !authHeader.startsWith("Bearer")|| !JSON.parse(authHeader.split(" ")[1].trim())) {
+    res.status(401).json("User not authorized or token missing");
   }
   else{
 
@@ -27,7 +26,7 @@ const validateToken = asyncHandler(async (req : IJwtPayload, res: Response, next
 
     const decoded =  jwt.verify(token, process.env.JSON_WEB_TOKEN_SECRET as jwt.Secret)
     
-    console.log("decoded ==========", decoded)
+    console.log("decoded = ", decoded)
     console.log('Decoded token :', decode(token));
 
     const decodedPayload =  jwtDecode<IJwtPayload>(token);
