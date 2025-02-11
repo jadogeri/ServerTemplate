@@ -11,6 +11,13 @@ class MongoDatabase {
             connectMongoDB(dbUrl);
         }
     }
+/**
+     * Retrieves the singleton instance of the MongoDatabase.
+     * If the instance does not exist, it creates a new one.
+     * 
+     * @returns {MongoDatabase} The singleton instance of MongoDatabase.
+     * @throws {Error} Throws an error if the database connection fails during instantiation.
+     */
    public static getInstance() : MongoDatabase {
         if (this._database != null) {
             return this._database

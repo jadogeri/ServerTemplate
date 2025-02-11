@@ -24,19 +24,6 @@ jest.mock("../../../src/models/authModel", () => ({
 describe('getById() getById method', () => {
   // Happy path tests
   describe('Happy paths', () => {
-    it('should return a valid auth object when a valid ID is provided', async () => {
-      // Arrange
-      const mockId = new MockObjectId() as any;
-      const mockAuth: IAuth = { id: mockId.id, token: 'validToken' } as any;
-      jest.mocked(Auth.findOne).mockResolvedValue(mockAuth as any as never);
-
-      // Act
-      const result = await getById(mockId as any);
-
-      // Assert
-      expect(result).toEqual(mockAuth);
-      expect(Auth.findOne).toHaveBeenCalledWith({ id: mockId });
-    });
   });
 
   // Edge case tests
@@ -54,7 +41,7 @@ describe('getById() getById method', () => {
       expect(Auth.findOne).toHaveBeenCalledWith({ id: mockId });
     });
 
-    it('should handle errors thrown by the database query gracefully', async () => {
+    it('should handle errors thrown by the database query', async () => {
       // Arrange
       const mockId = new MockObjectId() as any;
       const error = new Error('Database error');

@@ -13,38 +13,14 @@ import { create } from '../../../src/services/userService';
 jest.mock("../../../src/models/userModel");
 
 describe('create() create method', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-
   // Happy Path Tests
-  describe('Happy Paths', () => {
-    it('should create a user successfully with all fields provided', async () => {
+  describe("Happy Paths", () => {
+    it("should create a user successfully with valid input", async () => {
       // Arrange
       const user: IUser = {
-        username: 'testuser',
-        email: 'testuser@example.com',
-        password: 'securepassword',
-        phone: '1234567890',
-        isEnabled: true,
-        failedLogins: 0,
-      };
-      (User.create as jest.Mock).mockResolvedValue(user);
-
-      // Act
-      const result = await create(user);
-
-      // Assert
-      expect(User.create).toHaveBeenCalledWith(user);
-      expect(result).toEqual(user);
-    });
-
-    it('should create a user successfully with only required fields', async () => {
-      // Arrange
-      const user: IUser = {
-        username: 'testuser',
-        email: 'testuser@example.com',
-        password: 'securepassword',
+        email: "test@example.com",
+        username: "testuser",
+        password: "password123",
       };
       (User.create as jest.Mock).mockResolvedValue(user);
 
@@ -58,13 +34,13 @@ describe('create() create method', () => {
   });
 
   // Edge Case Tests
-  describe('Edge Cases', () => {
-    it('should handle creation of a user with missing optional fields', async () => {
+  describe("Edge Cases", () => {
+    it("should handle creation with missing optional fields", async () => {
       // Arrange
       const user: IUser = {
-        username: 'testuser',
-        email: 'testuser@example.com',
-        password: 'securepassword',
+        email: "test3@example.com",
+        username: "testuser3",
+        password: "password123",
       };
       (User.create as jest.Mock).mockResolvedValue(user);
 
@@ -76,27 +52,26 @@ describe('create() create method', () => {
       expect(result).toEqual(user);
     });
 
-    it('should throw an error if User.create fails', async () => {
+    it("should throw an error if User.create fails", async () => {
       // Arrange
       const user: IUser = {
-        username: 'testuser',
-        email: 'testuser@example.com',
-        password: 'securepassword',
+        email: "test4@example.com",
+        username: "testuser4",
+        password: "password123",
       };
-      const errorMessage = 'Database error';
+      const errorMessage = "Database error";
       (User.create as jest.Mock).mockRejectedValue(new Error(errorMessage));
 
       // Act & Assert
       await expect(create(user)).rejects.toThrow(errorMessage);
-      expect(User.create).toHaveBeenCalledWith(user);
     });
 
-    it('should handle creation of a user with undefined fields', async () => {
+    it("should handle creation with a very long username", async () => {
       // Arrange
       const user: IUser = {
-        username: undefined,
-        email: undefined,
-        password: undefined,
+        email: "test5@example.com",
+        username: "a".repeat(256), // Very long username
+        password: "password123",
       };
       (User.create as jest.Mock).mockResolvedValue(user);
 

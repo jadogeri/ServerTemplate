@@ -5,7 +5,6 @@
 import { isValidPassword } from '../../../src/utils/inputValidation';
 
 
-// Import the function to be tested
 describe('isValidPassword() isValidPassword method', () => {
   // Happy path tests
   describe('Happy Paths', () => {
@@ -20,7 +19,7 @@ describe('isValidPassword() isValidPassword method', () => {
     });
 
     it('should return true for a valid password at the maximum length', () => {
-      const password = 'Aa1#bcdefghijklmn';
+      const password = 'Aa1#bcdefghijklm';
       expect(isValidPassword(password)).toBe(true);
     });
   });
@@ -73,12 +72,12 @@ describe('isValidPassword() isValidPassword method', () => {
     });
 
     it('should return false for a password with only uppercase letters', () => {
-      const password = 'ABCDEFG';
+      const password = 'ABCDEF';
       expect(isValidPassword(password)).toBe(false);
     });
 
     it('should return false for a password with only lowercase letters', () => {
-      const password = 'abcdefg';
+      const password = 'abcdef';
       expect(isValidPassword(password)).toBe(false);
     });
   });

@@ -19,88 +19,80 @@ interface MockIAuth {
   id: mongoose.Types.ObjectId;
 }
 
-// Helper function to create a mock IAuth object
-function createMockIAuth(overrides?: Partial<MockIAuth>): MockIAuth {
-  return {
-    token: 'defaultToken',
-    id: new mongoose.Types.ObjectId(),
-    ...overrides,
-  } as any;
-}
-
+// Test suite for the update function
 describe('update() update method', () => {
+  let mockAuth: MockIAuth;
+
   beforeEach(() => {
-    jest.clearAllMocks();
+    // Initialize mockAuth with default values
+    mockAuth = {
+      token: 'sampleToken',
+      id: new mongoose.Types.ObjectId(),
+    } as any;
   });
 
-  // Happy Path Tests
-  describe('Happy Paths', () => {
-    it('should update the token for a valid auth object', async () => {
-      // Arrange
-      const mockAuth = createMockIAuth();
-      const updateOneMock = jest.fn().mockResolvedValue({ nModified: 1 });
-      (Auth.updateOne as jest.MockedFunction<typeof Auth.updateOne>) = updateOneMock;
+  // Happy path test: Ensure updateOne is called with correct parameters
+  it('should call updateOne with correct filter and update object', async () => {
+    // Arrange
+    const updateOneMock = jest.mocked(Auth.updateOne).mockResolvedValue({ nModified: 1 } as any);
 
-      // Act
-      const result = await update(mockAuth as any);
+    // Act
+    const result = await update(mockAuth as any);
 
-      // Assert
-      expect(updateOneMock).toHaveBeenCalledWith(
-        { id: mockAuth.id },
-        { $set: { token: mockAuth.token } },
-        { upsert: true }
-      );
-      expect(result).toEqual({ nModified: 1 });
-    });
-
-    it('should upsert a new auth object if it does not exist', async () => {
-      // Arrange
-      const mockAuth = createMockIAuth();
-      const updateOneMock = jest.fn().mockResolvedValue({ upserted: 1 });
-      (Auth.updateOne as jest.MockedFunction<typeof Auth.updateOne>) = updateOneMock;
-
-      // Act
-      const result = await update(mockAuth as any);
-
-      // Assert
-      expect(updateOneMock).toHaveBeenCalledWith(
-        { id: mockAuth.id },
-        { $set: { token: mockAuth.token } },
-        { upsert: true }
-      );
-      expect(result).toEqual({ upserted: 1 });
-    });
+    // Assert
+    expect(updateOneMock).toHaveBeenCalledWith(
+      { id: mockAuth.id },
+      { $set: { token: mockAuth.token } },
+      { upsert: true }
+    );
+    expect(result).toEqual({ nModified: 1 });
   });
 
-  // Edge Case Tests
-  describe('Edge Cases', () => {
-    it('should handle missing token gracefully', async () => {
-      // Arrange
-      const mockAuth = createMockIAuth({ token: undefined });
-      const updateOneMock = jest.fn().mockResolvedValue({ nModified: 0 });
-      (Auth.updateOne as jest.MockedFunction<typeof Auth.updateOne>) = updateOneMock;
+  // Edge case test: Handle missing token
+  it('should handle missing token gracefully', async () => {
+    // Arrange
+    mockAuth.token = undefined;
+    const updateOneMock = jest.mocked(Auth.updateOne).mockResolvedValue({ nModified: 0 } as any);
 
-      // Act
-      const result = await update(mockAuth as any);
+    // Act
+    const result = await update(mockAuth as any);
 
-      // Assert
-      expect(updateOneMock).toHaveBeenCalledWith(
-        { id: mockAuth.id },
-        { $set: { token: undefined } },
-        { upsert: true }
-      );
-      expect(result).toEqual({ nModified: 0 });
-    });
+    // Assert
+    expect(updateOneMock).toHaveBeenCalledWith(
+      { id: mockAuth.id },
+      { $set: { token: undefined } },
+      { upsert: true }
+    );
+    expect(result).toEqual({ nModified: 0 });
+  });
 
-    it('should handle invalid ObjectId', async () => {
-      // Arrange
-      const mockAuth = createMockIAuth({ id: 'invalidObjectId' as any });
-      const updateOneMock = jest.fn().mockRejectedValue(new Error('Invalid ObjectId'));
-      (Auth.updateOne as jest.MockedFunction<typeof Auth.updateOne>) = updateOneMock;
+  // Edge case test: Handle invalid ObjectId
+  it('should handle invalid ObjectId', async () => {
+    // Arrange
+    mockAuth.id = 'invalidObjectId' as any;
+    const updateOneMock = jest.mocked(Auth.findOne as jest.Mock).mockRejectedValue(new Error('Invalid ObjectId') as never);
 
-      // Act & Assert
-      await expect(update(mockAuth as any)).rejects.toThrow('Invalid ObjectId');
-    });
+    // Act & Assert
+    await expect(update(mockAuth as any)).rejects.toThrow('Invalid ObjectId');
+    expect(updateOneMock).toHaveBeenCalledWith(
+      { id: mockAuth.id },
+      { $set: { token: mockAuth.token } },
+      { upsert: true }
+    );
+  });
+
+  // Edge case test: Handle database error
+  it('should handle database error', async () => {
+    // Arrange
+    const updateOneMock = jest.mocked(Auth.updateOne).mockRejectedValue(new Error('Database error') as never);
+
+    // Act & Assert
+    await expect(update(mockAuth as any)).rejects.toThrow('Database error');
+    expect(updateOneMock).toHaveBeenCalledWith(
+      { id: mockAuth.id },
+      { $set: { token: mockAuth.token } },
+      { upsert: true }
+    );
   });
 });
 

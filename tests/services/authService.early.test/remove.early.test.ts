@@ -2,6 +2,8 @@
 // Unit tests for: remove
 
 
+import mongoose from "mongoose";
+import { IAuth } from "../../../src/interfaces/IAuth";
 import Auth from "../../../src/models/authModel";
 import { remove } from '../../../src/services/authService';
 
@@ -11,76 +13,83 @@ import { remove } from '../../../src/services/authService';
 jest.mock("../../../src/models/authModel");
 
 describe('remove() remove method', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-
-  describe('Happy paths', () => {
-    it('should successfully delete a document when a valid token is provided', async () => {
+  // Happy Path Tests
+  describe("Happy Path", () => {
+    it("should successfully remove an auth document when a valid auth object is provided", async () => {
       // Arrange
-      const token = 'validToken';
-      const mockResponse = { _id: '123', token: 'validToken' };
-      (Auth.findOneAndDelete as jest.Mock).mockResolvedValue(mockResponse);
+      const auth: IAuth = { id: new mongoose.Types.ObjectId(), token: "validToken" };
+      (Auth.findOneAndDelete as jest.Mock).mockResolvedValue(auth);
 
       // Act
-      const result = await remove(token);
+      const result = await remove(auth);
 
       // Assert
-      expect(Auth.findOneAndDelete).toHaveBeenCalledWith({ token: token });
-      expect(result).toEqual(mockResponse);
+      expect(Auth.findOneAndDelete).toHaveBeenCalledWith(auth);
+      expect(result).toEqual(auth);
     });
 
-    it('should return null if no document is found with the provided token', async () => {
+    it("should return null if no auth document matches the provided auth object", async () => {
       // Arrange
-      const token = 'nonExistentToken';
+      const auth: IAuth = { id: new mongoose.Types.ObjectId(), token: "nonExistentToken" };
       (Auth.findOneAndDelete as jest.Mock).mockResolvedValue(null);
 
       // Act
-      const result = await remove(token);
+      const result = await remove(auth);
 
       // Assert
-      expect(Auth.findOneAndDelete).toHaveBeenCalledWith({ token: token });
+      expect(Auth.findOneAndDelete).toHaveBeenCalledWith(auth);
       expect(result).toBeNull();
     });
   });
 
-  describe('Edge cases', () => {
-    it('should handle an empty string token gracefully', async () => {
+  // Edge Case Tests
+  describe("Edge Cases", () => {
+    it("should handle the case where the auth object is missing the token", async () => {
       // Arrange
-      const token = '';
+      const auth: Partial<IAuth> = { id: new mongoose.Types.ObjectId() };
       (Auth.findOneAndDelete as jest.Mock).mockResolvedValue(null);
 
       // Act
-      const result = await remove(token);
+      const result = await remove(auth as IAuth);
 
       // Assert
-      expect(Auth.findOneAndDelete).toHaveBeenCalledWith({ token: token });
-      expect(result).toBeNull();
-    });
-    it('should handle a token with special characters', async () => {
-      // Arrange
-      const token = '!@#$%^&*()';
-      (Auth.findOneAndDelete as jest.Mock).mockResolvedValue(null);
-
-      // Act
-      const result = await remove(token);
-
-      // Assert
-      expect(Auth.findOneAndDelete).toHaveBeenCalledWith({ token: token });
+      expect(Auth.findOneAndDelete).toHaveBeenCalledWith(auth);
       expect(result).toBeNull();
     });
 
-    it('should handle a very long token string', async () => {
+    it("should handle the case where the auth object is missing the id", async () => {
       // Arrange
-      const token = 'a'.repeat(1000);
+      const auth: Partial<IAuth> = { token: "someToken" };
       (Auth.findOneAndDelete as jest.Mock).mockResolvedValue(null);
 
       // Act
-      const result = await remove(token);
+      const result = await remove(auth as IAuth);
 
       // Assert
-      expect(Auth.findOneAndDelete).toHaveBeenCalledWith({ token: token });
+      expect(Auth.findOneAndDelete).toHaveBeenCalledWith(auth);
       expect(result).toBeNull();
+    });
+
+    it("should handle the case where the auth object is completely empty", async () => {
+      // Arrange
+      const auth: Partial<IAuth> = {};
+      (Auth.findOneAndDelete as jest.Mock).mockResolvedValue(null);
+
+      // Act
+      const result = await remove(auth as IAuth);
+
+      // Assert
+      expect(Auth.findOneAndDelete).toHaveBeenCalledWith(auth);
+      expect(result).toBeNull();
+    });
+
+    it("should throw an error if the database operation fails", async () => {
+      // Arrange
+      const auth: IAuth = { id: new mongoose.Types.ObjectId(), token: "validToken" };
+      (Auth.findOneAndDelete as jest.Mock).mockRejectedValue(new Error("Database error"));
+
+      // Act & Assert
+      await expect(remove(auth)).rejects.toThrow("Database error");
     });
   });
 });

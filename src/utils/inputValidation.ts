@@ -8,7 +8,7 @@ function isValidEmail(email : string) {
 
 function isValidPassword(password: string) {
     // Regular expression for password validation
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$@!%&*?])[A-Za-z\d#$@!%&*?]{6,16}$/
+    const passwordRegex =  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$@!%&*?])[A-Za-z\d#$@!%&*?]{6,16}$/
   
     return passwordRegex.test(password);
   }

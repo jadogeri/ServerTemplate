@@ -2,12 +2,14 @@
 // Unit tests for: getByEmail
 
 
+import { IUser } from "../../../src/interfaces/IUser";
 import User from "../../../src/models/userModel";
 import { getByEmail } from '../../../src/services/userService';
 
 
 
 
+// Mock the User model
 jest.mock("../../../src/models/userModel");
 
 describe('getByEmail() getByEmail method', () => {
@@ -18,7 +20,7 @@ describe('getByEmail() getByEmail method', () => {
   describe('Happy Paths', () => {
     it('should return a user when a user with the given email exists', async () => {
       // Arrange
-      const mockUser = { email: 'test@example.com', username: 'testuser' };
+      const mockUser: IUser = { email: 'test@example.com', username: 'testuser' };
       (User.findOne as jest.Mock).mockResolvedValue(mockUser);
 
       // Act
@@ -83,7 +85,7 @@ describe('getByEmail() getByEmail method', () => {
     it('should handle special characters in the email', async () => {
       // Arrange
       const specialEmail = 'user+test@example.com';
-      const mockUser = { email: specialEmail, username: 'specialuser' };
+      const mockUser: IUser = { email: specialEmail, username: 'specialuser' };
       (User.findOne as jest.Mock).mockResolvedValue(mockUser);
 
       // Act

@@ -30,7 +30,8 @@ describe('update() update method', () => {
     jest.clearAllMocks();
   });
 
-  describe('Happy paths', () => {
+  // Happy Path Tests
+  describe('Happy Paths', () => {
     it('should update a user successfully with valid ObjectId and user data', async () => {
       // Arrange
       const mockId = new MockObjectId() as any;
@@ -56,8 +57,9 @@ describe('update() update method', () => {
     });
   });
 
-  describe('Edge cases', () => {
-    it('should handle an empty user object gracefully', async () => {
+  // Edge Case Tests
+  describe('Edge Cases', () => {
+    it('should handle update with empty user data', async () => {
       // Arrange
       const mockId = new MockObjectId() as any;
       const mockUser: IUser = {};
@@ -76,32 +78,24 @@ describe('update() update method', () => {
       expect(result).toBeNull();
     });
 
-    it('should handle a non-existent user gracefully', async () => {
+    it('should handle update with invalid ObjectId', async () => {
       // Arrange
-      const mockId = new MockObjectId() as any;
+      const mockId = 'invalidObjectId' as any;
       const mockUser: IUser = {
-        username: 'nonexistentuser',
+        username: 'testuser',
       };
 
-      jest.mocked(User.findOneAndUpdate).mockResolvedValue(null as any as never);
+      jest.mocked(User.findOneAndUpdate).mockRejectedValue(new Error('Invalid ObjectId') as never);
 
-      // Act
-      const result = await update(mockId as any, mockUser);
-
-      // Assert
-      expect(User.findOneAndUpdate).toHaveBeenCalledWith(
-        { _id: mockId },
-        { $set: mockUser },
-        { upsert: true }
-      );
-      expect(result).toBeNull();
+      // Act & Assert
+      await expect(update(mockId, mockUser)).rejects.toThrow('Invalid ObjectId');
     });
 
-    it('should throw an error if findOneAndUpdate fails', async () => {
+    it('should handle update when User.findOneAndUpdate throws an error', async () => {
       // Arrange
       const mockId = new MockObjectId() as any;
       const mockUser: IUser = {
-        username: 'erroruser',
+        username: 'testuser',
       };
 
       jest.mocked(User.findOneAndUpdate).mockRejectedValue(new Error('Database error') as never);

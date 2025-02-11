@@ -7,41 +7,35 @@ import Auth from "../../../src/models/authModel";
 import { create } from '../../../src/services/authService';
 
 
-// src/services/__tests__/authService.test.ts
+// Import necessary modules and dependencies
 
 
+// Import necessary modules and dependencies
+// Mock the mongoose module
+jest.mock("mongoose");
 
-// src/services/__tests__/authService.test.ts
-// Mocking the IAuth interface
+// Mock the Auth model
+jest.mock("../../../src/models/authModel", () => ({
+  create: jest.fn(),
+}));
+
+// Define a mock interface for IAuth
 interface MockIAuth {
   token?: string;
   id: mongoose.Types.ObjectId;
 }
 
-// Mocking mongoose.Types.ObjectId
-jest.mock("mongoose", () => ({
-  Types: {
-    ObjectId: jest.fn().mockImplementation(() => 'mocked-object-id'),
-  },
-}));
-
-// Mocking the Auth model
-jest.mock("../../../src/models/authModel", () => ({
-  create: jest.fn(),
-}));
-
+// Test suite for the create function
 describe('create() create method', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-
+  // Happy path tests
   describe('Happy Paths', () => {
-    it('should successfully create an auth document', async () => {
+    it('should successfully create an auth document with valid data', async () => {
       // Arrange
       const mockAuth: MockIAuth = {
-        token: 'valid-token',
-        id: new mongoose.Types.ObjectId() as any,
-      };
+        token: 'validToken',
+        id: new mongoose.Types.ObjectId(),
+      } as any;
+
       const mockCreate = jest.mocked(Auth.create);
       mockCreate.mockResolvedValue(mockAuth as any as never);
 
@@ -54,12 +48,14 @@ describe('create() create method', () => {
     });
   });
 
+  // Edge case tests
   describe('Edge Cases', () => {
-    it('should handle missing token gracefully', async () => {
+    it('should handle creation with missing token', async () => {
       // Arrange
       const mockAuth: MockIAuth = {
-        id: new mongoose.Types.ObjectId() as any,
-      };
+        id: new mongoose.Types.ObjectId(),
+      } as any;
+
       const mockCreate = jest.mocked(Auth.create);
       mockCreate.mockResolvedValue(mockAuth as any as never);
 
@@ -71,17 +67,18 @@ describe('create() create method', () => {
       expect(result).toEqual(mockAuth);
     });
 
-    it('should throw an error if Auth.create fails', async () => {
+    it('should throw an error if creation fails', async () => {
       // Arrange
       const mockAuth: MockIAuth = {
-        token: 'valid-token',
-        id: new mongoose.Types.ObjectId() as any,
-      };
+        token: 'validToken',
+        id: new mongoose.Types.ObjectId(),
+      } as any;
+
       const mockCreate = jest.mocked(Auth.create);
-      mockCreate.mockRejectedValue(new Error('Database error') as never);
+      mockCreate.mockRejectedValue(new Error('Creation failed') as never);
 
       // Act & Assert
-      await expect(create(mockAuth as any)).rejects.toThrow('Database error');
+      await expect(create(mockAuth as any)).rejects.toThrow('Creation failed');
       expect(mockCreate).toHaveBeenCalledWith(mockAuth as any);
     });
   });

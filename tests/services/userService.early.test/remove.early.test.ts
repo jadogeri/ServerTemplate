@@ -10,20 +10,28 @@ import { remove } from '../../../src/services/userService';
 
 
 // Import necessary modules and dependencies
-// Mock the mongoose ObjectId
-class MockObjectId {
-  public id: string = '507f1f77bcf86cd799439011';
-}
+// Mock the mongoose module
+jest.mock("mongoose", () => ({
+  Types: {
+    ObjectId: jest.fn(),
+  },
+}));
 
-// Mock the User model's findByIdAndDelete method
+// Mock the User model
 jest.mock("../../../src/models/userModel", () => ({
   findByIdAndDelete: jest.fn(),
 }));
 
+// Create a MockObjectId class to simulate mongoose.Types.ObjectId
+class MockObjectId {
+  public id: string = 'mockedObjectId';
+}
+
+// Test suite for the remove function
 describe('remove() remove method', () => {
-  // Happy Path Tests
-  describe('Happy Path', () => {
-    it('should successfully delete a user by id', async () => {
+  // Happy path tests
+  describe('Happy Paths', () => {
+    it('should successfully remove a user by ObjectId', async () => {
       // Arrange
       const mockId = new MockObjectId() as any;
       const mockUser = { _id: mockId, username: 'testuser' } as any;
@@ -38,9 +46,9 @@ describe('remove() remove method', () => {
     });
   });
 
-  // Edge Case Tests
+  // Edge case tests
   describe('Edge Cases', () => {
-    it('should return null if user id does not exist', async () => {
+    it('should return null if no user is found with the given ObjectId', async () => {
       // Arrange
       const mockId = new MockObjectId() as any;
       jest.mocked(User.findByIdAndDelete).mockResolvedValue(null as any as never);
@@ -53,7 +61,7 @@ describe('remove() remove method', () => {
       expect(result).toBeNull();
     });
 
-    it('should handle errors thrown by the database', async () => {
+    it('should handle errors thrown by the database operation', async () => {
       // Arrange
       const mockId = new MockObjectId() as any;
       const error = new Error('Database error');
