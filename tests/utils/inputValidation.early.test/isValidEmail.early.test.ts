@@ -57,7 +57,7 @@ describe('isValidEmail() isValidEmail method', () => {
     });
 
     it('should return false for an email with a domain that is too long', () => {
-      expect(isValidEmail('test@manchesterunited.com')).toBe(false);
+      expect(isValidEmail('test@manchesterunited.commerical')).toBe(false);
     });
 
     it('should return false for an email with spaces', () => {

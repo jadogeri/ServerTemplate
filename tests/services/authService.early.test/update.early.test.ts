@@ -7,11 +7,26 @@ import Auth from "../../../src/models/authModel";
 import { update } from '../../../src/services/authService';
 
 
+// Mocking mongoose and User model
+jest.mock("mongoose", () => ({
+  Types: {
+    ObjectId: jest.fn(),
+  },
+}));
+
+jest.mock("../../../src/models/authModel", () => ({
+  findOneAndDelete: jest.fn(),
+  updateOne: jest.fn(),
+    
+  
+}));
 
 
+/*********************************************************** */
 // Mocking the mongoose and Auth dependencies
-jest.mock("mongoose");
+// jest.mock("mongoose");
 jest.mock("../../../src/models/authModel");
+
 
 // MockIAuth interface to simulate IAuth
 interface MockIAuth {

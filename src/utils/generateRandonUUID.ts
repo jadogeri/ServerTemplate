@@ -9,6 +9,9 @@ import nolookalikes from "nanoid-dictionary/nolookalikes";
    * @throws Will throw an error if the length is less than 1.
    */
 export function generateRandomUUID(length : number) {
+    if(length < 0){
+      throw new Error("Invalid length");
+    }
     const characters = nolookalikes;
     let result = '';
     for (let i = 0; i < length; i++) {

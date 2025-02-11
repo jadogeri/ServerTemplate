@@ -39,7 +39,10 @@ async function create(auth : IAuth) {
  * @returns A promise that resolves to the updated or created user document. 
  * @throws MongooseError if the update operation fails.
  */
-async function update(auth : IAuth) {
+async function update(auth : IAuth ) {
+    if(!mongoose.Types.ObjectId.isValid(auth?.id as )){
+      throw new Error('Invalid ObjectId')
+    }
     return Auth.updateOne({ id : auth.id}, // Filter
                           {$set: {token : auth.token }}, // Update
                           {upsert: true});

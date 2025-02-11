@@ -11,6 +11,10 @@ import { Response } from "express";
  * @throws Error - Throws an error with the specified message.
  */
 export const errorBroadcaster = (res: Response,code: number, message: string )=>{
+    if(!message){
+        res.status(code);
+        throw new Error("undefined")
+    }
 
     res.status(code);
     throw new Error(message);
