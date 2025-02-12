@@ -15,8 +15,9 @@ jest.mock("mongoose", () => ({
 }));
 
 jest.mock("../../../src/models/authModel", () => ({
-  findOneAndDelete: jest.fn(),
+  findOneAndUpdate: jest.fn(),
   updateOne: jest.fn(),
+  findOne : jest.fn()
     
   
 }));
@@ -25,7 +26,7 @@ jest.mock("../../../src/models/authModel", () => ({
 /*********************************************************** */
 // Mocking the mongoose and Auth dependencies
 // jest.mock("mongoose");
-jest.mock("../../../src/models/authModel");
+//jest.mock("../../../src/models/authModel");
 
 
 // MockIAuth interface to simulate IAuth
@@ -75,7 +76,7 @@ describe('update() update method', () => {
     // Assert
     expect(updateOneMock).toHaveBeenCalledWith(
       { id: mockAuth.id },
-      { $set: { token: undefined } },
+      { $set: { token: undefined as any} },
       { upsert: true }
     );
     expect(result).toEqual({ nModified: 0 });
@@ -85,7 +86,7 @@ describe('update() update method', () => {
   it('should handle invalid ObjectId', async () => {
     // Arrange
     mockAuth.id = 'invalidObjectId' as any;
-    const updateOneMock = jest.mocked(Auth.findOne as jest.Mock).mockRejectedValue(new Error('Invalid ObjectId') as never);
+    const updateOneMock = jest.mocked(Auth.updateOne).mockRejectedValue(new Error('Invalid ObjectId') as never);
 
     // Act & Assert
     await expect(update(mockAuth as any)).rejects.toThrow('Invalid ObjectId');

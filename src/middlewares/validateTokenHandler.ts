@@ -8,14 +8,19 @@ import isJwtTokenExpired, { decode } from 'jwt-check-expiry';
 
 const validateToken = asyncHandler(async (req : IJwtPayload, res: Response, next: NextFunction) => {
 
+  try{
   let token;
   let authHeader = req.headers.authorization as string;
   console.log("authheader = ", authHeader)
   
-  if (!authHeader || !authHeader.startsWith("Bearer")|| !JSON.parse(authHeader.split(" ")[1].trim())) {
+  if (!authHeader || !authHeader.startsWith("Bearer")|| !authHeader.split(" ")[1].trim()) {
+    console.log("authheader = if  ")
+
     res.status(401).json("User not authorized or token missing");
   }
   else{
+    console.log("authheader = else  ")
+
 
     token = authHeader.split(" ")[1];  
     console.log('isExpired is:', isJwtTokenExpired(token));
@@ -44,6 +49,9 @@ const validateToken = asyncHandler(async (req : IJwtPayload, res: Response, next
     }
 
   }
+}catch(e){
+  console.log(e)
+}
 });
 
 module.exports = validateToken;

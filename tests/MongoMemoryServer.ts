@@ -10,7 +10,9 @@ export const connect = async () => {
        dbName: 'testDB'
        // add more config if you need
    });
-   //console.log("total connections ===",mongoose.connections.length)
+   console.log("connected to mongoose ",uri)
+
+   console.log("total connections ===",mongoose.connections.length)
    
 
     return connection;
