@@ -9,6 +9,7 @@ import * as bcrypt from "bcrypt"
 import { isValidEmail, isValidPassword } from '../../utils/inputValidation';
 import { IAuth } from '../../interfaces/IAuth';
 
+
 /**
 *@desc Deactivate a user
 *@route POST /api/users/deactivate
@@ -49,6 +50,10 @@ export const deactivateUser = asyncHandler(async (req: Request, res : Response) 
     await authService.remove(deactivateAuth)
   
   await userService.remove(registeredUser!._id)
+
+
+
+
   res.json({ message: `deactivated acoount with email ${email}` });
 });
 
