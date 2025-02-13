@@ -73,13 +73,15 @@ export const registerUser = asyncHandler(async (req: Request, res : Response) =>
     let company = "Server Template KING"
 
      let recipient : Recipient= {username : user.username, email: user.email, company : company,test : "this is a test"}
+    let recipients : Recipient[] = [];
+    recipients.push(recipient)
+
      
 
      console.log("3 ************************************")
 
 try{
-  
-    loadTemplate('register-account', recipient)
+    loadTemplate('register-account', recipients)
     .then((results: any) => {
       results.map((result: { context: { email: any; }; email: { subject: any; html: any; text: any; }; }) => {
                   transportMail({

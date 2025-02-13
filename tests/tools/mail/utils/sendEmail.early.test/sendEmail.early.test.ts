@@ -3,7 +3,7 @@
 
 
 import { transporter } from "../../../../../src/configs/nodemailer";
-import sendEmail from '../../../../../src/tools/mail/utils/sendEmail';
+import sendEmail from '../../../../../src/tools/mail/utils/transportMail';
 
 
 // Import necessary modules and functions

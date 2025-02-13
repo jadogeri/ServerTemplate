@@ -1,8 +1,8 @@
-import {transporter} from "../../../configs/nodemailer";
-export default function sendEmail (obj: any) {
-    console.log("printining objecs== ", obj)
-    return transporter.sendMail(obj);
+import { Recipient } from "../../../types/Recipient"
+import { loadTemplate } from "./loadTemplate"
+export const sendEmail = async (templateName : string, recipient : Recipient ) =>  {
+
+    await loadTemplate()
+  
 }
-
-
 
