@@ -5,8 +5,7 @@ import { errorBroadcaster } from "../../utils/errorBroadcaster";
 import * as userService from "../../services/userService"
 import * as authService from "../../services/authService"
 import * as bcrypt from "bcrypt"
-// import { APIManager } from '../../api/APIManager';
-import { isValidEmail, isValidPassword } from '../../utils/inputValidation';
+import { isValidEmail } from '../../utils/inputValidation';
 import { IAuth } from '../../interfaces/IAuth';
 
 
@@ -24,7 +23,7 @@ export const deactivateUser = asyncHandler(async (req: Request, res : Response) 
 
     errorBroadcaster(res,400,"All fields are mandatory!");
   }
-  if(!isValidEmail(email as string)){
+  if(!isValidEmail(email )){
     errorBroadcaster(res,400,"not a  valid email");
 
   }

@@ -1,21 +1,13 @@
-import path from "path"
+import { Recipient } from "../../../types/Recipient";
+
+const path = require('path')
 const Promise = require('bluebird');
-import  { EmailTemplate, Email }  from "../../../configs/nodemailer";
+const  { EmailTemplate }= require("../../../configs/nodemailer")
 
 
-export const loadTemplate = (templateName: string , contexts: any[]) => {
-    let filepath = path.join(__dirname + "/../", 'templates');
-
-    console.log("dirname =================",__dirname)
-    let template = new Email(
-        {
-            
-        }
-    );
-    
-
-
-    return Promise.all(contexts.map((context) => {
+export function loadTemplate (templateName: string, contexts: Recipient[]) {
+    let template = new EmailTemplate(path.join(__dirname + "/../", 'templates', templateName));
+    return Promise.all(contexts.map((context:Recipient) => {
         return new Promise((resolve: (arg0: { email: any; context: any; }) => void, reject: (arg0: any) => void) => {
             template.render(context, (err: any, result: any) => {
                 if (err) reject(err);
@@ -28,3 +20,4 @@ export const loadTemplate = (templateName: string , contexts: any[]) => {
     }));
 }
 
+module.exports = { loadTemplate }
