@@ -16,12 +16,14 @@ import { loadTemplate } from  '../../tools/mail/utils/loadTemplate';
 import  transportMail  from "../../tools/mail/utils/transportMail";
 import { Recipient } from "../../types/Recipient";
 //const sendSms = require("../../tools/phone/sendSms")
+import { sendEmail } from "../../tools/mail/utils/sendEmail";
+import { sendSms } from "../../tools/text/sendSms";
 /**
 *@desc Register a user
 *@route POST /api/users/register
 *@access public
 */
-let company = 'DeauxBoisSweets'
+let company = process.env.COMPANY
 
 
 export const registerUser = asyncHandler(async (req: Request, res : Response) => {  
@@ -44,7 +46,7 @@ export const registerUser = asyncHandler(async (req: Request, res : Response) =>
   }  
 //if phone number is provided check if string is a valid phone number
   if(phone){
-    if(!isValidatePhoneNumber(phone as string)){
+    if(!isValidatePhoneNumber(phone )){
         errorBroadcaster(res,400,"not a valid phone number")
     }  
   }
@@ -59,7 +61,6 @@ export const registerUser = asyncHandler(async (req: Request, res : Response) =>
   }
 
   
-  console.log("1 ************************************")
   //Hash password
   const hashedPassword : string = await hash(password as string, parseInt(process.env.BCRYPT_SALT_ROUNDS as string));
   console.log("Hashed Password: ", hashedPassword);
@@ -68,38 +69,12 @@ export const registerUser = asyncHandler(async (req: Request, res : Response) =>
   //const user = await userService.create(unregisteredUser)
   await userService.create(unregisteredUser)  
   .then((user: IUser)=>{
-    console.log("2 ************************************")
 
-    let company = "Server Template KING"
-
-     let recipient : Recipient= {username : user.username, email: user.email, company : company,test : "this is a test"}
-     
-
-     console.log("3 ************************************")
-
-try{
-  
-    loadTemplate('register-account', recipient)
-    .then((results: any) => {
-      results.map((result: { context: { email: any; }; email: { subject: any; html: any; text: any; }; }) => {
-                  transportMail({
-              to: result.context.email,
-              from: company,
-              subject: result.email.subject,
-              html: result.email.html,
-              text: result.email.text,
-              
-          }).then(()=>{console.log("sent!!")})
-          console.log("printing results.....................",JSON.stringify(result,null,4))
-  
-      })
-
-      })
-      
-    
-
-
-  console.log(`User created ${user}`);
+    let recipient : Recipient= {username : user.username, email: user.email, company : company}  
+try{  
+   sendEmail('register-account', recipient);
+   sendSms("+15045414308")
+  console.log(`User created ${JSON.stringify(user)}`);
   if (user) {
     //send response 
     res.status(201).json(user);
@@ -110,42 +85,6 @@ try{
 }catch(e){
   console.log(e)
 }
-  
-  /*
-
-
-  if (user) {
-    //send response 
-    res.status(201).json(user);
-  }else{
-    res.status(400).json({ message: "something went wrong" });
-  }
-
-
-*/
-
-
-
-
-
-
-
-
-
-
-
-
-
    })  
   
-  /*
-  console.log(`User created ${user}`);
-  
-  if (user) {
-    //send response 
-    res.status(201).json(user);
-  }else{
-    res.status(400).json({ message: "something went wrong" });
-  }
-    */
-});
+  })
