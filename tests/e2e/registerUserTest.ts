@@ -1,6 +1,6 @@
 import {  expect, test } from '@jest/globals';
 const request = require('supertest');
-import { fileReader } from "../tools/fileReader";
+import { fileReader } from "../fileReader";
 const {BASE_URL}  = require("../constants")
 
 

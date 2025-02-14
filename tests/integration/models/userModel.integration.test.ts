@@ -2,7 +2,7 @@
 import mockingoose from 'mockingoose';
 import User from '../../../src/models/userModel'; // Your User model
 import { IUser } from '../../../src/interfaces/IUser';
-import { validateStringEquality, validateNotEmpty } from '../../tools/validators';
+import { validateStringEquality, validateNotEmpty } from '../../validators';
 const users = require("../../__mocks__/users")
 
 describe('User Model', () => {
