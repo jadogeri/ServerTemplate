@@ -1,7 +1,6 @@
 
 // Unit tests for: sendEmail
 
-
 import { Mail } from "../../../../types/Mail";
 import { Recipient } from "../../../../types/Recipient";
 import { loadTemplate } from "../loadTemplate";
