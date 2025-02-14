@@ -6,3 +6,4 @@ export type Mail = {
     subject: string;
     deeplink?: string | null
 }
+

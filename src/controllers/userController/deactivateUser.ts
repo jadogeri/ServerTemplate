@@ -7,6 +7,8 @@ import * as authService from "../../services/authService"
 import * as bcrypt from "bcrypt"
 import { isValidEmail } from '../../utils/inputValidation';
 import { IAuth } from '../../interfaces/IAuth';
+import { sendEmail } from '../../tools/mail/utils/sendEmail';
+import { Recipient } from '../../types/Recipient';
 
 
 /**
@@ -50,8 +52,12 @@ export const deactivateUser = asyncHandler(async (req: Request, res : Response) 
   
   await userService.remove(registeredUser!._id)
 
-
-
+    const recipient : Recipient = {
+      username : registeredUser?.username,
+      email : registeredUser?.email,
+      company : process.env.COMPANY
+    }
+    sendEmail("deactivate-account",recipient)
 
   res.json({ message: `deactivated acoount with email ${email}` });
 });

@@ -12,12 +12,10 @@ import { IUser } from '../../interfaces/IUser';
 import * as userService from "../../services/userService"
 import { errorBroadcaster } from "../../utils/errorBroadcaster";
 import { isValidEmail, isValidPassword, isValidUsername, isValidatePhoneNumber } from "../../utils/inputValidation";
-import { loadTemplate } from  '../../tools/mail/utils/loadTemplate';
-import  transportMail  from "../../tools/mail/utils/transportMail";
+
 import { Recipient } from "../../types/Recipient";
-//const sendSms = require("../../tools/phone/sendSms")
 import { sendEmail } from "../../tools/mail/utils/sendEmail";
-import { sendSms } from "../../tools/text/sendSms";
+import { sendSms } from "../../tools/phone/sendSms";
 /**
 *@desc Register a user
 *@route POST /api/users/register
@@ -73,7 +71,8 @@ export const registerUser = asyncHandler(async (req: Request, res : Response) =>
     let recipient : Recipient= {username : user.username, email: user.email, company : company}  
 try{  
    sendEmail('register-account', recipient);
-   sendSms("+15045414308")
+   //TODO ADD PHONE SENDING
+   sendSms("+15045414308",recipient)
   console.log(`User created ${JSON.stringify(user)}`);
   if (user) {
     //send response 

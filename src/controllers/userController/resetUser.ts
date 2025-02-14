@@ -13,6 +13,8 @@ import { errorBroadcaster } from "../../utils/errorBroadcaster";
 import * as bcrypt from "bcrypt"
 import { isValidEmail, isValidPassword } from '../../utils/inputValidation';
 import { IUser } from '../../interfaces/IUser';
+import { sendEmail } from '../../tools/mail/utils/sendEmail';
+import { Recipient } from '../../types/Recipient';
 
 /**
 *@desc Reset a user
@@ -51,11 +53,17 @@ export const resetUser = asyncHandler(async (req: Request, res : Response) => {
 
       }
       await userService.update(user._id, updatedUser)
+      const recipient : Recipient = {
+        username : user.username,
+        email : user.email,
+        company : process.env.COMPANY
+      }
+      sendEmail("reset-password",recipient)
       res.status(200).json({ message: "updated user password" });
     }
 
   }
-  res.json({ message: "logout the user" });
+  res.json({ message: "something went wrong" });
 });
 
 

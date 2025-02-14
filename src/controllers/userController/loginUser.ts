@@ -14,7 +14,9 @@ import { IAuth } from "../../interfaces/IAuth";
 import * as userService from"../../services/userService"
 import * as authService from"../../services/authService"
 import { errorBroadcaster } from "../../utils/errorBroadcaster";
-import { isValidEmail, isValidPassword } from "../../utils/inputValidation";
+import { isValidEmail} from "../../utils/inputValidation";
+import { sendEmail } from "../../tools/mail/utils/sendEmail";
+import { Recipient } from "../../types/Recipient";
 
 /**
 *@desc Login user
@@ -31,11 +33,11 @@ export const loginUser = asyncHandler(async (req : Request, res: Response)  => {
     throw new Error("All fields are mandatory!");
   }
 
-  if(!isValidEmail(email as string)){
+  if(!isValidEmail(email)){
     errorBroadcaster(res,400,"not a valid standard email address")
   }
 
-  const user  = await userService.getByEmail(email as string);
+  const user  = await userService.getByEmail(email);
 
   if(user){
 
@@ -86,6 +88,12 @@ export const loginUser = asyncHandler(async (req : Request, res: Response)  => {
 
         user.isEnabled = false;
         await userService.update(user._id, user)
+              const recipient : Recipient = {
+                username : user.username,
+                email : user.email,
+                company : process.env.COMPANY
+              }
+        sendEmail("locked-account",recipient )
         res.status(400).json("Account is locked beacause of too many failed login attempts. Use forget account to access acount");
 
       }else{

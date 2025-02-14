@@ -1,7 +1,8 @@
 import { twilioClient, twilioPhoneNumber } from "../../configs/twilio";
+import { Recipient } from "../../types/Recipient";
 
 
-export const sendSms = (recipientPhoneNumber : string)=>{
+export const sendSms = (recipientPhoneNumber : string, recipient : Recipient)=>{
 
     twilioClient.messages
     .create({

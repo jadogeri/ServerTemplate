@@ -14,6 +14,8 @@ import { isValidEmail } from '../../utils/inputValidation';
 import { IUser } from '../../interfaces/IUser';
 const asyncHandler = require("express-async-handler");
 import { generateRandomUUID } from '../../utils/generateRandonUUID';
+import { Recipient } from '../../types/Recipient';
+import { sendEmail } from '../../tools/mail/utils/sendEmail';
 
 /**
 *@desc Forgot a user
@@ -28,11 +30,11 @@ export const forgotUser = asyncHandler(async (req: Request, res : Response) => {
     res.status(400);
     throw new Error("Email is mandatory!");
   }
-  if(!isValidEmail(email as string)){
+  if(!isValidEmail(email)){
     errorBroadcaster(res,400,"not a  valid email")
   }
 
-  const user  = await userService.getByEmail(email as string);
+  const user  = await userService.getByEmail(email);
   if (!user) {
     errorBroadcaster(res,400,`Invalid Email ${email}`);
   }else{
@@ -44,7 +46,7 @@ export const forgotUser = asyncHandler(async (req: Request, res : Response) => {
 
     console.log("uuid === ", uuid);
     //hash generated password
-    const hashedPassword : string = await bcrypt.hash(uuid , parseInt(process.env.SALT_ROUNDS as string));
+    const hashedPassword : string = await bcrypt.hash(uuid , parseInt(process.env.BCRYPT_SALT_ROUNDS as string));
     console.log("Hashed Password: ", hashedPassword);
     //store generated password in database and unlock account
     const updatedUser : IUser = {
@@ -55,6 +57,13 @@ export const forgotUser = asyncHandler(async (req: Request, res : Response) => {
     await userService.update(user._id, updatedUser)
     //update user password with uuid
     .then(()=>{
+      let recipient : Recipient ={
+        company : process.env.COMPANY as string,
+        username : user.username,
+        email : user.email,
+        password : uuid
+      }
+      sendEmail("forgot-password",recipient)
     res.status(200).json({ password: uuid });
 
     })
