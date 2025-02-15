@@ -8,8 +8,8 @@
 const creds = { user:process.env.NODEMAILER_USERNAME,
     pass :process.env.NODEMAILER_PASSWORD};
     
-const inLineCss = require('nodemailer-juice');
-const nodemailer = require('nodemailer')
+export const inLineCss : Function = require('nodemailer-juice');
+export const nodemailer = require('nodemailer')
 export const transporter = nodemailer.createTransport({
 service: 'gmail',
 auth: {
@@ -19,8 +19,6 @@ pass: creds.pass,
 }).use('compile', inLineCss());
 
 
-export const EmailTemplate = require('email-templates').EmailTemplate
-const path = require('path')
-import * as Promise from 'bluebird';
+module.exports = {nodemailer, transporter}
 
-module.exports = {nodemailer, transporter, EmailTemplate, path, Promise}
+

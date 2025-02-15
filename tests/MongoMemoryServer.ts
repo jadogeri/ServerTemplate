@@ -4,33 +4,30 @@ import {log } from "console"
 const mongod = MongoMemoryServer.create();
 export const connect = async () => {
    const uri = (await mongod).getUri();
-   //console.log("uri ===",uri)
-   //await mongoose.connect(uri);
+ 
    let connection = mongoose.connect(uri, {
        dbName: 'testDB'
        // add more config if you need
    });
-   console.log("connected to mongoose ",uri)
 
-   console.log("total connections ===",mongoose.connections.length)
+   //console.log("total connections ===",mongoose.connections.length)
    
 
     return connection;
 }
 export const closeDatabase = async () => {
 
-   console.log("total connections in close ===",mongoose.connections.length)
+   //console.log("total connections in close ===",mongoose.connections.length)
    let i = 0
 
    for (const connection of mongoose.connections) {
-      console.log("loop " , i)
+      //console.log("loop " , i)
       i++;
 
       try {
         await connection.dropDatabase();
         await connection.close();
         await mongoose.disconnect()
-        //console.log(`Connection to ${connection.name} closed successfully.`);
         await (await mongod).stop();
 
       } catch (error) {

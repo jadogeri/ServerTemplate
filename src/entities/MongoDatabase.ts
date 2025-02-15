@@ -6,9 +6,8 @@ class MongoDatabase {
    private static _database: MongoDatabase | null = null;
    private constructor() {
         const dbUrl = process.env.MONGODB_URI
-        console.log(dbUrl)
         if(dbUrl) {
-            connectMongoDB(dbUrl);
+             connectMongoDB(dbUrl);
         }
     }
 /**

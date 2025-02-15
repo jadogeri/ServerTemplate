@@ -6,8 +6,6 @@ import mongoose from "mongoose";
 import { connectMongoDB } from '../../../src/configs/mongoDB';
 
 
-
-
 jest.mock("mongoose", () => ({
   connect: jest.fn(),
 }));

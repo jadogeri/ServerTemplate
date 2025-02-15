@@ -46,7 +46,7 @@ export const resetUser = asyncHandler(async (req: Request, res : Response) => {
     if(!(await bcrypt.compare(old_password,user.password as string))){
       errorBroadcaster(res,400,`Invalid password`);
     }else{
-      const hashedPassword : string = await bcrypt.hash(new_password , parseInt(process.env.SALT_ROUNDS as string));
+      const hashedPassword : string = await bcrypt.hash(new_password , parseInt(process.env.BCRYPT_SALT_ROUNDS as string));
       console.log("Hashed Password: ", hashedPassword);
       const updatedUser : IUser = {
         password : hashedPassword,

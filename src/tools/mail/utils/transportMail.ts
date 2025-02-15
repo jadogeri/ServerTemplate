@@ -6,10 +6,6 @@ import {transporter} from "../../../configs/nodemailer";
  * @throws Will throw an error if the email sending fails.
  */
 export default function transportMail (mail: any) {
-    console.log("printining starts================================================")
-
-    console.log("printining objecs== ", mail)
-    console.log("printining ends================================================")
     return transporter.sendMail(mail);
 }
 

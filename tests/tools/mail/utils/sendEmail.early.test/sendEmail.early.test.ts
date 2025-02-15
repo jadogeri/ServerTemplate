@@ -1,23 +1,23 @@
 
 // Unit tests for: sendEmail
 
-import { Mail } from "../../../../types/Mail";
-import { Recipient } from "../../../../types/Recipient";
-import { loadTemplate } from "../loadTemplate";
-import { sendEmail } from '../sendEmail';
-import transportMail from "../transportMail";
 
+import { loadTemplate } from "../../../../../src/tools/mail/utils/loadTemplate";
+import { sendEmail } from '../../../../../src/tools/mail/utils/sendEmail';
+import transportMail from "../../../../../src/tools/mail/utils/transportMail";
+import { Mail } from "../../../../../src/types/Mail";
+import { Recipient } from "../../../../../src/types/Recipient";
 
 // Mocking the loadTemplate and transportMail functions
-jest.mock("../loadTemplate", () => {
-  const actual = jest.requireActual("../loadTemplate");
+jest.mock("../../../../../src/tools/mail/utils/loadTemplate", () => {
+  const actual = jest.requireActual("../../../../../src/tools/mail/utils/loadTemplate");
   return {
     ...actual,
     loadTemplate: jest.fn(),
   };
 });
 
-jest.mock("../transportMail", () => {
+jest.mock("../../../../../src/tools/mail/utils/transportMail", () => {
   return {
     __esModule: true,
     default: jest.fn(),
@@ -54,7 +54,6 @@ describe('sendEmail() sendEmail method', () => {
           text: mockMail.text,
         },
       });
-
       (transportMail as jest.Mock).mockResolvedValue(undefined);
 
       // Act
@@ -67,29 +66,10 @@ describe('sendEmail() sendEmail method', () => {
   });
 
   describe('Edge cases', () => {
-    it('should handle missing recipient email gracefully', async () => {
-      // Arrange
-      const recipientWithoutEmail: Recipient = { ...mockRecipient, email: undefined };
-      (loadTemplate as jest.Mock).mockResolvedValue({
-        recipient: { email: undefined },
-        email: {
-          subject: mockMail.subject,
-          html: mockMail.html,
-          text: mockMail.text,
-        },
-      });
-
-      // Act
-      await sendEmail('validTemplate', recipientWithoutEmail);
-
-      // Assert
-      expect(loadTemplate).toHaveBeenCalledWith('validTemplate', recipientWithoutEmail);
-      expect(transportMail).not.toHaveBeenCalled();
-    });
-
     it('should handle loadTemplate rejection gracefully', async () => {
       // Arrange
-      (loadTemplate as jest.Mock).mockRejectedValue(new Error('Template not found'));
+      const error =  new Error('Template loading failed');
+      (loadTemplate as jest.Mock).mockRejectedValue(error);
 
       // Act
       await sendEmail('invalidTemplate', mockRecipient);
@@ -109,8 +89,8 @@ describe('sendEmail() sendEmail method', () => {
           text: mockMail.text,
         },
       });
-
-      (transportMail as jest.Mock).mockRejectedValue(new Error('Failed to send email'));
+      const error = new Error('Email sending failed');
+      (transportMail as jest.Mock).mockRejectedValue(error);
 
       // Act
       await sendEmail('validTemplate', mockRecipient);
@@ -118,6 +98,26 @@ describe('sendEmail() sendEmail method', () => {
       // Assert
       expect(loadTemplate).toHaveBeenCalledWith('validTemplate', mockRecipient);
       expect(transportMail).toHaveBeenCalledWith(mockMail);
+    });
+
+    it('should handle missing recipient email gracefully', async () => {
+      // Arrange
+      const recipientWithoutEmail: Recipient = { ...mockRecipient, email: undefined };
+      (loadTemplate as jest.Mock).mockResolvedValue({
+        recipient: { email: undefined },
+        email: {
+          subject: mockMail.subject,
+          html: mockMail.html,
+          text: mockMail.text,
+        },
+      });
+
+      // Act
+      await sendEmail('validTemplate', recipientWithoutEmail);
+
+      // Assert
+      expect(loadTemplate).toHaveBeenCalledWith('validTemplate', recipientWithoutEmail);
+      expect(transportMail).not.toHaveBeenCalled();
     });
   });
 });

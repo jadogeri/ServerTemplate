@@ -1,8 +1,8 @@
+import { Error } from "mongoose";
 import { Recipient } from "../../../types/Recipient";
-
 const path = require('path')
-const Promise = require('bluebird');
-const  { EmailTemplate }= require("../../../configs/nodemailer")
+//import {Promise} from 'bluebird';
+const EmailTemplate  = require('email-templates').EmailTemplate 
 
 
 /**
@@ -12,18 +12,23 @@ const  { EmailTemplate }= require("../../../configs/nodemailer")
  * @returns A promise that resolves with an object containing the rendered email and recipient data.
  * @throws Will reject the promise if there is an error during template rendering.
  */
-export function loadTemplate (templateName: string, recipient: Recipient) {
+export async function loadTemplate (templateName: string, recipient: Recipient) {
     let template = new EmailTemplate(path.join(__dirname + "/../", 'templates', templateName));
-        return new Promise((resolve: (arg0: { email: any; recipient: any; }) => void, reject: (arg0: any) => void) => {
-            template.render(recipient, (err: any, result: any) => {
-                if (err) reject(err);
-                else resolve({
-                    email: result,
-                    recipient : recipient,
-                });
+    const dataPromise =  new Promise((resolve: (arg0: { email: any; recipient: any; }) => void, reject: (arg0: any) => void) => {
+        template.render(recipient, (err: Error, result: any) => {
+            if (err ){ 
+                return reject(err)
+            } else {
+                return resolve({  email: result, recipient : recipient,
             });
-        });
+        }
+        })
+    });
+
+    let value = await dataPromise;
+    return value;
     
 }
 
 module.exports = { loadTemplate }
+
