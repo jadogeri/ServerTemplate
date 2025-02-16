@@ -9,7 +9,7 @@ export const registerUserTest = () => {
   test('registers user Tesing in isolation', async () => {
 
     console.log(__dirname)
-    let path  : string = __dirname + "\\..\\__mocks__\\user.json"
+    let path  : string = __dirname + "/../__mocks__/user.json"
     let initUser = fileReader(path)
     console.log("init user ========================",initUser)
     localStorage.setItem("user",initUser);      
