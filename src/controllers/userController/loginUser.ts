@@ -99,7 +99,7 @@ export const loginUser = asyncHandler(async (req : Request, res: Response)  => {
       }else{
         await userService.update(user._id, user)    
       }      
-      res.status(400).json({ message: "email or password is correct" });
+      res.status(400).json({ message: "email or password is incorrect" });
     }
   }else{
     res.status(400).json({ message: "email does not exist" });
