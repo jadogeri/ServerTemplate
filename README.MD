@@ -123,11 +123,13 @@ The system follows a **three-tier architecture**:
 - **Backend Frameworks**: Node and Express
 - **Database**: MongoDB
 - **Test**: Jest, MockingGoose, Mongo Memory Server and Supertest
+- **Plugins**: Early AI
 - **Container**: Docker
 - **Security**: JSON Web Token (JWT), Bcrypt and Nanoid
 - **Hosting**: Render.com 
 - **Source Control**: Git and GitHub
 - **CI/CD**: GitHub Actions
+- **Code Analsis**: SonarQube
 
 ### **3.3 Deployment Artifacts**
 - **Backend Application**: Appllicationcontains everyting to build and run Express application instance on Render.com or build a Docker image, and run a Docker container on Render.com
@@ -149,6 +151,7 @@ The system follows a **three-tier architecture**:
 * [Create Google account](https://google.com/)
 * [Generate Google account App Password](https://support.google.com/mail/thread/205453566/how-to-generate-an-app-password?hl=en)
 * [Twilio Account - API for SMS (Optional)](https://www.twilio.com/en-us/messaging/programmable-messaging-api)
+* [PostMan - API Testing](https://www.postman.com/downloads/)
 
 
 ---
