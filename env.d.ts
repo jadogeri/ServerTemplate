@@ -30,3 +30,7 @@ declare global {
   }
 
   export {}
+
+  declare global {
+    var localStorage: LocalStorage;
+  }

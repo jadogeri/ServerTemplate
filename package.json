@@ -4,6 +4,7 @@
   "description": "starter template for backend",
   "main": "index.js",
   "scripts": {
+    "build": "tsc",
     "test": "jest --runInBand --detectOpenHandles --colors",
     "unit": "jest --testPathPattern=unit.test.ts$ --colors",
     "integration": "jest --detectOpenHandles --testPathPattern=integration.test.ts$ --colors --watchAll --no-cache --runInBand --verbose",
