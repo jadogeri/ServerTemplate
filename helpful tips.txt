@@ -1,8 +1,0 @@
-https://dev.to/ali_adeku/guide-to-writing-integration-tests-in-express-js-with-jest-and-supertest-1059#:~:text=In%20the%20root%20directory%20of,all%20your%20integration%20test%20files.
-https://dev.to/remrkabledev/testing-with-mongodb-memory-server-4ja2
-https://medium.com/@adammalej/unit-tests-in-jest-with-supertest-and-mongodb-e4d56e918ce8
-https://dev.to/darkmavis1980/how-to-test-mongoose-models-with-jest-and-mockingoose-2k10
-https://www.clouddefense.ai/code/javascript/example/mongodb-memory-server
-https://github.com/typegoose/mongodb-memory-server
-
-

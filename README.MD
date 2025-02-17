@@ -16,12 +16,10 @@ This is a template for Backend Application (Express + Node + Mongoose) which sto
 
 ## Screenshots
 
-| ![Screenshot 1](assets/images/screenshot1.png)        | ![screenshot 2](assets/images/screenshot2.png) |
+| ![Screenshot 1](assets/images/screenshot1.png)        |![screenshot 2](assets/images/screenshot2.png) |
 | --------------------------------------- | --------------------------------------- |
 |  |                                         |
- ![Screenshot 1](assets/images/screenshot3.png)        | ![screenshot 2](assets/images/screenshot4.png) |
-| --------------------------------------- | --------------------------------------- |
-|  |                                         |
+
 ## Table of Contents
 
    <ul>
@@ -94,7 +92,7 @@ This document outlines the system architecture, components, and design considera
 
 ### **1.2 Scope**  
 The system will allow users to:  
-- Create users and add contacts.  
+- Create user account.  
 - Handle authentication flow.  
 - Provide security to user data.
 
@@ -163,23 +161,23 @@ The system follows a **three-tier architecture**:
 
 1 Open command prompt or terminal.
 
-2 Type command git clone https://github.com/jadogeri/Contact_Management_App.git then press enter.
+2 Type command git clone https://github.com/jadogeri/ServerTemplate.git then press enter.
 
 ```bash
-  git clone https://github.com/jadogeri/Contact_Management_App.git
+  git clone https://github.com/jadogeri/ServerTemplate.git
 ```
 
-3 Enter command cd Contact_Management_App then press enter.
+3 Enter command cd ServerTemplate then press enter.
 
 ```bash
-  cd Contact_Management_App
+  cd ServerTemplate
 ```
 
 #### **6.1.1 Run Locally**
 
 1 Add .env file in project root directory and copy contents in .env.sample.
 
-2 Fill out connection_string with mongoDB atlas CONNECTION_STRING and create a secret phrase for ACCESS_TOKEN_SECRET.
+2 Fill out connection_string with mongoDB atlas MONGODB_URI and create a secret phrase for JSON_WEB_TOKEN_SECRET.
 
 ![env](assets/images/env.png)
 
@@ -201,11 +199,11 @@ The system follows a **three-tier architecture**:
 
 1 Add Dockerfile file in project root directory and copy contents in .Dockerfile.sample.
 
-2 Fill out connection string with mongoDB atlas CONNECTION_STRING and create a secret phrase for ACCESS_TOKEN_SECRET.
+2 Fill out connection string with mongoDB atlas MONGODB_URI and create a secret phrase for JSON_WEB_TOKEN_SECRET.
 
 ![docker](assets/images/docker.png)
 
-3 Type docker build -t cma-api . in command line to build docker image.
+3 Type docker build -t server-image . in command line to build docker image.
 
 ```bash
   docker build -t server-image .
@@ -220,12 +218,12 @@ The system follows a **three-tier architecture**:
 
 ![dockerbuild](assets/images/dockerrun.png)
 
-4 Type docker stop cma to stop container.
+4 Type docker stop server-container to stop container.
 
 ```bash
   docker stop server-container
 ```
-5 Type docker start cma to start container.
+5 Type docker start server-container to start container.
 
 ```bash
   docker start server-container
@@ -234,11 +232,12 @@ The system follows a **three-tier architecture**:
 ## **7. API Testing**  
 **Prerequisites** :ensure container or local application is running. 
 
-1 Open up any web browser and type http://localhost:4000/api-docs
-
 **Note** : use <a href="#2-api-reference">API Reference</a> docs for testing endpoints.
 
-![swaggerrumnning](assets/images/runningswagger.png)
+#### **7.1.1 Postman Environment Variables**
+
+
+![postmanenv](assets/images/postman_env.png)
 
 ---
 ## **8. Tests**  
@@ -264,3 +263,8 @@ The system follows a **three-tier architecture**:
 * AweSome Open Source : [Awesome Readme Templates](https://awesomeopensource.com/project/elangosundar/awesome-README-templates)
  * Readme.so : [The easiest way to create a README](https://readme.so/)
  * Swagger :  [Swagger API Documentation](https://swagger.io/docs/)
+ * Supertest :  [Guide to writing integration tests in express js with Jest and Supertest](https://dev.to/ali_adeku/guide-to-writing-integration-tests-in-express-js-with-jest-and-supertest-1059#:~:text=In%20the%20root%20directory%20of,all%20your%20integration%20test%20files)
+ * MongoDB Memory Server Test Database : [Testing with MongoDB-Memory-Server ](https://dev.to/remrkabledev/testing-with-mongodb-memory-server-4ja2)
+ * Unit Testing : [Unit tests in Jest with supertest, MongoDB and TypeScript](https://medium.com/@adammalej/unit-tests-in-jest-with-supertest-and-mongodb-e4d56e918ce8)
+ * Mockingoose : [How to test mongoose models with jest and mockingoose](https://dev.to/darkmavis1980/how-to-test-mongoose-models-with-jest-and-mockingoose-2k10)
+ * MongoDB Memory Server :  [MongoDB Memory Server tutorial in typescript](https://github.com/typegoose/mongodb-memory-server)
