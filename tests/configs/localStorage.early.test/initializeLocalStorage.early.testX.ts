@@ -6,6 +6,17 @@ import { LocalStorage } from "node-localstorage";
 import { initializeLocalStorage } from '../../../src/configs/localStorage';
 
 
+if (typeof localStorage === 'undefined') {
+  const localStorageMock: Storage = {
+    getItem: (key: string): string | null => null,
+    setItem: (key: string, value: string) => {},
+    removeItem: (key: string) => {},
+    clear: () => {},
+    length: 0,
+    key: (index: number): string | null => null,
+  };
+  global.localStorage = localStorageMock;
+}
 
 
 jest.mock("node-localstorage", () => {

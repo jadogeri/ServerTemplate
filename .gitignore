@@ -10,6 +10,8 @@
 
 # production
 /build
+/public
+/dist
 
 # misc
 .DS_Store
@@ -27,3 +29,4 @@ yarn-error.log*
 
 #Dockerfile
 Dockerfile
+.vercel
