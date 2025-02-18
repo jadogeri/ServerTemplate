@@ -13,8 +13,7 @@
     "prod": "nodemon index.ts",
     "dev": "ts-node-dev index",
     "watch": "nodemon --exec ts-node -- ./index.ts",
-    "mmd": "nodemon --exec ts-node -- ./tests/index.ts",
-    "main": "nodemon main.ts"
+    "mmd": "nodemon --exec ts-node -- ./tests/index.ts"
   },
   "repository": {
     "type": "git",

@@ -1,14 +1,15 @@
+# **System Design Document (SDD)**
 
-# **System Design Document (SDD)**  
-## **Server Template**  
+## **Server Template**
+
 **Version:** 1.1
 **Date:** February 15, 2025
 
 ---
 
 ## Description
-This is a template for Backend Application (Express + Node + Mongoose) which stores user information and contacts.
 
+This is a template for Backend Application (Express + Node + Mongoose) which stores user information and contacts.
 
 ## Authors
 
@@ -16,13 +17,13 @@ This is a template for Backend Application (Express + Node + Mongoose) which sto
 
 ## Screenshots
 
-| ![Screenshot 1](assets/images/screenshot1.png)        |![screenshot 2](assets/images/screenshot2.png) |
-| --------------------------------------- | --------------------------------------- |
-|  |                                         |
+| ![Screenshot 1](assets/images/screenshot1.png) | ![screenshot 2](assets/images/screenshot2.png) |
+| -------------------------------------------- | -------------------------------------------- |
+|                                              |                                              |
 
 ## Table of Contents
 
-   <ul>
+<ul>
       <li><a href="#1-introduction">1. Introduction</a>
         <ul>
           <li><a href="#11-purpose">1.1 Purpose</a> </li>
@@ -75,8 +76,8 @@ This is a template for Backend Application (Express + Node + Mongoose) which sto
     <ul>
         <li><a href="#8-tests">8. Tests</a>
         </li>
-    </ul>    
-    <ul>    
+    </ul>  
+    <ul>  
         <li><a href="#9-license">9. License</a>
         </li>
     </ul> 
@@ -84,38 +85,46 @@ This is a template for Backend Application (Express + Node + Mongoose) which sto
         <li><a href="#10-references">10. References</a>
         </li>
     <ul>
-    
 
-## **1. Introduction**  
-### **1.1 Purpose**  
+## **1. Introduction**
+
+### **1.1 Purpose**
+
 This document outlines the system architecture, components, and design considerations for Contact Management App. The goal is to provide a template for backend developers to handle CRUD operations and authentication flow.
 
-### **1.2 Scope**  
-The system will allow users to:  
-- Create user account.  
-- Handle authentication flow.  
+### **1.2 Scope**
+
+The system will allow users to:
+
+- Create user account.
+- Handle authentication flow.
 - Provide security to user data.
 
-### **1.3 Intended Audience**  
+### **1.3 Intended Audience**
+
 - Junior or Senior backend developers.
 - beginners learning typescript.
 
 ---
 
-## **2. API Reference**  
+## **2. API Reference**
+
 * [Link to Documentation ](https://documenter.getpostman.com/view/40822092/2sAYXEEdwL)
 
+## **3. System Architecture**
 
-## **3. System Architecture**  
-### **3.1 High-Level Architecture**  
-The system follows a **three-tier architecture**:  
-1. **Presentation Layer**: This layer directly interacts with incoming HTTP requests, defines routes using Express's routing mechanism, and sends back the final response to the client.   
-2. **Application Layer**: This layer encapsulates the core business logic, performing operations like data validation, calculations, and complex data manipulation, typically called by the route handlers in the presentation layer. 
-3. **Data Layer**: This layer handles communication with the database, performing CRUD operations to retrieve and store data. 
+### **3.1 High-Level Architecture**
 
-![Architecture](assets/images/architecture.png) 
+The system follows a **three-tier architecture**:
 
-### **3.2 Technology Stack**  
+1. **Presentation Layer**: This layer directly interacts with incoming HTTP requests, defines routes using Express's routing mechanism, and sends back the final response to the client.
+2. **Application Layer**: This layer encapsulates the core business logic, performing operations like data validation, calculations, and complex data manipulation, typically called by the route handlers in the presentation layer.
+3. **Data Layer**: This layer handles communication with the database, performing CRUD operations to retrieve and store data.
+
+![Architecture](assets/images/architecture.png)
+
+### **3.2 Technology Stack**
+
 - **Programming Languages**: Typescript, NOSQL, YAML
 - **IDE**: Visual Studio Code (VSCode)
 - **Backend Frameworks**: Node and Express
@@ -124,24 +133,30 @@ The system follows a **three-tier architecture**:
 - **Plugins**: Early AI
 - **Container**: Docker
 - **Security**: JSON Web Token (JWT), Bcrypt and Nanoid
-- **Hosting**: Render.com 
+- **Hosting**: Render.com
 - **Source Control**: Git and GitHub
 - **CI/CD**: GitHub Actions
 - **Code Analsis**: SonarQube
 
 ### **3.3 Deployment Artifacts**
+
 - **Backend Application**: Appllicationcontains everyting to build and run Express application instance on Render.com or build a Docker image, and run a Docker container on Render.com
+
 ---
 
-## **4. Data Design**  
+## **4. Data Design**
+
 ### **4.1 Data Entities and Relationships**
-|Entity|Description|
-|-|-|
-|USER|User account information used to authenticate users.|
-|AUTH|Saves authentication information of Users.|
+
+| Entity | Description                                          |
+| ------ | ---------------------------------------------------- |
+| USER   | User account information used to authenticate users. |
+| AUTH   | Saves authentication information of Users.           |
 
 ---
-## **5. Installation**  
+
+## **5. Installation**
+
 * [Download and install NodeJS](https://nodejs.org/en/download)
 * [Download and install Docker - Windows](https://docs.docker.com/desktop/setup/install/windows-install/)
 * [Download and install Docker - Mac](https://docs.docker.com/desktop/setup/install/mac-install/)
@@ -151,10 +166,10 @@ The system follows a **three-tier architecture**:
 * [Twilio Account - API for SMS (Optional)](https://www.twilio.com/en-us/messaging/programmable-messaging-api)
 * [PostMan - API Testing](https://www.postman.com/downloads/)
 
-
 ---
 
-## **6. Usage**  
+## **6. Usage**
+
 **Prerequisites** :installation of NodeJS and MongoDB atlas account
 
 ### **6.1 Run Application**
@@ -208,6 +223,7 @@ The system follows a **three-tier architecture**:
 ```bash
   docker build -t server-image .
 ```
+
 ![dockerbuild](assets/images/dockerimage.png)
 
 3 Type docker run --name server-container -d -it -p 6000:6000 server-image to create and start container immediately.
@@ -223,34 +239,38 @@ The system follows a **three-tier architecture**:
 ```bash
   docker stop server-container
 ```
+
 5 Type docker start server-container to start container.
 
 ```bash
   docker start server-container
 ```
 
-## **7. API Testing**  
-**Prerequisites** :ensure container or local application is running. 
+## **7. API Testing**
 
-**Note** : use <a href="#2-api-reference">API Reference</a> docs for testing endpoints.
+**Prerequisites** :ensure container or local application is running.
+
+**Note** : use `<a href="#2-api-reference">`API Reference`</a>` docs for testing endpoints.
 
 #### **7.1.1 Postman Environment Variables**
-
 
 ![postmanenv](assets/images/postman_env.png)
 
 ---
-## **8. Tests**  
+
+## **8. Tests**
 
 1. run test command below.
 
 ```bash
   npm run test
 ```
+
 ![tests](assets/images/tests.png)
 
 ---
-## **9. License**  
+
+## **9. License**
 
 [LICENSE](/LICENSE)
 
@@ -259,12 +279,12 @@ The system follows a **three-tier architecture**:
 ## **10. References**
 
 * FreeCodeCamp : [Frontend Web Development: (HTML, CSS, JavaScript, TypeScript, React)](https://www.youtube.com/watch?v=MsnQ5uepIa).
-* Dipesh Malvia : [Learn Node.js & Express with Project in 2 Hours](https://www.youtube.com/watch?v=H9M02of22z4&t=140s).
+* Dipesh Malvia : [Learn Node.js &amp; Express with Project in 2 Hours](https://www.youtube.com/watch?v=H9M02of22z4&t=140s).
 * AweSome Open Source : [Awesome Readme Templates](https://awesomeopensource.com/project/elangosundar/awesome-README-templates)
- * Readme.so : [The easiest way to create a README](https://readme.so/)
- * Swagger :  [Swagger API Documentation](https://swagger.io/docs/)
- * Supertest :  [Guide to writing integration tests in express js with Jest and Supertest](https://dev.to/ali_adeku/guide-to-writing-integration-tests-in-express-js-with-jest-and-supertest-1059#:~:text=In%20the%20root%20directory%20of,all%20your%20integration%20test%20files)
- * MongoDB Memory Server Test Database : [Testing with MongoDB-Memory-Server ](https://dev.to/remrkabledev/testing-with-mongodb-memory-server-4ja2)
- * Unit Testing : [Unit tests in Jest with supertest, MongoDB and TypeScript](https://medium.com/@adammalej/unit-tests-in-jest-with-supertest-and-mongodb-e4d56e918ce8)
- * Mockingoose : [How to test mongoose models with jest and mockingoose](https://dev.to/darkmavis1980/how-to-test-mongoose-models-with-jest-and-mockingoose-2k10)
- * MongoDB Memory Server :  [MongoDB Memory Server tutorial in typescript](https://github.com/typegoose/mongodb-memory-server)
+* Readme.so : [The easiest way to create a README](https://readme.so/)
+* Swagger :  [Swagger API Documentation](https://swagger.io/docs/)
+* Supertest :  [Guide to writing integration tests in express js with Jest and Supertest](https://dev.to/ali_adeku/guide-to-writing-integration-tests-in-express-js-with-jest-and-supertest-1059#:~:text=In%20the%20root%20directory%20of,all%20your%20integration%20test%20files)
+* MongoDB Memory Server Test Database : [Testing with MongoDB-Memory-Server ](https://dev.to/remrkabledev/testing-with-mongodb-memory-server-4ja2)
+* Unit Testing : [Unit tests in Jest with supertest, MongoDB and TypeScript](https://medium.com/@adammalej/unit-tests-in-jest-with-supertest-and-mongodb-e4d56e918ce8)
+* Mockingoose : [How to test mongoose models with jest and mockingoose](https://dev.to/darkmavis1980/how-to-test-mongoose-models-with-jest-and-mockingoose-2k10)
+* MongoDB Memory Server :  [MongoDB Memory Server tutorial in typescript](https://github.com/typegoose/mongodb-memory-server)
