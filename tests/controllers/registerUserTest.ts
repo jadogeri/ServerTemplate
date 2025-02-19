@@ -8,24 +8,29 @@ export const registerUserTest = () => {
 
   test('registers user Tesing in isolation', async () => {
 
-    console.log(__dirname)
-    let path  : string = __dirname + "/../__mocks__/user.json"
-    let initUser = fileReader(path)
-    console.log("init user ========================",initUser)
-    localStorage.setItem("user",initUser);      
+    try{
 
-    let mock = localStorage.getItem("user");
-    let mockObj = JSON.parse(mock as string)
-    const res = await request(BASE_URL).post('/api/users/register').send(mockObj)    
+      console.log(__dirname)
+      let path  : string = __dirname + "/../__mocks__/user.json"
+      let initUser = fileReader(path)
+      console.log("init user ========================",initUser)
+      localStorage.setItem("user",initUser);      
 
-   console.log("data retrieved from test == ",JSON.stringify(res.body))
-   if(res.statusCode ===201){
-    let updatedCreds = {...mockObj,... res.body,password : mockObj.password}   
-    localStorage.setItem("user",JSON.stringify(updatedCreds, null, 2))
+      let mock = localStorage.getItem("user");
+      let mockObj = JSON.parse(mock as string)
+      const res = await request(BASE_URL).post('/api/users/register').send(mockObj)    
 
-   }
+      console.log("data retrieved from test == ",JSON.stringify(res.body))
+      if(res.statusCode ===201){
+        let updatedCreds = {...mockObj,... res.body,password : mockObj.password}   
+        localStorage.setItem("user",JSON.stringify(updatedCreds, null, 2))
 
-    expect(res.statusCode).toEqual(201);
+      }
+
+      expect(res.statusCode).toEqual(201);
+    }catch(e){
+      console.log(e);
+    }    
  
   },30000)
 

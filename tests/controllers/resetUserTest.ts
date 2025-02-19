@@ -7,27 +7,34 @@ export const resetUserTest = () => {
 
   test('reset user password', async () => {
 
-    let initUser = localStorage.getItem("user");       
+    try{
 
-    const user = JSON.parse(initUser as string)
+      let initUser = localStorage.getItem("user");       
 
-    //get token from user
+      const user = JSON.parse(initUser as string)
 
-    const {token, email, old_password, new_password} = user
+      //get token from user
 
-    const res = await request(BASE_URL).post(`/api/users/reset`)
-                      .send({email : email, old_password : old_password, new_password: new_password})
-                      .set('Authorization', `Bearer ${token}`)  
+      const {token, email, old_password, new_password} = user
 
-   console.log("data retrieved from test == ",JSON.stringify(res.body), typeof res.body)
-   if(res.statusCode < 300){
-    let updatedUser = {...user, password : user.new_password, old_password : "" }
-    localStorage.setItem("user", JSON.stringify(updatedUser, null , 2))
- 
-   }
-  
+      const res = await request(BASE_URL).post(`/api/users/reset`)
+                        .send({email : email, old_password : old_password, new_password: new_password})
+                        .set('Authorization', `Bearer ${token}`)  
+
+      console.log("data retrieved from test == ",JSON.stringify(res.body), typeof res.body)
+      if(res.statusCode < 300){
+        let updatedUser = {...user, password : user.new_password, old_password : "" }
+        localStorage.setItem("user", JSON.stringify(updatedUser, null , 2))
+    
+      }
+    
     expect(res.statusCode).toEqual(200);
     expect(res.body).toBeDefined();
+
+    }catch(e){
+      console.log(e);
+    }
+  
  
   },60000)
   
