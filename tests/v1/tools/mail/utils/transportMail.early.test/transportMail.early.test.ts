@@ -2,13 +2,13 @@
 // Unit tests for: transportMail
 
 
-import { transporter } from "../../../../../src/configs/nodemailer";
-import transportMail from '../../../../../src/tools/mail/utils/transportMail';
+import { transporter } from "../../../../../../src/v1/configs/nodemailer";
+import transportMail from '../../../../../../src/v1/tools/mail/utils/transportMail';
 
 
 // src/tools/mail/utils/__tests__/transportMail.test.ts
 // Mock the transporter object
-jest.mock("../../../../../src/configs/nodemailer", () => ({
+jest.mock("../../../../../../src/v1/configs/nodemailer", () => ({
   transporter: {
     sendMail: jest.fn(),
   },

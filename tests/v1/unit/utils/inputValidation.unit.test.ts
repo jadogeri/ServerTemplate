@@ -2,7 +2,7 @@ import { isValidEmail,
          isValidPassword, 
          isValidUsername, 
          isValidatePhoneNumber } 
-from "../../../src/utils/inputValidation";
+from "../../../../src/v1/utils/inputValidation";
 import { input } from "../../__mocks__/inputs"
 
 // math.test.js

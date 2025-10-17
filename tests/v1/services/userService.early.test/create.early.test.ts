@@ -2,15 +2,15 @@
 // Unit tests for: create
 
 
-import { IUser } from "../../../src/v1/interfaces/IUser";
-import User from "../../../src/v1/models/userModel";
-import { create } from '../../../src/v1/services/userService';
+import { IUser } from "../../../../src/v1/interfaces/IUser";
+import User from "../../../../src/v1/models/userModel";
+import { create } from '../../../../src/v1/services/userService';
 
 
 
 
 // Mock the User model
-jest.mock("../../../src/v1/models/userModel");
+jest.mock("../../../../src/v1/models/userModel");
 
 describe('create() create method', () => {
   // Happy Path Tests

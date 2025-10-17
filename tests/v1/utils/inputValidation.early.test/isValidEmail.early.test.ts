@@ -2,7 +2,7 @@
 // Unit tests for: isValidEmail
 
 
-import { isValidEmail } from '../../../src/utils/inputValidation';
+import { isValidEmail } from '../../../../src/v1/utils/inputValidation';
 
 
 // Import the function to be tested

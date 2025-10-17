@@ -3,7 +3,7 @@
 
 
 import { Response } from "express";
-import { errorBroadcaster } from '../../../src/utils/errorBroadcaster';
+import { errorBroadcaster } from '../../../../src/v1/utils/errorBroadcaster';
 
 
 

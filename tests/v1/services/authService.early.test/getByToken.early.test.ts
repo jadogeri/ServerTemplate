@@ -2,15 +2,15 @@
 // Unit tests for: getByToken
 
 
-import { IAuth } from "../../../src/v1/interfaces/IAuth";
-import Auth from "../../../src/v1/models/authModel";
-import { getByToken } from '../../../src/v1/services/authService';
+import { IAuth } from "../../../../src/v1/interfaces/IAuth";
+import Auth from "../../../../src/v1/models/authModel";
+import { getByToken } from '../../../../src/v1/services/authService';
 
 
 
 
 // Mock the Auth model
-jest.mock("../../../src/v1/models/authModel");
+jest.mock("../../../../src/v1/models/authModel");
 
 describe('getByToken() getByToken method', () => {
   beforeEach(() => {

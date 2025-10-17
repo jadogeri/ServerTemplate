@@ -2,7 +2,7 @@
 // Unit tests for: isValidatePhoneNumber
 
 
-import { isValidatePhoneNumber } from '../../../src/utils/inputValidation';
+import { isValidatePhoneNumber } from '../../../../src/v1/utils/inputValidation';
 
 
 // src/utils/__tests__/inputValidation.test.ts

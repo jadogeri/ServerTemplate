@@ -3,7 +3,7 @@
 
 
 import nolookalikes from "nanoid-dictionary/nolookalikes";
-import { generateRandomUUID } from '../../../src/utils/generateRandonUUID';
+import { generateRandomUUID } from '../../../../src/v1/utils/generateRandonUUID';
 
 
 // src/utils/__tests__/generateRandomUUID.test.ts

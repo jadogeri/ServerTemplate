@@ -2,9 +2,9 @@
 // Unit tests for: getById
 
 
-import { IAuth } from "../../../src/v1/interfaces/IAuth";
-import Auth from "../../../src/v1/models/authModel";
-import { getById } from '../../../src/v1/services/authService';
+import { IAuth } from "../../../../src/v1/interfaces/IAuth";
+import Auth from "../../../../src/v1/models/authModel";
+import { getById } from '../../../../src/v1/services/authService';
 
 
 // Import necessary modules and dependencies
@@ -17,7 +17,7 @@ class MockObjectId {
 }
 
 // Mock the Auth model's findOne method
-jest.mock("../../../src/v1/models/authModel", () => ({
+jest.mock("../../../../src/v1/models/authModel", () => ({
   findOne: jest.fn(),
 }));
 

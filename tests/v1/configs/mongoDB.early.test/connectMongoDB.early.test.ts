@@ -3,7 +3,7 @@
 
 
 import mongoose from "mongoose";
-import { connectMongoDB } from '../../../src/v1/configs/mongoDB';
+import { connectMongoDB } from '../../../../src/v1/configs/mongoDB';
 
 
 jest.mock("mongoose", () => ({
