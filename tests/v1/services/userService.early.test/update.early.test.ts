@@ -2,9 +2,9 @@
 // Unit tests for: update
 
 
-import { IUser } from "../../../src/interfaces/IUser";
-import User from "../../../src/models/userModel";
-import { update } from '../../../src/services/userService';
+import { IUser } from "../../../../src/v1/interfaces/IUser";
+import User from "../../../../src/v1/models/userModel";
+import { update } from '../../../../src/v1/services/userService';
 
 
 
@@ -16,7 +16,7 @@ jest.mock("mongoose", () => ({
   },
 }));
 
-jest.mock("../../../src/models/userModel", () => ({
+jest.mock("../../../../src/v1/models/userModel", () => ({
   findOneAndUpdate: jest.fn(),
 }));
 

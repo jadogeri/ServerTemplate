@@ -3,7 +3,7 @@
 
 
 import { LocalStorage } from "node-localstorage";
-import { initializeLocalStorage } from '../../../src/configs/localStorage';
+import { initializeLocalStorage } from '../../../src/v1/configs/localStorage';
 
 
 if (typeof localStorage === 'undefined') {

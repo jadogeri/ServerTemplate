@@ -2,15 +2,15 @@
 // Unit tests for: getByUsername
 
 
-import { IUser } from "../../../src/interfaces/IUser";
-import User from "../../../src/models/userModel";
-import { getByUsername } from '../../../src/services/userService';
+import { IUser } from "../../../src/v1/interfaces/IUser";
+import User from "../../../src/v1/models/userModel";
+import { getByUsername } from '../../../src/v1/services/userService';
 
 
 
 
 // Mock the User model
-jest.mock("../../../src/models/userModel");
+jest.mock("../../../src/v1/models/userModel");
 
 describe('getByUsername() getByUsername method', () => {
   beforeEach(() => {

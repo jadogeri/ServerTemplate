@@ -72,7 +72,7 @@ export const registerUser = asyncHandler(async (req: Request, res : Response) =>
 try{  
    sendEmail('register-account', recipient);
    //TODO ADD PHONE SENDING
-   sendSms("+15045414308",recipient)
+  //  sendSms("YOUR TWILIO PHONE NUMBER",recipient)
   console.log(`User created ${JSON.stringify(user)}`);
   if (user) {
     //send response 

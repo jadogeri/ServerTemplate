@@ -3,8 +3,8 @@
 
 
 import mongoose from "mongoose";
-import Auth from "../../../src/models/authModel";
-import { update } from '../../../src/services/authService';
+import Auth from "../../../src/v1/models/authModel";
+import { update } from '../../../src/v1/services/authService';
 
 
 // Mocking mongoose and User model
@@ -14,7 +14,7 @@ jest.mock("mongoose", () => ({
   },
 }));
 
-jest.mock("../../../src/models/authModel", () => ({
+jest.mock("../../../src/v1/models/authModel", () => ({
   findOneAndUpdate: jest.fn(),
   updateOne: jest.fn(),
   findOne : jest.fn()
