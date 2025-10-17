@@ -7,13 +7,13 @@ on:
   push:
     branches: [ "main" ]
     paths:
-      - 'src/v1/**'
-      - 'tests/v1/**'
+      - 'src/v2/**'
+      - 'tests/v2/**'
   pull_request:
     branches: [ "main" ]
     paths:
-      - 'src/v1/**'
-      - 'tests/v1/**'
+      - 'src/v2/**'
+      - 'tests/v2/**'
 
 
 jobs:
@@ -36,4 +36,4 @@ jobs:
         cache: 'npm'
     - run: npm ci
     - run: npm run build --if-present 
-    - run: npm run v1
+    - run: npm run test
