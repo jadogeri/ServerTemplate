@@ -1,8 +1,6 @@
     // src/services/user.service.ts
     import UserRepository from '../repositories/UserRepository';
-    import User from '../models/UserModel';
-    import { IUser } from '../interfaces/IUser';
-
+ 
     class UserService {
 
         async currentUser(){
@@ -34,5 +32,6 @@
 
     }
 
-    export default new UserService();
+    
+    export default UserService;
 
