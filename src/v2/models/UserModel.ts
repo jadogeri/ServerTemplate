@@ -3,7 +3,7 @@ import { UserSchema } from '../schemas/UserSchema';
 import { IUser } from '../interfaces/IUser';
 
 
-export class UserModel{
+class UserModel{
 
     private schema: UserSchema;
 
@@ -20,3 +20,5 @@ export class UserModel{
         return User;
     }
 }
+
+export default new UserModel().getInstance();
