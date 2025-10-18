@@ -2,34 +2,6 @@ import mongoose from "mongoose";
 import User from "../models/UserModel";
 import { IUser } from "../interfaces/IUser";
 
-
-    // src/repositories/user.repository.ts
-
-
-    // class UserRepository {
-    //     async create(userData: IUser): Promise<> {
-    //         return UserModel.create(userData);
-    //     }
-
-    //     async findAll(): Promise<IUser[]> {
-    //         return UserModel.find();
-    //     }
-
-    //     async findById(id: string): Promise<IUser | null> {
-    //         return UserModel.findById(id);
-    //     }
-
-    //     async update(id: string, userData: Partial<User>): Promise<UserDocument | null> {
-    //         return UserModel.findByIdAndUpdate(id, userData, { new: true });
-    //     }
-
-    //     async delete(id: string): Promise<UserDocument | null> {
-    //         return UserModel.findByIdAndDelete(id);
-    //     }
-    // }
-
-    // export default new UserRepository();
-
 class UserRepository{
 
     constructor(){
@@ -41,8 +13,8 @@ class UserRepository{
      * @returns A promise that resolves to the user object or null if not found.
      * @throws Throws an error if the database query fails.
      */
-    async getByEmail(email : string) {
-    return User.findOne({ email : email });
+    async findByEmail(email : string) {
+        return User.findOne({ email : email });
     }
 
     /**
@@ -51,8 +23,8 @@ class UserRepository{
      * @returns A promise that resolves to the user object or null if not found.
      * @throws Throws an error if the database query fails.
      */
-    async getByUsername(username : string) {
-    return User.findOne({ username : username });
+    async findByUsername(username : string) {
+        return User.findOne({ username : username });
     }
 
     /**
@@ -62,7 +34,7 @@ class UserRepository{
      * @throws Throws an error if the user creation fails due to validation or database issues.
      */
     async create(user : IUser) {
-    return  User.create(user);
+        return  User.create(user);
     }
 
     /**
@@ -71,8 +43,8 @@ class UserRepository{
      * @returns A promise that resolves to the deleted user document or null if not found.
      * @throws MongooseError if there is an issue with the database operation.
      */
-    async remove(_id :  mongoose.Types.ObjectId) {
-    return User.findByIdAndDelete(_id);
+    async delete(_id :  mongoose.Types.ObjectId) {
+        return User.findByIdAndDelete(_id);
     }
 
     /**
@@ -84,7 +56,7 @@ class UserRepository{
      * @throws MongooseError if the update operation fails.
      */
     async update(_id :  mongoose.Types.ObjectId, user : IUser) {
-    return User.findOneAndUpdate({ _id: _id }, {$set: user},{upsert: true});
+        return User.findOneAndUpdate({ _id: _id }, {$set: user},{upsert: true});
     }
 
 }
