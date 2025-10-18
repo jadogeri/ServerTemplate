@@ -21,4 +21,6 @@ class UserModel{
     }
 }
 
-export default new UserModel().getInstance();
+const User = new UserModel().getInstance();
+
+export default User;
