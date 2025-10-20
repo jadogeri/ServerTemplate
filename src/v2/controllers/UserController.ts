@@ -154,7 +154,7 @@ class UserController{
 
     const userRequest : UserDeactivateRequestDTO  = req.body
      // calling validation service
-    const validation : ValidationResponse = this.credentialValidatorService.validateResetPassword(userRequest);
+    const validation : ValidationResponse = this.credentialValidatorService.validateDeactivate(userRequest);
     if(!validation.isValid()){
       const errorResponse : ErrorResponse = validation.getErrorResponse() as ErrorResponse;
       errorBroadcaster(res,errorResponse.getCode(), errorResponse.getMessage())
