@@ -72,6 +72,13 @@ import { UserLogoutResponseDTO } from '../dtos/response/UserLogoutResponseDTO';
       return await this.authRepository.remove(auth)
     }
 
+    async removeByUserID(userID: mongoose.Types.ObjectId){
+      const auth : IAuth = {
+        id : userID
+      }
+
+      return await this.authRepository.remove(auth)
+    }
 
 
     }
@@ -79,119 +86,3 @@ import { UserLogoutResponseDTO } from '../dtos/response/UserLogoutResponseDTO';
     
     export default AuthService;
 
-/**
- * 
- 
-
-
-export const forgotUser = asyncHandler(async (req: Request, res : Response) => {
-
-
-  }else{
-    //generate unique password
-    const size : number = parseInt(process.env.NANOID_SIZE as string);
-    
-    // Using the alphanumeric dictionary
-    const uuid = generateRandomUUID(size)  
-
-    console.log("uuid === ", uuid);
-    //hash generated password
-    const hashedPassword : string = await bcrypt.hash(uuid , parseInt(process.env.BCRYPT_SALT_ROUNDS as string));
-    console.log("Hashed Password: ", hashedPassword);
-    //store generated password in database and unlock account
-    const updatedUser : IUser = {
-      password : hashedPassword,
-      failedLogins : 0,
-      isEnabled : true
-    }
-    await userService.update(user._id, updatedUser)
-    //update user password with uuid
-    .then(()=>{
-      let recipient : Recipient ={
-        company : process.env.COMPANY as string,
-        username : user.username,
-        email : user.email,
-        password : uuid
-      }
-      sendEmail("forgot-password",recipient)
-    res.status(200).json({ password: uuid });
-
-    })
-  }
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-   .then((user: IUser)=>{
- 
-     let recipient : Recipient= {username : user.username, email: user.email, company : company}  
- try{  
-    sendEmail('register-account', recipient);
-    //TODO ADD PHONE SENDING
-   //  sendSms("YOUR TWILIO PHONE NUMBER",recipient)
-   console.log(`User created ${JSON.stringify(user)}`);
-   if (user) {
-     //send response 
-     res.status(201).json(user);
-   }else{
-     res.status(400).json({ message: "something went wrong" });
-   }
- 
- }catch(e){
-   console.log(e)
- */

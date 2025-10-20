@@ -14,15 +14,16 @@ import UserService from '../services/UserService';
 import { UserRegisterRequestDTO } from '../dtos/request/UserRegisterRequestDTO';
 import { UserRegisterResponseDTO } from '../dtos/response/UserRegisterResponseDTO';
 import { ErrorResponse } from '../entities/ErrorResponse';
-import EmailService from '../services/EmailService';
-import { Recipient } from '../types/Recipient';
 import { UserLoginRequestDTO } from '../dtos/request/UserLoginRequestDTO';
 import { UserLoginResponseDTO } from '../dtos/response/UserLoginResponseDTO';
 import { UserForgotRequestDTO } from '../dtos/request/UserForgotRequestDTO';
 import { UserForgotResponseDTO } from '../dtos/response/UserForgotResponseDTO';
 import { IJwtPayload } from '../interfaces/IJWTPayload';
 import { UserLogoutResponseDTO } from '../dtos/response/UserLogoutResponseDTO';
-
+import { UserDeactivateRequestDTO } from '../dtos/request/UserDeactivateRequestDTO';
+import { UserDeactivateResponseDTO } from '../dtos/response/UserDeactivateResponseDTO';
+import { UserResetRequestDTO } from '../dtos/request/UserResetRequestDTO';
+import { UserResetResponseDTO } from '../dtos/response/UserResetResponseDTO';
 
 /**
 *@desc Current user info
@@ -33,11 +34,10 @@ import { UserLogoutResponseDTO } from '../dtos/response/UserLogoutResponseDTO';
 class UserController{
 
   private userService : UserService;
-  private emailService : EmailService;
 
-  constructor(userService: UserService, emailService : EmailService){
+  constructor(userService: UserService){
+
     this.userService = userService;
-    this.emailService = emailService;
   }
 
   registerUser = asyncHandler(async (req: Request<{}, {}, UserRegisterRequestDTO>, res: Response) : Promise<void> => {
@@ -74,10 +74,6 @@ class UserController{
     if(userResponse instanceof ErrorResponse){
       errorBroadcaster(res, userResponse.getCode(), userResponse.getMessage())
     }else{
-      // SEND EMAIL
-      let recipient : Recipient= {username : userResponse.username, email: userResponse.email}  
-      this.emailService.sendEmail('register-account', recipient);
-
       // SEND RESPONSE  
       res.status(201).send(userResponse);
     }
@@ -102,16 +98,8 @@ class UserController{
     const userResponse : ErrorResponse | UserLoginResponseDTO = await this.userService.loginUser(userRequest);  
     
     if(userResponse instanceof ErrorResponse){
-      //IF ERROR MESSAGE CONTAINS 'LOCKED' THEN SEND EMAIL
-      if(userResponse.getMessage().toUpperCase().includes("LOCKED") && userResponse.getMessage().toUpperCase().includes("FORGOT")){
-        // SEND EMAIL
-        let recipient : Recipient= {username : userResponse.getUsername(), email: userResponse.getEmail()}  
-        this.emailService.sendEmail("locked-account",recipient ); 
-      }
-
       errorBroadcaster(res, userResponse.getCode(), userResponse.getMessage())
     }else{
-
       // SEND RESPONSE  
       res.status(200).send(userResponse);
     }    
@@ -169,91 +157,76 @@ class UserController{
     errorBroadcaster(res, userResponse.getCode(), userResponse.getMessage())
   }else{
   // SEND RESPONSE  
-    res.status(200).send(userResponse);    }    
+    res.status(200).send(userResponse);   
+   }    
   
 });
 
 
 
-  resetUser = asyncHandler(async (req : any, res: Response) => {
+  resetUser = asyncHandler(async (req: Request<{}, {}, UserResetRequestDTO>, res: Response) : Promise<void> => {
+  const userRequest : UserResetRequestDTO  = req.body
+  const { email, oldPassword, newPassword, confirmNewPassword } = userRequest;
+    console.log(email ,oldPassword, newPassword, confirmNewPassword)
+    if (!email || !oldPassword || !newPassword || !confirmNewPassword) {
+      res.status(400);
+      throw new Error("All fields are mandatory!");
 
-    this.userService.resetUser();
+    }
+    if(!isValidEmail(email as string)){
+      errorBroadcaster(res,400,"not a  valid email")
+  
+    }
+    if(!isValidPassword(newPassword as string)){
+      errorBroadcaster(res,400,"not a valid new password")
+    }  
+    if(newPassword !== confirmNewPassword){
+      errorBroadcaster(res,400,"passwords do not match");
+    }
 
-    res.status(200).json({message: "reset user"});
+    //calling service
+    const userResponse : ErrorResponse | UserResetResponseDTO = await this.userService.resetUser(userRequest);
+    
+    if(userResponse instanceof ErrorResponse){
+    //IF ERROR MESSAGE THEN SEND RESPONSE
+      errorBroadcaster(res, userResponse.getCode(), userResponse.getMessage())
+    }else{
+    // SEND RESPONSE  
+      res.status(200).send(userResponse);   
+    }    
+
   });
 
-  deactivateUser = asyncHandler(async (req : any, res: Response) => {
+  deactivateUser = asyncHandler(async (req: Request<{}, {}, UserDeactivateRequestDTO>, res: Response) : Promise<void> => {
 
-    this.userService.deactivateUser();
+  const userRequest : UserDeactivateRequestDTO  = req.body
+  const { email, password, confirm} : UserDeactivateRequestDTO  = userRequest
+  if (!email || !password || confirm == undefined) {
+    console.log(email,password,confirm)
 
-    res.status(200).json({message: "deactivate user"});
+    errorBroadcaster(res,400,"All fields are mandatory!");
+  }
+  if(!isValidEmail(email )){
+    errorBroadcaster(res,400,"not a  valid email");
+
+  }
+
+  if(confirm!== true){
+    errorBroadcaster(res,400,"confirm must be true");
+
+  }
+
+      //calling service
+  const userResponse : ErrorResponse | UserDeactivateResponseDTO = await this.userService.deactivateUser(userRequest); 
+    if(userResponse instanceof ErrorResponse){
+      //IF ERROR MESSAGE THEN SEND RESPONSE
+      errorBroadcaster(res, userResponse.getCode(), userResponse.getMessage())
+    }else{
+    // SEND RESPONSE  
+      res.status(200).send(userResponse);
+    }    
   });
 
 }
 
 export default UserController;
-
-
-/**
- * 
-
-import { Response, Request } from 'express';
-import { IUserForgot } from "../../interfaces/IUserForgot";
-import * as userService from "../../services/userService"
-import { errorBroadcaster } from "../../utils/errorBroadcaster";
-import * as bcrypt from "bcrypt"
-import { isValidEmail } from '../../utils/inputValidation';
-import { IUser } from '../../interfaces/IUser';
-const asyncHandler = require("express-async-handler");
-import { generateRandomUUID } from '../../utils/generateRandonUUID';
-import { Recipient } from '../../types/Recipient';
-import { sendEmail } from '../../tools/mail/utils/sendEmail';
-
-
-export const forgotUser = asyncHandler(async (req: Request, res : Response) => {
-
-  const { email} : IUserForgot = req.body;
-  if (!email ) {
-    res.status(400);
-    throw new Error("Email is mandatory!");
-  }
-  if(!isValidEmail(email)){
-    errorBroadcaster(res,400,"not a  valid email")
-  }
-
-  const user  = await userService.getByEmail(email);
-  if (!user) {
-    errorBroadcaster(res,400,`Invalid Email ${email}`);
-  }else{
-    //generate unique password
-    const size : number = parseInt(process.env.NANOID_SIZE as string);
-    
-    // Using the alphanumeric dictionary
-    const uuid = generateRandomUUID(size)  
-
-    console.log("uuid === ", uuid);
-    //hash generated password
-    const hashedPassword : string = await bcrypt.hash(uuid , parseInt(process.env.BCRYPT_SALT_ROUNDS as string));
-    console.log("Hashed Password: ", hashedPassword);
-    //store generated password in database and unlock account
-    const updatedUser : IUser = {
-      password : hashedPassword,
-      failedLogins : 0,
-      isEnabled : true
-    }
-    await userService.update(user._id, updatedUser)
-    //update user password with uuid
-    .then(()=>{
-      let recipient : Recipient ={
-        company : process.env.COMPANY as string,
-        username : user.username,
-        email : user.email,
-        password : uuid
-      }
-      sendEmail("forgot-password",recipient)
-    res.status(200).json({ password: uuid });
-
-    })
-  }
-});
- */

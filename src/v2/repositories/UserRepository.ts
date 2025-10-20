@@ -61,6 +61,16 @@ class UserRepository{
         return User.findOneAndUpdate({ _id: _id }, {$set: user},{upsert: true});
     }
 
+        /**
+     * Deletes a user from the database by their unique identifier.
+     * @param _id - The ObjectId of the user to be deleted.
+     * @returns A promise that resolves to the deleted user document or null if not found.
+     * @throws MongooseError if there is an issue with the database operation.
+     */
+    async remove(_id :  mongoose.Types.ObjectId) {
+    return User.findByIdAndDelete(_id);
+    }
+
 }
 
 export default UserRepository;

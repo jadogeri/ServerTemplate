@@ -20,6 +20,10 @@ import { Recipient } from '../types/Recipient';
 import { IJwtPayload } from '../interfaces/IJWTPayload';
 import { UserLogoutResponseDTO } from '../dtos/response/UserLogoutResponseDTO';
 import AuthService from './AuthService';
+import { UserDeactivateRequestDTO } from '../dtos/request/UserDeactivateRequestDTO';
+import { UserDeactivateResponseDTO } from '../dtos/response/UserDeactivateResponseDTO';
+import { UserResetResponseDTO } from '../dtos/response/UserResetResponseDTO';
+import { UserResetRequestDTO } from '../dtos/request/UserResetRequestDTO';
 
 
 
@@ -73,6 +77,10 @@ import AuthService from './AuthService';
                 createdAt: createdUser.createdAt,
                 updatedAt: createdUser.updatedAt              
             }
+            // SEND EMAIL
+            let recipient : Recipient= {username : userResponse.username, email: userResponse.email}  
+            this.emailService.sendEmail('register-account', recipient);
+            // SEND RESPONSE
             return userResponse;
         }
         async loginUser(reqUser: UserLoginRequestDTO): Promise<UserLoginResponseDTO | ErrorResponse> {
@@ -140,7 +148,11 @@ import AuthService from './AuthService';
 
                         user.isEnabled = false;
                         await this.userRepository.update(user._id, user)
+                        //SEND EMAIL
+                        let recipient : Recipient= {username : user.username, email: user.email}  
+                        this.emailService.sendEmail("locked-account",recipient ); 
 
+                        // RETURN RESPONSE TO CONTROLLER
                         const errorResponse = new ErrorResponse(400,"Account is locked because of too many failed login attempts. Use /forgt route to access acount");
                         errorResponse.setEmail(user.email as string);
                         errorResponse.setUsername(user.username as string);
@@ -219,148 +231,76 @@ import AuthService from './AuthService';
 
 
 
+    async deactivateUser(reqUser: UserDeactivateRequestDTO): Promise<UserDeactivateResponseDTO | ErrorResponse> {
+            
+            const {email, password, confirm} = reqUser;
+            const registeredUser = await this.userRepository.findByEmail(email);
+            if(!registeredUser){
+                return new ErrorResponse(400,"Email does not exist");
+            }
 
+            if(!(await bcrypt.compare(password,registeredUser?.password as string))) {
+                return new ErrorResponse(400,"Invalid password or email");
+            }
+            // calling auth service
 
+            await this.authService.removeByUserID(registeredUser._id)
 
+            await this.userRepository.remove(registeredUser!._id);
 
+            // SEND EMAIL
+            let recipient : Recipient ={
+                username : registeredUser.username,
+                email : email,
+            }
+            this.emailService.sendEmail("forgot-password",recipient);
 
+            //SEND RESPONSE
+            const userResponse : UserDeactivateResponseDTO = {
+                message: `deactivated acoount with email ${email}`
+            }
 
+            return userResponse;
 
-
-
-
-
-
-
-        // async currentUser(reqUser: IJwtPayload): Promise<any> {
-        // }
-
-        async deactivateUser(){
-            return {"message": "deactivate user"}
         }
 
-        async resetUser(){
-            return {"message": "reset user"}
+        async resetUser(reqUser: UserResetRequestDTO): Promise<UserResetResponseDTO | ErrorResponse> {
+            const { email, oldPassword, newPassword } = reqUser;
+
+            const user  = await this.userRepository.findByEmail(email);
+            if (!user) {
+                return new ErrorResponse(400,`Invalid Email! ${email}`);
+            }else{
+                if(!(await bcrypt.compare(oldPassword,user.password as string))){
+                    return new ErrorResponse(400,`Invalid password`);
+                }else{
+                    const hashedPassword : string = await bcrypt.hash(newPassword , parseInt(process.env.BCRYPT_SALT_ROUNDS as string));
+                    console.log("Hashed Password: ", hashedPassword);
+                    const updatedUser : IUser = {
+                        password : hashedPassword,
+
+                    }
+                    await this.userRepository.update(user._id, updatedUser)
+                    // SEND EMAIL
+                    let recipient : Recipient ={
+                        username : user.username,
+                        email : email,
+                    }
+                    this.emailService.sendEmail("reset-password",recipient);
+
+                    //SEND RESPONSE
+                    const userResponse : UserResetResponseDTO = {
+                        message: `Successfully reset password of acoount with email '${email}'`
+                    }
+
+                    return userResponse;
+
+                }
+
+            }
         }
 
     }
 
     
     export default UserService;
-
-/**
- * 
- 
-
-
-export const forgotUser = asyncHandler(async (req: Request, res : Response) => {
-
-
-  }else{
-    //generate unique password
-    const size : number = parseInt(process.env.NANOID_SIZE as string);
-    
-    // Using the alphanumeric dictionary
-    const uuid = generateRandomUUID(size)  
-
-    console.log("uuid === ", uuid);
-    //hash generated password
-    const hashedPassword : string = await bcrypt.hash(uuid , parseInt(process.env.BCRYPT_SALT_ROUNDS as string));
-    console.log("Hashed Password: ", hashedPassword);
-    //store generated password in database and unlock account
-    const updatedUser : IUser = {
-      password : hashedPassword,
-      failedLogins : 0,
-      isEnabled : true
-    }
-    await userService.update(user._id, updatedUser)
-    //update user password with uuid
-    .then(()=>{
-      let recipient : Recipient ={
-        company : process.env.COMPANY as string,
-        username : user.username,
-        email : user.email,
-        password : uuid
-      }
-      sendEmail("forgot-password",recipient)
-    res.status(200).json({ password: uuid });
-
-    })
-  }
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-   .then((user: IUser)=>{
- 
-     let recipient : Recipient= {username : user.username, email: user.email, company : company}  
- try{  
-    sendEmail('register-account', recipient);
-    //TODO ADD PHONE SENDING
-   //  sendSms("YOUR TWILIO PHONE NUMBER",recipient)
-   console.log(`User created ${JSON.stringify(user)}`);
-   if (user) {
-     //send response 
-     res.status(201).json(user);
-   }else{
-     res.status(400).json({ message: "something went wrong" });
-   }
- 
- }catch(e){
-   console.log(e)
- */

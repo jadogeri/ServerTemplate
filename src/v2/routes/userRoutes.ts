@@ -15,7 +15,7 @@ const authService = new AuthService(authRepository);
 
 const bcryptService = new BcryptService();
 const userService = new UserService(userRepository, authService, bcryptService, emailService);
-const userController = new UserController(userService, emailService);
+const userController = new UserController(userService);
 const validateToken = require("../middlewares/validateTokenHandler");
 
 const router = express.Router();
