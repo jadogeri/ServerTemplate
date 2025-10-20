@@ -12,6 +12,14 @@ import * as bcrypt from "bcrypt";
 import * as  jwt from "jsonwebtoken";
 import { IAuth } from '../interfaces/IAuth';
 import AuthRepository from '../repositories/AuthRepository';
+import { UserForgotRequestDTO } from '../dtos/request/UserForgotRequestDTO';
+import { UserForgotResponseDTO } from '../dtos/response/UserForgotResponseDTO';
+import BcryptService from './BcryptService';
+import EmailService from './EmailService';
+import { Recipient } from '../types/Recipient';
+import { IJwtPayload } from '../interfaces/IJWTPayload';
+import { UserLogoutResponseDTO } from '../dtos/response/UserLogoutResponseDTO';
+import AuthService from './AuthService';
 
 
 
@@ -23,12 +31,16 @@ import AuthRepository from '../repositories/AuthRepository';
     class UserService {
 
         private userRepository: UserRepository;
-        private authRepository: AuthRepository;
+        private authService: AuthService;
+        private bcryptService : BcryptService;
+        private emailService: EmailService;
         
-        constructor(userRepository: UserRepository, authRepository: AuthRepository){
+        constructor(userRepository: UserRepository, authService: AuthService, bcryptService: BcryptService, emailService: EmailService){
 
             this.userRepository = userRepository;
-            this.authRepository = authRepository;
+            this.authService = authService;
+            this.bcryptService = bcryptService
+            this.emailService = emailService;
         }        
         async registerUser(reqUser: UserRegisterRequestDTO): Promise<UserRegisterResponseDTO | ErrorResponse>  {
 
@@ -89,18 +101,20 @@ import AuthRepository from '../repositories/AuthRepository';
                     let secretKey  = process.env.JSON_WEB_TOKEN_SECRET! ;
                     const accessToken  =  jwt.sign( payload,secretKey as jwt.Secret,  { expiresIn: "10m" } );
                     //add token and id to auth 
+
+                    //call auth service
                     const authUser : IAuth = {
                         id : user._id,
                         token : accessToken
                     }
 
-                    const authenticatedUser = await this.authRepository.findByUserId(user._id);
+                    const authenticatedUser : IAuth | null = await this.authService.findByUserId(user._id);
                     if(!authenticatedUser){
 
-                        await this.authRepository.create(authUser);
+                        await this.authService.create(user._id, accessToken);
                     }else{
 
-                        await this.authRepository.update(authUser);;     
+                        await this.authService.update(user._id, accessToken);
                     }
 
                     //if failed logins > 0, 
@@ -127,7 +141,7 @@ import AuthRepository from '../repositories/AuthRepository';
                         user.isEnabled = false;
                         await this.userRepository.update(user._id, user)
 
-                        const errorResponse = new ErrorResponse(400,"Account is locked because of too many failed login attempts. Use /forgot route to access acount");
+                        const errorResponse = new ErrorResponse(400,"Account is locked because of too many failed login attempts. Use /forgt route to access acount");
                         errorResponse.setEmail(user.email as string);
                         errorResponse.setUsername(user.username as string);
                         return errorResponse;
@@ -144,34 +158,85 @@ import AuthRepository from '../repositories/AuthRepository';
             }
         }
 
+    async forgotUser(reqUser: UserForgotRequestDTO): Promise<UserForgotResponseDTO | ErrorResponse> {
+        const { email } = reqUser;
+        const user  = await this.userRepository.findByEmail(email);
+        if (!user) {
+            return new ErrorResponse(400,`Invalid Email: ${email}`);
+        }else{
+            // call bcrypt service and generate random hashed password
+            const hashedPassword : string = await this.bcryptService.getHashedPassword();
+            const uuid : string = this.bcryptService.getUUID();
 
+            console.log("Hashed Password: ", hashedPassword);
+            console.log("uuid: ", uuid)
+            //store generated password in database and unlock account
+            const updatedUser : IUser = {
+            password : hashedPassword,
+            failedLogins : 0,
+            isEnabled : true
+            }
+            await this.userRepository.update(user._id, updatedUser);
 
+            // SEND EMAIL
+            let recipient : Recipient ={
+                username : user.username,
+                email : user.email,
+                password : uuid
+            }
+            this.emailService.sendEmail("forgot-password",recipient);
 
+            //SEND RESPONSE
+            const userResponse : UserForgotResponseDTO =  {
+                password : uuid
+            }
 
+            return userResponse;
 
-
-
-
-
-
-
-
-
-
-
-        async currentUser(){
-            return {"message": "current user"}
         }
+
+    }
+
+    async logoutUser(jwtPayload: IJwtPayload): Promise<UserLogoutResponseDTO | ErrorResponse> {
+        const token = jwtPayload?.token 
+        const {username} = jwtPayload.user
+        const authenticatedUser = await this.authService.findByToken(token as string);
+        if(!authenticatedUser){
+            return new ErrorResponse(401, "Already logged out" );
+        }
+        //remove auth from Auth Collection
+  
+        // await this.authRepository.remove(logoutAuth)
+        //call service
+        await this.authService.remove(token)
+
+        const userResponse : UserLogoutResponseDTO = {
+            message: `Successfully logged out user ${username}`
+        }
+
+        return userResponse;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        // async currentUser(reqUser: IJwtPayload): Promise<any> {
+        // }
 
         async deactivateUser(){
             return {"message": "deactivate user"}
-        }
-        async forgotUser(){
-            return {"message": "forgot user"}
-        }
-
-        async logoutUser(){
-            return {"message": "log out user"}
         }
 
         async resetUser(){
@@ -187,79 +252,43 @@ import AuthRepository from '../repositories/AuthRepository';
  * 
  
 
-loginUser = asyncHandler(async (req : Request, res: Response)  => {
+
+export const forgotUser = asyncHandler(async (req: Request, res : Response) => {
 
 
-  const user  = await userService.getByEmail(email);
-
-  if(user){
-
-    if(user.isEnabled === false){      
-      errorBroadcaster(res,423,"Account is locked, use forget account to access acount")
-    }
-
-    //compare password with hashedpassword 
-    if (user &&  await bcrypt.compare(password,user.password as string)) {
-
-      let payload = {
-        user: {
-          username: user.username as string , email: user.email as string , id: user._id ,
-        },
-      }
-      //post fix operator   knowing value cant be undefined
-      let secretKey  = process.env.JSON_WEB_TOKEN_SECRET! ;
-      const accessToken  =  jwt.sign( payload,secretKey as jwt.Secret,  { expiresIn: "30m" } );
-      //add token and id to auth 
-      const authUser : IAuth = {
-        id : user._id,
-        token : accessToken
-      }
-
-      const authenticatedUser = await authService.getById(user._id);
-      if(!authenticatedUser){
-
-        await authService.create(authUser);
-      }else{
-
-        await authService.update(authUser);;     
-      }
-
-      //if failed logins > 0, 
-      //reset to zero if account is not locked
-      if(user.failedLogins as number > 0){
-
-        const resetUser : IUser ={
-          failedLogins: 0
-        }
-
-        await userService.update(user._id, resetUser)
-      }
-        res.status(200).json({ accessToken }); 
-    }else{ 
-      user.failedLogins = user.failedLogins  as number + 1      
-      if(user.failedLogins === 3){
-
-        user.isEnabled = false;
-        await userService.update(user._id, user)
-              const recipient : Recipient = {
-                username : user.username,
-                email : user.email,
-                company : process.env.COMPANY
-              }
-        sendEmail("locked-account",recipient )
-        res.status(400).json("Account is locked beacause of too many failed login attempts. Use forget account to access acount");
-
-      }else{
-        await userService.update(user._id, user)    
-      }      
-      res.status(400).json({ message: "email or password is incorrect" });
-    }
   }else{
-    res.status(400).json({ message: "email does not exist" });
-  }
+    //generate unique password
+    const size : number = parseInt(process.env.NANOID_SIZE as string);
+    
+    // Using the alphanumeric dictionary
+    const uuid = generateRandomUUID(size)  
 
+    console.log("uuid === ", uuid);
+    //hash generated password
+    const hashedPassword : string = await bcrypt.hash(uuid , parseInt(process.env.BCRYPT_SALT_ROUNDS as string));
+    console.log("Hashed Password: ", hashedPassword);
+    //store generated password in database and unlock account
+    const updatedUser : IUser = {
+      password : hashedPassword,
+      failedLogins : 0,
+      isEnabled : true
+    }
+    await userService.update(user._id, updatedUser)
+    //update user password with uuid
+    .then(()=>{
+      let recipient : Recipient ={
+        company : process.env.COMPANY as string,
+        username : user.username,
+        email : user.email,
+        password : uuid
+      }
+      sendEmail("forgot-password",recipient)
+    res.status(200).json({ password: uuid });
+
+    })
+  }
 });
-  
+
 
 
 

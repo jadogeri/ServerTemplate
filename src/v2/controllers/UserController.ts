@@ -4,7 +4,7 @@
  * @since 09-FEB-2025
  *
  */
-import asyncHandler from '../../v2/utils/asyncHandler';
+const asyncHandler = require("express-async-handler");
 import { Response, Request } from 'express';
 import { errorBroadcaster } from "../utils/errorBroadcaster";
 import { isValidEmail, isValidPassword, isValidUsername, isValidatePhoneNumber } from "../utils/inputValidation";
@@ -18,6 +18,10 @@ import EmailService from '../services/EmailService';
 import { Recipient } from '../types/Recipient';
 import { UserLoginRequestDTO } from '../dtos/request/UserLoginRequestDTO';
 import { UserLoginResponseDTO } from '../dtos/response/UserLoginResponseDTO';
+import { UserForgotRequestDTO } from '../dtos/request/UserForgotRequestDTO';
+import { UserForgotResponseDTO } from '../dtos/response/UserForgotResponseDTO';
+import { IJwtPayload } from '../interfaces/IJWTPayload';
+import { UserLogoutResponseDTO } from '../dtos/response/UserLogoutResponseDTO';
 
 
 /**
@@ -80,7 +84,7 @@ class UserController{
 
   });
 
-  loginUser = asyncHandler(async (req: Request<{}, {}, UserLoginRequestDTO>, res: Response)  => {
+  loginUser = asyncHandler(async (req: Request<{}, {}, UserLoginRequestDTO>, res: Response): Promise<void>  => {
     const userRequest : UserLoginRequestDTO = req.body 
     console.log(userRequest)
     const { email, password } = userRequest;
@@ -117,59 +121,59 @@ class UserController{
 
 
 
+  forgotUser = asyncHandler(async (req: Request<{}, {}, UserRegisterRequestDTO>, res: Response) : Promise<void> => {
+    
+    const userRequest : UserForgotRequestDTO = req.body 
+    console.log(userRequest)
+    const { email } = userRequest;
+    console.log(email)
 
+    if(!email){
+      errorBroadcaster(res,400,"Email is mandatory!");
+    }
+    if(!isValidEmail(email)){
+      errorBroadcaster(res,400,"not a  valid email")
+    }
 
+    //calling service
+    const userResponse : ErrorResponse | UserForgotResponseDTO = await this.userService.forgotUser(userRequest);  
+    if(userResponse instanceof ErrorResponse){
+      //IF ERROR MESSAGE THEN SEND RESPONSE
+      errorBroadcaster(res, userResponse.getCode(), userResponse.getMessage())
+    }else{
+    // SEND RESPONSE  
+      res.status(200).send(userResponse);
+    }    
+    
+  });  
 
+  
+  currentUser = asyncHandler(async (req : IJwtPayload , res: Response) => {
+    
+    res.status(200).json(req.user);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  currentUser = asyncHandler(async (req: Request, res : Response) => {  
-
-    this.userService.currentUser();
-
-    res.status(200).json({message: "register user"});
   });
 
-  // loginUser = asyncHandler(async (req : any, res: Response) => {
+  logoutUser = asyncHandler(async (req: Request<{}, {}, IJwtPayload>, res: Response) : Promise<void> => {
+   
+  const userRequest = req as IJwtPayload;  
+  const token = userRequest.token as string
+  console.log("token==================", token)
+  if(!token){ 
+    errorBroadcaster(res,400,"field token is mandatory");
+  } 
+    //calling service
+  const userResponse : ErrorResponse | UserLogoutResponseDTO = await this.userService.logoutUser(userRequest);  
+  if(userResponse instanceof ErrorResponse){
+    //IF ERROR MESSAGE THEN SEND RESPONSE
+    errorBroadcaster(res, userResponse.getCode(), userResponse.getMessage())
+  }else{
+  // SEND RESPONSE  
+    res.status(200).send(userResponse);    }    
+  
+});
 
-  //   this.userService.loginUser();
 
-  //   res.status(200).json({message: "login user"});
-  // });
-
-  logoutUser = asyncHandler(async (req : any, res: Response) => {
-
-    this.userService.logoutUser();
-
-    res.status(200).json({message: "logout user"});
-  });
-
-  forgotUser = asyncHandler(async (req : any, res: Response) => {
-
-    this.userService.forgotUser();
-
-    res.status(200).json({message: "forgot user"});
-  });
 
   resetUser = asyncHandler(async (req : any, res: Response) => {
 
@@ -189,113 +193,67 @@ class UserController{
 
 export default UserController;
 
+
 /**
  * 
 
-
-const asyncHandler = require("express-async-handler");
-import {hash} from "bcrypt";
 import { Response, Request } from 'express';
-import { IUser } from '../../interfaces/IUser';
+import { IUserForgot } from "../../interfaces/IUserForgot";
 import * as userService from "../../services/userService"
 import { errorBroadcaster } from "../../utils/errorBroadcaster";
-import { isValidEmail, isValidPassword, isValidUsername, isValidatePhoneNumber } from "../../utils/inputValidation";
+import * as bcrypt from "bcrypt"
+import { isValidEmail } from '../../utils/inputValidation';
+import { IUser } from '../../interfaces/IUser';
+const asyncHandler = require("express-async-handler");
+import { generateRandomUUID } from '../../utils/generateRandonUUID';
+import { Recipient } from '../../types/Recipient';
+import { sendEmail } from '../../tools/mail/utils/sendEmail';
 
-import { Recipient } from "../../types/Recipient";
-import { sendEmail } from "../../tools/mail/utils/sendEmail";
-import { sendSms } from "../../tools/phone/sendSms";
 
-let company = process.env.COMPANY
+export const forgotUser = asyncHandler(async (req: Request, res : Response) => {
 
-
-export const registerUser = asyncHandler(async (req: Request, res : Response) => {  
-    
-  const { username, email, password, phone } : IUser = req.body;
-  
-  if (!username || !email || !password) {
-    errorBroadcaster(res,400,"All fields are mandatory!")
+  const { email} : IUserForgot = req.body;
+  if (!email ) {
+    res.status(400);
+    throw new Error("Email is mandatory!");
   }
-  if(!isValidEmail(email as string)){
-    errorBroadcaster(res,553,"not a  valid email")
-
-  }
-  if(!isValidUsername(username as string)){
-    errorBroadcaster(res,400,"not a valid username")
-
-  }
-  if(!isValidPassword(password as string)){
-    errorBroadcaster(res,400,"not a valid password")
-  }  
-//if phone number is provided check if string is a valid phone number
-  if(phone){
-    if(!isValidatePhoneNumber(phone )){
-        errorBroadcaster(res,400,"not a valid phone number")
-    }  
-  }
-  
-  const userByEmailAvailable  = await userService.getByEmail(email as string);
-  if (userByEmailAvailable) {
-    errorBroadcaster(res,409,"User already registered!");
-  }
-  const userByUsernameAvailable  = await userService.getByUsername(username as string);
-  if (userByUsernameAvailable) {
-    errorBroadcaster(res,409,"Username already taken!");
+  if(!isValidEmail(email)){
+    errorBroadcaster(res,400,"not a  valid email")
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  //Hash password
-  const hashedPassword : string = await hash(password as string, parseInt(process.env.BCRYPT_SALT_ROUNDS as string));
-  console.log("Hashed Password: ", hashedPassword);
-  const unregisteredUser : IUser = req.body 
-  unregisteredUser.password = hashedPassword;
-  //const user = await userService.create(unregisteredUser)
-  await userService.create(unregisteredUser)  
-  .then((user: IUser)=>{
-
-    let recipient : Recipient= {username : user.username, email: user.email, company : company}  
-try{  
-   sendEmail('register-account', recipient);
-   //TODO ADD PHONE SENDING
-  //  sendSms("YOUR TWILIO PHONE NUMBER",recipient)
-  console.log(`User created ${JSON.stringify(user)}`);
-  if (user) {
-    //send response 
-    res.status(201).json(user);
+  const user  = await userService.getByEmail(email);
+  if (!user) {
+    errorBroadcaster(res,400,`Invalid Email ${email}`);
   }else{
-    res.status(400).json({ message: "something went wrong" });
-  }
+    //generate unique password
+    const size : number = parseInt(process.env.NANOID_SIZE as string);
+    
+    // Using the alphanumeric dictionary
+    const uuid = generateRandomUUID(size)  
 
-}catch(e){
-  console.log(e)
-}
-   })  
-  
-  })
+    console.log("uuid === ", uuid);
+    //hash generated password
+    const hashedPassword : string = await bcrypt.hash(uuid , parseInt(process.env.BCRYPT_SALT_ROUNDS as string));
+    console.log("Hashed Password: ", hashedPassword);
+    //store generated password in database and unlock account
+    const updatedUser : IUser = {
+      password : hashedPassword,
+      failedLogins : 0,
+      isEnabled : true
+    }
+    await userService.update(user._id, updatedUser)
+    //update user password with uuid
+    .then(()=>{
+      let recipient : Recipient ={
+        company : process.env.COMPANY as string,
+        username : user.username,
+        email : user.email,
+        password : uuid
+      }
+      sendEmail("forgot-password",recipient)
+    res.status(200).json({ password: uuid });
+
+    })
+  }
+});
  */

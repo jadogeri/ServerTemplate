@@ -1,3 +1,4 @@
+import { IJwtPayload } from "./src/v2/interfaces/IJWTPayload";
 import { UserRegisterRequestDTO } from "./src/v2/dtos/request/UserRegisterRequestDTO";
 import { UserRegisterResponseDTO } from "./src/v2/dtos/response/UserRegisterResponseDTO";
 import { ErrorResponse } from "./src/v2/entities/ErrorResponse";
@@ -6,7 +7,8 @@ declare global {
   var localStorage: LocalStorage;
     namespace Express {
       interface Request {
-        user: {
+        token?: string,
+        user?: {
             username:string;
             email:string
             id:mongoose.Types.ObjectId
@@ -19,10 +21,6 @@ declare global {
       responseBody?: UserRegisterResponseDTO | ErrorResponse;
       json(body: UserRegisterResponseDTO): Response; // Type for the response body
       body: UserRegisterResponseDTO
-
-
-
-
 
       }
     }

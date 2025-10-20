@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import Auth from "../models/authModel";
+import Auth from "../models/AuthModel";
 import { IAuth } from "../interfaces/IAuth";
 
 

@@ -3,7 +3,7 @@ import { Mail } from "../types/Mail"
 import { Recipient } from "../types/Recipient"
 import { loadTemplate } from "../tools/mail/utils/loadTemplate"
 import transportMail from "../tools/mail/utils/transportMail"
-import { EmailContext } from "../entities/emailContext"
+import { EmailContext } from "../entities/EmailContext"
 
 // import { sendSms } from "../../tools/phone/sendSms";
  

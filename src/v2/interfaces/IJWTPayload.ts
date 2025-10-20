@@ -6,6 +6,6 @@ export interface IJwtPayload extends Request {
     username:string;
     email:string
     id:mongoose.Types.ObjectId
-
-  }  
+  };
+  token: string;
 }
