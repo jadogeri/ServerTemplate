@@ -1,16 +1,15 @@
-import mongoose, { Date } from "mongoose";
+import mongoose, {Date} from "mongoose";
 
-export interface IUser  {
+export interface UserRegisterResponseDTO{
     username?: string;
     email?: string;
     password? : string,
-    phone? : string
+    phone? : string,
     isEnabled? : boolean,
     failedLogins? : number,
     createdAt?: Date,
     updatedAt?: Date,
-    _id?: mongoose.Types.ObjectId
-
-  
+    _id: mongoose.Types.ObjectId
 
 }
+

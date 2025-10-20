@@ -1,9 +1,15 @@
 import express from "express";
 import UserController from "../controllers/UserController";
 import UserService from "../services/UserService";
+import UserRepository from "../repositories/UserRepository";
+import EmailService from "../services/EmailService";
+import AuthRepository from "../repositories/AuthRepository";
 
-const userService = new UserService();
-const userController = new UserController(userService)
+const emailService = new EmailService();
+const userRepository = new UserRepository();
+const authRepository = new AuthRepository();
+const userService = new UserService(userRepository, authRepository);
+const userController = new UserController(userService, emailService);
 const validateToken = require("../middlewares/validateTokenHandler");
 
 const router = express.Router();

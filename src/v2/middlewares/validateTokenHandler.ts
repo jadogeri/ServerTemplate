@@ -1,6 +1,8 @@
+
+
 import { Response, NextFunction } from "express";
 import {jwtDecode} from 'jwt-decode';
-import asyncHandler from "../../v1/utils/asyncHandler";
+const asyncHandler = require("express-async-handler");
 import * as jwt from"jsonwebtoken";
 import { IJwtPayload } from "../interfaces/IJWTPayload";
 import isJwtTokenExpired, { decode } from 'jwt-check-expiry';

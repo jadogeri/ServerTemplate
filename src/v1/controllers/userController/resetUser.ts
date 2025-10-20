@@ -16,6 +16,7 @@ import { IUser } from '../../interfaces/IUser';
 import { sendEmail } from '../../tools/mail/utils/sendEmail';
 import { Recipient } from '../../types/Recipient';
 
+
 /**
 *@desc Reset a user
 *@route PUT /api/users/reset

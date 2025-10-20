@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import User from "../models/UserModel";
 import { IUser } from "../interfaces/IUser";
+import { UserRegisterRequestDTO } from "../dtos/request/UserRegisterRequestDTO";
 
 class UserRepository{
 
@@ -33,8 +34,9 @@ class UserRepository{
      * @returns A promise that resolves to the created user object.
      * @throws Throws an error if the user creation fails due to validation or database issues.
      */
-    async create(user : IUser) {
-        return  User.create(user);
+    async create(user : UserRegisterRequestDTO) {
+
+        return  User.create(user as IUser);
     }
 
     /**
@@ -61,4 +63,4 @@ class UserRepository{
 
 }
 
-export default new UserRepository();
+export default UserRepository;
