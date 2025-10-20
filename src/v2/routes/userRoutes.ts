@@ -7,15 +7,17 @@ import EmailService from "../services/EmailService";
 import AuthRepository from "../repositories/AuthRepository";
 import BcryptService from "../services/BcryptService";
 import AuthService from "../services/AuthService";
+import CredentialValidatorService from "../services/CredentialValidatorService";
 
 const emailService = new EmailService();
+const credentialValidatorService = new CredentialValidatorService();
 const userRepository = new UserRepository();
 const authRepository = new AuthRepository();
 const authService = new AuthService(authRepository);
 
 const bcryptService = new BcryptService();
 const userService = new UserService(userRepository, authService, bcryptService, emailService);
-const userController = new UserController(userService);
+const userController = new UserController(userService, credentialValidatorService);
 const validateToken = require("../middlewares/validateTokenHandler");
 
 const router = express.Router();

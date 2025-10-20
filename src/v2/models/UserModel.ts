@@ -2,7 +2,6 @@ import mongoose, { Model } from 'mongoose';
 import { UserSchema } from '../schemas/UserSchema';
 import { IUser } from '../interfaces/IUser';
 
-
 class UserModel{
 
     private schema: UserSchema;
