@@ -7,13 +7,13 @@ on:
   push:
     branches: [ "main" ]
     paths:
-      - 'src/v2/**'
-      - 'tests/v2/**'
+      - 'app/src/v2/**'
+      - 'app/tests/v2/**'
   pull_request:
     branches: [ "main" ]
     paths:
-      - 'src/v2/**'
-      - 'tests/v2/**'
+      - 'app/src/v2/**'
+      - 'app/tests/v2/**'
 
 
 jobs:
