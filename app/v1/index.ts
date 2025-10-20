@@ -3,7 +3,7 @@ const dotenv = require("dotenv")
 dotenv.config();
 
 import express,{ Request, Response } from 'express';
-//import MongoDatabase from './src/v1/entities/MongoDatabase';
+import MongoDatabase from './src/v1/entities/MongoDatabase';
 const errorHandler = require("./src/v1/middlewares/errorHandler");
 const {corsOptions} = require("./src/v1/configs/cors")
 const cors = require("cors");
@@ -28,7 +28,7 @@ app.get('/', (req: Request, res : Response) => {
   res.send({message:"home"});
 });
 
-//MongoDatabase.getInstance()
+MongoDatabase.getInstance()
 
 
 if (process.env.NODE_ENV !== 'test') {

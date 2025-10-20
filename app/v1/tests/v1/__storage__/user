@@ -1,0 +1,14 @@
+{
+  "username": "JohnDoe1",
+  "email": "johndoe1@gmail.com",
+  "password": "Test12345@",
+  "phone": "15049999999",
+  "confirm": true,
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJuYW1lIjoiSm9obkRvZTEiLCJlbWFpbCI6ImpvaG5kb2UxQGdtYWlsLmNvbSIsImlkIjoiNjc5YmJiMzU5MGYyYmJkZTVhMzVlMzg2In0sImlhdCI6MTczODI2MDc5MSwiZXhwIjoxNzM4MjYyNTkxfQ.9qjx6BiDI6AGa0Qlp0zfvkzlWRPLOIEBh0Bz_gP3N94",
+  "old_password": "",
+  "new_password": "Test12345@",
+  "_id": "679bbb3590f2bbde5a35e386",
+  "createdAt": "2025-01-30T17:47:33.503Z",
+  "updatedAt": "2025-01-30T17:47:33.503Z",
+  "__v": 0
+}

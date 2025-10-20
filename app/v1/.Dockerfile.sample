@@ -1,0 +1,20 @@
+FROM node:lts-alpine
+ENV PORT=6000
+ENV BCRYPT_SALT_ROUNDS=11
+ENV NANOID_SIZE=11
+ENV BASE_URL=http://localhost:6000
+ENV NODEMAILER_USERNAME="gmail account"
+ENV NODEMAILER_PASSWORD="gmail app password"
+ENV JSON_WEB_TOKEN_SECRET=""
+ENV MONGODB_URI="mongodb uri"
+ENV TWILIO_ACCOUNT_SID="twilio account sid"
+ENV TWILIO_AUTH_TOKEN="twilio auth token"
+ENV TWILIO_PHONE_NUMBER="twilio phone number"
+ENV COMPANY="company name"
+WORKDIR /app
+COPY package*.json /app
+RUN npm install
+COPY . /app
+EXPOSE 6000
+CMD npm run dev
+
