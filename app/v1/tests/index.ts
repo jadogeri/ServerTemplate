@@ -2,10 +2,11 @@
 const dotenv = require("dotenv")
 dotenv.config();
 
+import {corsOptions} from "../src/configs/cors";
+
 import express,{ Request, Response } from 'express';
 import * as mmd from './MongoMemoryServer';
 const errorHandler = require("../src/middlewares/errorHandler");
-const {corsOptions} = require("../src/configs/cors")
 const cors = require("cors");
 
 
