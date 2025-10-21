@@ -90,7 +90,7 @@ This is a template for Backend Application (Express + Node + Mongoose) which sto
 
 ### **1.1 Purpose**
 
-This document outlines the system architecture, components, and design considerations for Contact Management App. The goal is to provide a template for backend developers to handle CRUD operations and authentication flow.
+This document outlines the system architecture, components, and design considerations for Server Te App. The goal is to provide a template for backend developers to handle CRUD operations and authentication flow.
 
 ### **1.2 Scope**
 
@@ -182,10 +182,10 @@ The system follows a **three-tier architecture**:
   git clone https://github.com/jadogeri/ServerTemplate.git
 ```
 
-3 Enter command cd ServerTemplate then press enter.
+3 Enter command cd ServerTemplate/app/v1 then press enter.
 
 ```bash
-  cd ServerTemplate
+  cd ServerTemplate/app/v1
 ```
 
 #### **6.1.1 Run Locally**
@@ -250,7 +250,7 @@ The system follows a **three-tier architecture**:
 
 **Prerequisites** :ensure container or local application is running.
 
-**Note** : use `<a href="#2-api-reference">`API Reference`</a>` docs for testing endpoints.
+**Note** : use <a href="#2-api-reference">API Reference</a> docs for testing endpoints.
 
 #### **7.1.1 Postman Environment Variables**
 
