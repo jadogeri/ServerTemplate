@@ -1,4 +1,4 @@
-import { constants } from "../../../constants";
+import { constants } from "../../constants";
 import { Response, Request,NextFunction } from "express";
 
 const errorHandler = (err : Error, req : Request, res : Response, next : NextFunction) => {
