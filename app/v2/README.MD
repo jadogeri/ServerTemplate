@@ -2,8 +2,8 @@
 
 ## **Server Template**
 
-**Version:** 1.1
-**Date:** February 15, 2025
+**Version:** 2.0
+**Date:** October 21, 2025
 
 ---
 
