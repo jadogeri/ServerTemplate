@@ -2,7 +2,7 @@
 // Unit tests for: isValidPassword
 
 
-import { isValidPassword } from '../../../../src/v1/utils/inputValidation';
+import { isValidPassword } from '../../../src/utils/inputValidation';
 
 
 describe('isValidPassword() isValidPassword method', () => {

@@ -1,3 +1,5 @@
+import { LocalStorage } from "node-localstorage";
+
 declare global {
   var localStorage: LocalStorage;
     namespace Express {

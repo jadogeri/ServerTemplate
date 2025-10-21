@@ -3,8 +3,8 @@
 
 
 import mongoose from "mongoose";
-import Auth from "../../../../src/v1/models/authModel";
-import { create } from '../../../../src/v1/services/authService';
+import Auth from "../../../src/models/authModel";
+import { create } from '../../../src/services/authService';
 
 
 // Import necessary modules and dependencies
@@ -15,7 +15,7 @@ import { create } from '../../../../src/v1/services/authService';
 jest.mock("mongoose");
 
 // Mock the Auth model
-jest.mock("../../../../src/v1/models/authModel", () => ({
+jest.mock("../../../src/models/authModel", () => ({
   create: jest.fn(),
 }));
 

@@ -2,7 +2,7 @@
 // Unit tests for: isValidUsername
 
 
-import { isValidUsername } from '../../../../src/v1/utils/inputValidation';
+import { isValidUsername } from '../../../src/utils/inputValidation';
 
 
 // Import the function to be tested

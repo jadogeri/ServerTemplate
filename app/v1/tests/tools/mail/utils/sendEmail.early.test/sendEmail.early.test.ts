@@ -2,22 +2,22 @@
 // Unit tests for: sendEmail
 
 
-import { loadTemplate } from "../../../../../../src/v1/tools/mail/utils/loadTemplate";
-import { sendEmail } from '../../../../../../src/v1/tools/mail/utils/sendEmail';
-import transportMail from "../../../../../../src/v1/tools/mail/utils/transportMail";
-import { Mail } from "../../../../../../src/v1/types/Mail";
-import { Recipient } from "../../../../../../src/v1/types/Recipient";
+import { loadTemplate } from "../../../../../src/tools/mail/utils/loadTemplate";
+import { sendEmail } from '../../../../../src/tools/mail/utils/sendEmail';
+import transportMail from "../../../../../src/tools/mail/utils/transportMail";
+import { Mail } from "../../../../../src/types/Mail";
+import { Recipient } from "../../../../../src/types/Recipient";
 
 // Mocking the loadTemplate and transportMail functions
-jest.mock("../../../../../../src/v1/tools/mail/utils/loadTemplate", () => {
-  const actual = jest.requireActual("../../../../../../src/v1/tools/mail/utils/loadTemplate");
+jest.mock("../../../../../src/tools/mail/utils/loadTemplate", () => {
+  const actual = jest.requireActual("../../../../../src/tools/mail/utils/loadTemplate");
   return {
     ...actual,
     loadTemplate: jest.fn(),
   };
 });
 
-jest.mock("../../../../../../src/v1/tools/mail/utils/transportMail", () => {
+jest.mock("../../../../../src/tools/mail/utils/transportMail", () => {
   return {
     __esModule: true,
     default: jest.fn(),

@@ -1,4 +1,4 @@
-import { IUser } from "../../../src/v1/interfaces/IUser"
+import { IUser } from "../../src/interfaces/IUser"
 
 const users: IUser[] = [
     {

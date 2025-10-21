@@ -2,8 +2,8 @@
 // Unit tests for: remove
 
 
-import User from "../../../../src/v1/models/userModel";
-import { remove } from '../../../../src/v1/services/userService';
+import User from "../../../src/models/userModel";
+import { remove } from '../../../src/services/userService';
 
 
 // Import necessary modules and dependencies
@@ -18,7 +18,7 @@ jest.mock("mongoose", () => ({
 }));
 
 // Mock the User model
-jest.mock("../../../../src/v1/models/userModel", () => ({
+jest.mock("../../../src/models/userModel", () => ({
   findByIdAndDelete: jest.fn(),
 }));
 

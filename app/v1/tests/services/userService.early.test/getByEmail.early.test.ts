@@ -2,15 +2,15 @@
 // Unit tests for: getByEmail
 
 
-import { IUser } from "../../../../src/v1/interfaces/IUser";
-import User from "../../../../src/v1/models/userModel";
-import { getByEmail } from '../../../../src/v1/services/userService';
+import { IUser } from "../../../src/interfaces/IUser";
+import User from "../../../src/models/userModel";
+import { getByEmail } from '../../../src/services/userService';
 
 
 
 
 // Mock the User model
-jest.mock("../../../../src/v1/models/userModel");
+jest.mock("../../../src/models/userModel");
 
 describe('getByEmail() getByEmail method', () => {
   beforeEach(() => {

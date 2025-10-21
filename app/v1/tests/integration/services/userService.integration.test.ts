@@ -1,8 +1,8 @@
 // userService.test.js
-import * as userService from '../../../../src/v1/services/userService';
+import * as userService from '../../../src/services/userService';
 import * as db from "../../MongoMemoryServer"
-import User from '../../../../src/v1/models/userModel'; // Your User model
-import { IUser } from '../../../../src/v1/interfaces/IUser';
+import User from '../../../src/models/userModel'; // Your User model
+import { IUser } from '../../../src/interfaces/IUser';
 import { validateStringEquality, validateNotEmpty } from '../../validators';
 import { log } from 'console';
 import mongoose from 'mongoose';

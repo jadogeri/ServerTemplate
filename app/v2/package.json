@@ -13,9 +13,8 @@
     "prod": "nodemon index.ts",
     "dev": "ts-node-dev index",
     "watch": "nodemon --exec ts-node -- ./index.ts",
-    "mmd": "nodemon --exec ts-node -- ./tests/v1/index.ts",
-    "v1": "jest tests/v1",
-    "v2": "jest tests/v2"
+    "mmd": "nodemon --exec ts-node -- ./tests/index.ts",
+    "v2": "jest tests"
 
   },
   "repository": {

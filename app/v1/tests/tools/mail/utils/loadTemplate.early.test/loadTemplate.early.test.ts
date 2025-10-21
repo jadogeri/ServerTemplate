@@ -2,8 +2,8 @@
 // Unit tests for: loadTemplate
 
 
-import { loadTemplate } from '../../../../../../src/v1/tools/mail/utils/loadTemplate';
-import { Recipient } from "../../../../../../src/v1/types/Recipient";
+import { loadTemplate } from '../../../../../src/tools/mail/utils/loadTemplate';
+import { Recipient } from "../../../../../src/types/Recipient";
 
 
 // Mocking the EmailTemplate class from 'email-templates'

@@ -2,14 +2,14 @@
 // Unit tests for: getInstance
 
 
-import { connectMongoDB } from '../../../../src/v1/configs/mongoDB';
-import MongoDatabase from '../../../../src/v1/entities/MongoDatabase';
+import { connectMongoDB } from '../../../src/configs/mongoDB';
+import MongoDatabase from '../../../src/entities/MongoDatabase';
 
 
 
 
 jest.mock("dotenv");
-jest.mock("../../../../src/v1/configs/mongoDB", () => ({
+jest.mock("../../../src/configs/mongoDB", () => ({
   connectMongoDB: jest.fn(),
 }));
 

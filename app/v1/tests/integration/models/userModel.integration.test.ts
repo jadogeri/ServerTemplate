@@ -1,7 +1,7 @@
 
 import mockingoose from 'mockingoose';
-import User from '../../../../src/v1/models/userModel'; // Your User model
-import { IUser } from '../../../../src/v1/interfaces/IUser';
+import User from '../../../src/models/userModel'; // Your User model
+import { IUser } from '../../../src/interfaces/IUser';
 import { validateStringEquality, validateNotEmpty } from '../../validators';
 const users = require("../../__mocks__/users")
 

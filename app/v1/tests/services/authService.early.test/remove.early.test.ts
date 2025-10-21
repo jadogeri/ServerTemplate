@@ -3,14 +3,14 @@
 
 
 import mongoose from "mongoose";
-import { IAuth } from "../../../../src/v1/interfaces/IAuth";
-import Auth from "../../../../src/v1/models/authModel";
-import { remove } from '../../../../src/v1/services/authService';
+import { IAuth } from "../../../src/interfaces/IAuth";
+import Auth from "../../../src/models/authModel";
+import { remove } from '../../../src/services/authService';
 
 
 
 
-jest.mock("../../../../src/v1/models/authModel");
+jest.mock("../../../src/models/authModel");
 
 describe('remove() remove method', () => {
   // Happy Path Tests
