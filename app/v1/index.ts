@@ -4,10 +4,10 @@ dotenv.config();
 
 import express,{ Request, Response } from 'express';
 import MongoDatabase from './src/entities/MongoDatabase';
-const errorHandler = require("./src/v1/middlewares/errorHandler");
-const {corsOptions} = require("./src/v1/configs/cors")
-const cors = require("cors");
+import {corsOptions} from "./src/configs/cors";
 
+const errorHandler = require("./src/middlewares/errorHandler");
+const cors = require("cors");
 
 const app = express();
 
@@ -15,9 +15,8 @@ const port = process.env.PORT || 6000;
 
 
 app.use(express.json());
-//app.use("/api/contacts", require("./src/routes/contactRoutes"))
 
-app.use("/api/v1/users", require("./src/v1/routes/userRoutes"));
+app.use("/api/v1/users", require("./src/routes/userRoutes"));
 
 app.use(errorHandler);
 app.use(cors(corsOptions)) 
