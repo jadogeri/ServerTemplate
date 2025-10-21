@@ -1,2 +1,0 @@
-# Scripts
-Miscellaneous scripts.
