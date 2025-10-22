@@ -1,6 +1,5 @@
 import { constants } from "../../constants";
 import { Response, Request,NextFunction } from "express";
-
 const errorHandler = (err : Error, req : Request, res : Response, next : NextFunction) => {
   const statusCode = res.statusCode ? res.statusCode : 500;
   switch (statusCode) {
@@ -59,4 +58,4 @@ const errorHandler = (err : Error, req : Request, res : Response, next : NextFun
   }
 };
 
-module.exports = errorHandler;
+module.exports = { errorHandler };

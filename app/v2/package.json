@@ -14,7 +14,7 @@
     "dev": "ts-node-dev index.ts",
     "watch": "nodemon --exec ts-node -- ./index.ts",
     "mmd": "nodemon --exec ts-node -- ./tests/index.ts",
-    "v2": "jest tests"
+    "v2": "nodemon --exec npx ts-node ./index.ts"
   },
   "repository": {
     "type": "git",

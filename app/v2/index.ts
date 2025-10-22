@@ -4,7 +4,7 @@ dotenv.config();
 
 import express,{ Request, Response } from 'express';
 import MongoDatabase from './src/entities/MongoDatabase';
-const errorHandler = require("./src/middlewares/errorHandler");
+const { errorHandler } = require("./src/middlewares/errorHandler");
 const {corsOptions} = require("./src/configs/cors")
 const cors = require("cors");
 
