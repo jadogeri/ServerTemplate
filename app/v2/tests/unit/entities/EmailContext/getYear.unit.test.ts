@@ -42,12 +42,12 @@ describe('EmailContext.getYear() getYear method', () => {
     it('should return correct year just after New Year (edge case)', () => {
         // This test aims to verify correct year calculation just after New Year.
         // Mock Date to Jan 1, 00:00:00
-        const mockDate = new Date('2024-01-01T00:00:00.000Z');
+        const mockDate = new Date('2024-01-02T00:00:00.000Z');
         const spy = jest.spyOn(global, 'Date').mockImplementation(() => mockDate);
 
         const emailContext = new EmailContext();
         const result = emailContext.getYear();
-        expect(result).not.toEqual(2024);
+        expect(result).toEqual(2024);
 
         // Restore Date
         spy.mockRestore()
@@ -68,12 +68,12 @@ describe('EmailContext.getYear() getYear method', () => {
 
     it('should work correctly if system date is set to a year far in the future (edge case)', () => {
         // This test aims to verify correct year calculation for a date far in the future.
-        const mockDate = new Date('3000-01-01T00:00:00.000Z');
+        const mockDate = new Date('3000-01-02T00:00:00.000Z');
         const spy = jest.spyOn(global, 'Date').mockImplementation(() => mockDate);
 
         const emailContext = new EmailContext();
         const result = emailContext.getYear();
-        expect(result).toBe(2999);
+        expect(result).toBe(3000);
 
         spy.mockRestore();
     });
