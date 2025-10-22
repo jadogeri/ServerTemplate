@@ -1,9 +1,7 @@
 
-import { Mail } from "../types/Mail"
 import { Recipient } from "../types/Recipient"
-import { loadTemplate } from "../tools/mail/utils/loadTemplate"
-import transportMail from "../tools/mail/utils/transportMail"
-import { EmailContext } from "../entities/EmailContext"
+//import { twilioClient, twilioPhoneNumber } from "../configs/twilio";
+//import { MessageInstance } from "twilio/lib/rest/api/v2010/account/message";
 
 // import { sendSms } from "../../tools/phone/sendSms";
  
@@ -12,8 +10,23 @@ class TextService {
   constructor(){
   }        
 
-  sendSms =() =>  {
-  }
+sendSms = (recipientPhoneNumber : string, recipient : Recipient)=>{
+
+  // twilioClient
+  // .messages
+  //   .create({
+  //     from: twilioPhoneNumber,
+  //     to: recipientPhoneNumber,
+  //     body: "Hello from Twilio and TypeScript!",
+  //   })
+  //   .then((message : unknown) =>{ 
+  //     console.log(`Message SID: ${message}`);
+  //    })
+  //   .catch((error: unknown) =>{ 
+  //     console.error(`Error sending SMS: ${error}`);
+  //   });
+
+}
  
 }    
 

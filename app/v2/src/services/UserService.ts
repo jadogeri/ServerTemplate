@@ -24,6 +24,7 @@ import { UserDeactivateRequestDTO } from '../dtos/request/UserDeactivateRequestD
 import { UserDeactivateResponseDTO } from '../dtos/response/UserDeactivateResponseDTO';
 import { UserResetResponseDTO } from '../dtos/response/UserResetResponseDTO';
 import { UserResetRequestDTO } from '../dtos/request/UserResetRequestDTO';
+import TextService from './TextService';
 
 
 
@@ -38,13 +39,15 @@ import { UserResetRequestDTO } from '../dtos/request/UserResetRequestDTO';
         private authService: AuthService;
         private bcryptService : BcryptService;
         private emailService: EmailService;
+        private textService: TextService;
         
-        constructor(userRepository: UserRepository, authService: AuthService, bcryptService: BcryptService, emailService: EmailService){
+        constructor(userRepository: UserRepository, authService: AuthService, bcryptService: BcryptService, emailService: EmailService, textService: TextService){
 
             this.userRepository = userRepository;
             this.authService = authService;
             this.bcryptService = bcryptService
             this.emailService = emailService;
+            this.textService = textService;
         }        
         async registerUser(reqUser: UserRegisterRequestDTO): Promise<UserRegisterResponseDTO | ErrorResponse>  {
 
@@ -151,6 +154,9 @@ import { UserResetRequestDTO } from '../dtos/request/UserResetRequestDTO';
                         //SEND EMAIL
                         let recipient : Recipient= {username : user.username, email: user.email}  
                         this.emailService.sendEmail("locked-account",recipient ); 
+
+                        //SEND TEXT MESSAGE
+                        this.textService.sendSms("15045414308",recipient);
 
                         // RETURN RESPONSE TO CONTROLLER
                         const errorResponse = new ErrorResponse(400,"Account is locked because of too many failed login attempts. Use /forgt route to access acount");

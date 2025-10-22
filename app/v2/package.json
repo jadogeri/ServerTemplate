@@ -11,7 +11,7 @@
     "e2e": "jest --testPathPattern=e2e.test.ts$",
     "start": "node index.ts",
     "prod": "nodemon index.ts",
-    "dev": "ts-node-dev index",
+    "dev": "ts-node-dev index.ts",
     "watch": "nodemon --exec ts-node -- ./index.ts",
     "mmd": "nodemon --exec ts-node -- ./tests/index.ts",
     "v2": "jest tests"
@@ -64,7 +64,7 @@
     "@types/bcrypt": "^5.0.2",
     "@types/bluebird": "^3.5.42",
     "@types/email-templates": "^10.0.4",
-    "@types/express": "^5.0.0",
+    "@types/express": "^5.0.3",
     "@types/jest": "^29.5.14",
     "@types/jsonwebtoken": "^9.0.8",
     "@types/mockingoose": "^2.13.0",
