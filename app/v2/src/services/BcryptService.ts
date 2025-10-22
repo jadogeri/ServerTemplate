@@ -22,7 +22,6 @@ class BcryptService {
   public updateUUID(){
     // Using the alphanumeric dictionary
     this.uuid = generateRandomUUID(this.size)  
-    console.log("uuid === ", this.uuid);
 
   }
 
