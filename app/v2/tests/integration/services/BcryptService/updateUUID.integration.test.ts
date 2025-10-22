@@ -1,12 +1,12 @@
 
-import { generateRandomUUID } from "../../../src/utils/generateRandonUUID";
-import BcryptService from '../../../src/services/BcryptService';
+import { generateRandomUUID } from "../../../../src/utils/generateRandonUUID";
+import BcryptService from '../../../../src/services/BcryptService';
 
 
 // app/v2/src/services/BcryptService.updateUUID.spec.ts
 // Mock generateRandomUUID, preserving all other exports
-jest.mock("../../../src/utils/generateRandonUUID", () => {
-  const actual = jest.requireActual("../../../src/utils/generateRandonUUID");
+jest.mock("../../../../src/utils/generateRandonUUID", () => {
+  const actual = jest.requireActual("../../../../src/utils/generateRandonUUID");
   return {
     ...actual,
     generateRandomUUID: jest.fn(),
