@@ -109,7 +109,7 @@ The system will allow users to:
 
 ## **2. API Reference**
 
-* [Link to Documentation ](https://documenter.getpostman.com/view/40822092/2sAYXEEdwL)
+* [Link to Documentation ](https://documenter.getpostman.com/view/40822092/2sB3QRoSr6)
 
 ## **3. System Architecture**
 
