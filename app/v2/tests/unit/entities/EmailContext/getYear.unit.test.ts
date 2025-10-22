@@ -80,12 +80,12 @@ describe('EmailContext.getYear() getYear method', () => {
 
     it('should not throw and should return a number even if Date is mocked to a non-standard date (edge case)', () => {
         // This test aims to verify that getYear does not throw and returns a number for a non-standard date.
-        const mockDate = new Date('0001-01-01T00:00:00.000Z');
+        const mockDate = new Date('0001-01-02T00:00:00.000Z');
         const spy = jest.spyOn(global, 'Date').mockImplementation(() => mockDate);
 
         const emailContext = new EmailContext();
         const result = emailContext.getYear();
-        expect(result).not.toBe(1);
+        expect(result).toBe(1);
         expect(typeof result).toBe('number');
 
         // Restore Date
