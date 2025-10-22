@@ -59,4 +59,4 @@ const errorHandler = (err : Error, req : Request, res : Response, next : NextFun
   }
 };
 
-module.exports = errorHandler;
+module.exports = { errorHandler };

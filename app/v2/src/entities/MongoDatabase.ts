@@ -1,8 +1,6 @@
-import * as dotenv from 'dotenv'
 import { connectMongoDB } from '../configs/mongoDB'
-dotenv.config()
 
-class MongoDatabase {
+export class MongoDatabase {
    private static _database: MongoDatabase | null = null;
    private constructor() {
         const dbUrl = process.env.MONGODB_URI
@@ -27,5 +25,4 @@ class MongoDatabase {
         }
    }
 }
-export default MongoDatabase
 

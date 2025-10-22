@@ -1,7 +1,8 @@
 
 import { NextFunction, Request, Response } from "express";
 import { constants } from "../../constants";
-const errorHandler = require("../../src/middlewares/errorHandler");
+const { errorHandler } = require("../../src/middlewares/errorHandler")
+
 
 describe('errorHandler() errorHandler method', () => {
   // Helper to create a mock response object

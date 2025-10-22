@@ -1,9 +1,10 @@
 
-const dotenv = require("dotenv")
-dotenv.config();
 
 import express,{ Request, Response } from 'express';
-import MongoDatabase from './src/entities/MongoDatabase';
+import {MongoDatabase } from './src/entities/MongoDatabase';
+
+const dotenv = require("dotenv")
+dotenv.config();
 const { errorHandler } = require("./src/middlewares/errorHandler");
 const {corsOptions} = require("./src/configs/cors")
 const cors = require("cors");
