@@ -8,7 +8,6 @@ export class EmailContext{
     getYear(){
         const currentDate = new Date();
         const currentYear = currentDate.getFullYear();
-        console.log(currentYear);
         return currentYear;
     }
     getCompany(){
