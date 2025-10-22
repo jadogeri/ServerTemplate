@@ -1,6 +1,6 @@
 # **System Design Document (SDD)**
 
-## **Server Template**
+## **Server Template v2**
 
 **Version:** 2.0
 **Date:** October 21, 2025
