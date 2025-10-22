@@ -1,9 +1,8 @@
 
 import { Recipient } from "../types/Recipient"
-//import { twilioClient, twilioPhoneNumber } from "../configs/twilio";
+import { twilioClient, twilioPhoneNumber } from "../configs/twilio";
 //import { MessageInstance } from "twilio/lib/rest/api/v2010/account/message";
 
-// import { sendSms } from "../../tools/phone/sendSms";
  
 class TextService {
 
@@ -12,19 +11,19 @@ class TextService {
 
 sendSms = (recipientPhoneNumber : string, recipient : Recipient)=>{
 
-  // twilioClient
-  // .messages
-  //   .create({
-  //     from: twilioPhoneNumber,
-  //     to: recipientPhoneNumber,
-  //     body: "Hello from Twilio and TypeScript!",
-  //   })
-  //   .then((message : unknown) =>{ 
-  //     console.log(`Message SID: ${message}`);
-  //    })
-  //   .catch((error: unknown) =>{ 
-  //     console.error(`Error sending SMS: ${error}`);
-  //   });
+  twilioClient
+  .messages
+    .create({
+      from: twilioPhoneNumber,
+      to: recipientPhoneNumber,
+      body: "Hello from Twilio and TypeScript!",
+    })
+    .then((message : unknown) =>{ 
+      console.log(`Message SID: ${message}`);
+     })
+    .catch((error: unknown) =>{ 
+      console.error(`Error sending SMS: ${error}`);
+    });
 
 }
  
