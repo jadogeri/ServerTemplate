@@ -55,12 +55,12 @@ describe('EmailContext.getYear() getYear method', () => {
 
     it('should work correctly if system date is set to a year far in the past (edge case)', () => {
         // This test aims to verify correct year calculation for a date far in the past.
-        const mockDate = new Date('1900-01-01T00:00:00.000Z');
+        const mockDate = new Date('1900-01-02T00:00:00.000Z');
         const spy = jest.spyOn(global, 'Date').mockImplementation(() => mockDate);
 
         const emailContext = new EmailContext();
         const result = emailContext.getYear();
-        expect(result).not.toBe(1900);
+        expect(result).toBe(1900);
 
         // Restore Date
         spy.mockRestore()
