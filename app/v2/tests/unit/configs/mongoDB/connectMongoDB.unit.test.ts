@@ -1,6 +1,6 @@
 
 import mongoose from "mongoose";
-import { connectMongoDB } from '../mongoDB';
+import { connectMongoDB } from '../../../../src/configs/mongoDB';
 
 
 // app/v2/src/configs/mongoDB.test.ts

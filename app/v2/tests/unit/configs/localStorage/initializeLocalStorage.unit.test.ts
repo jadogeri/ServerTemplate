@@ -1,9 +1,5 @@
 
-import { initializeLocalStorage } from '../localStorage';
-
-
-// app/v2/src/configs/localStorage.test.ts
-
+import { initializeLocalStorage } from '../../../../src/configs/localStorage';
 
 // app/v2/src/configs/localStorage.test.ts
 describe('initializeLocalStorage() initializeLocalStorage method', () => {
