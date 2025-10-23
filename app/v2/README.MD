@@ -133,10 +133,10 @@ The system follows a **three-tier architecture**:
 - **Plugins**: Early AI
 - **Container**: Docker
 - **Security**: JSON Web Token (JWT), Bcrypt and Nanoid
-- **Hosting**: Render.com
 - **Source Control**: Git and GitHub
 - **CI/CD**: GitHub Actions
 - **Code Analsis**: SonarQube
+- **Documentation**: Postman
 
 ### **3.3 Deployment Artifacts**
 
