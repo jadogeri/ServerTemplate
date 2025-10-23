@@ -1,0 +1,233 @@
+google search -> testcontainer for testing controller typescript services and repository mongodb
+
+
+This guide provides a blueprint for using Testcontainers in a TypeScript environment to perform integration tests on a REST API, including its controller, service, and MongoDB repository. 
+Prerequisites
+Docker: Testcontainers uses the Docker daemon to spin up database containers.
+Node.js and npm: The JavaScript runtime and package manager.
+A testing framework: We will use Jest in this example, which has excellent support for asynchronous operations.
+MongoDB driver: This example uses Mongoose, a popular MongoDB object data modeling library. 
+Step 1: Install dependencies
+First, add the necessary packages to your project. 
+
+
+# For the application logic
+npm install express mongoose dotenv
+
+# For testing
+npm install --save-dev jest @types/jest ts-jest supertest @types/supertest @testcontainers/mongodb
+
+----------------------------------------------------------------------------------------------------
+Step 2: Set up Testcontainers and Jest
+A globalSetup and globalTeardown script is the most efficient way to manage a singleton Testcontainers instance for your entire test suite. 
+jest.config.js
+Create or update your Jest configuration file to use a global setup and teardown script. 
+
+
+// jest.config.js
+module.exports = {
+  preset: 'ts-jest',
+  testEnvironment: 'node',
+  globalSetup: './tests/setup.ts',
+  globalTeardown: './tests/teardown.ts',
+  testPathIgnorePatterns: ['/node_modules/', '/dist/'],
+};
+
+---------------------------------------------------------------------------------------------------------
+
+tests/setup.ts
+This script starts the MongoDB container before any tests run and stores the connection URI in a global variable for all tests to access. 
+
+
+// tests/setup.ts
+import { MongoDBContainer } from '@testcontainers/mongodb';
+import mongoose from 'mongoose';
+
+module.exports = async () => {
+  const mongoContainer = new MongoDBContainer();
+  await mongoContainer.start();
+  (global as any).__MONGO_URI__ = mongoContainer.getConnectionString();
+  (global as any).__MONGO_CONTAINER__ = mongoContainer;
+
+  // Wait for the container to become healthy and for Mongoose to connect
+  await mongoose.connect((global as any).__MONGO_URI__);
+  console.log('Test MongoDB container started and connected.');
+};
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+
+tests/teardown.ts
+This script stops and cleans up the MongoDB container after all tests are complete. 
+
+
+// tests/teardown.ts
+import mongoose from 'mongoose';
+
+module.exports = async () => {
+  await mongoose.disconnect();
+  const mongoContainer = (global as any).__MONGO_CONTAINER__;
+  if (mongoContainer) {
+    await mongoContainer.stop();
+    console.log('Test MongoDB container stopped.');
+  }
+};
+-------------------------------------------------------------------------------------------------------------------------------
+
+Step 3: Implement the application layer
+Create the repository, service, and controller for your application. We will use a simple User model. 
+src/models/user.ts
+Define the Mongoose schema for the User. 
+
+
+
+// src/models/user.ts
+import mongoose, { Document, Schema } from 'mongoose';
+
+export interface IUser extends Document {
+  name: string;
+  email: string;
+}
+
+const UserSchema: Schema = new Schema({
+  name: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
+});
+
+export const UserModel = mongoose.model<IUser>('User', UserSchema);
+
+----------------------------------------------------------------------------------------------------------------------
+
+
+src/repositories/userRepository.ts
+Create a repository to handle database interactions. 
+typescript
+
+
+// src/repositories/userRepository.ts
+import { UserModel, IUser } from '../models/user';
+
+export const findUsers = async (): Promise<IUser[]> => {
+  return UserModel.find();
+};
+
+export const createUser = async (userData: Partial<IUser>): Promise<IUser> => {
+  const newUser = new UserModel(userData);
+  return newUser.save();
+};
+--------------------------------------------------------------------------
+
+src/services/userService.ts
+Create a service that uses the repository. 
+
+
+// src/services/userService.ts
+import * as userRepository from '../repositories/userRepository';
+import { IUser } from '../models/user';
+
+export const getAllUsers = async (): Promise<IUser[]> => {
+  return userRepository.findUsers();
+};
+
+export const createNewUser = async (userData: Partial<IUser>): Promise<IUser> => {
+  return userRepository.createUser(userData);
+};
+----------------------------------------------------------------------------
+src/controllers/userController.ts
+Create an Express controller that uses the service. 
+
+
+// src/controllers/userController.ts
+import { Request, Response } from 'express';
+import * as userService from '../services/userService';
+
+export const getUsers = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const users = await userService.getAllUsers();
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).send('Internal Server Error');
+  }
+};
+
+export const createUserController = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const newUser = await userService.createNewUser(req.body);
+    res.status(201).json(newUser);
+  } catch (error) {
+    res.status(500).send('Internal Server Error');
+  }
+};
+-----------------------------------------------------------------------------------------------
+
+
+Step 4: Write integration tests
+Create a test file to verify the entire request-response cycle, from the controller to the database. 
+tests/user.test.ts
+This test file will interact with your Express application via supertest and use the Testcontainers-managed MongoDB instance. 
+
+
+
+// tests/user.test.ts
+import request from 'supertest';
+import mongoose from 'mongoose';
+import express from 'express';
+import { getUsers, createUserController } from '../src/controllers/userController';
+import { UserModel } from '../src/models/user';
+
+// Set up a minimal Express app for testing purposes
+const app = express();
+app.use(express.json());
+app.get('/users', getUsers);
+app.post('/users', createUserController);
+
+describe('User API Integration Tests', () => {
+  // Clear the database between tests to ensure isolation
+  beforeEach(async () => {
+    await UserModel.deleteMany({});
+  });
+
+  describe('GET /users', () => {
+    it('should return an empty array if no users exist', async () => {
+      const response = await request(app).get('/users');
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual([]);
+    });
+
+    it('should return a list of users', async () => {
+      const user1 = { name: 'John Doe', email: 'john@example.com' };
+      const user2 = { name: 'Jane Doe', email: 'jane@example.com' };
+      await UserModel.create(user1);
+      await UserModel.create(user2);
+
+      const response = await request(app).get('/users');
+      expect(response.status).toBe(200);
+      expect(response.body.length).toBe(2);
+      expect(response.body[0].email).toBe(user1.email);
+      expect(response.body[1].email).toBe(user2.email);
+    });
+  });
+
+  describe('POST /users', () => {
+    it('should create a new user and return it', async () => {
+      const userData = { name: 'New User', email: 'new.user@example.com' };
+      const response = await request(app).post('/users').send(userData);
+
+      expect(response.status).toBe(201);
+      expect(response.body.name).toBe(userData.name);
+      expect(response.body.email).toBe(userData.email);
+
+      const userInDb = await UserModel.findOne({ email: userData.email });
+      expect(userInDb).not.toBeNull();
+    });
+  });
+});
+---------------------------------------------------------------------------------------------------------
+
+
+Step 5: Run the tests
+Execute your tests using the Jest command. Testcontainers will automatically start and stop the MongoDB Docker container. 
+
+
+npm test
+---------------------------------------------------------------------------------------------------------------
+
