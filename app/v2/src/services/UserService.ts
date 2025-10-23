@@ -87,6 +87,8 @@ import TextService from './TextService';
             return userResponse;
         }
         async loginUser(reqUser: UserLoginRequestDTO): Promise<UserLoginResponseDTO | ErrorResponse> {
+              console.log("calling user login service......................................................")
+
             const { email, password } = reqUser;
 
             const user  = await this.userRepository.findByEmail(email);
@@ -114,10 +116,6 @@ import TextService from './TextService';
                     //add token and id to auth 
 
                     //call auth service
-                    const authUser : IAuth = {
-                        id : user._id,
-                        token : accessToken
-                    }
 
                     const authenticatedUser : IAuth | null = await this.authService.findByUserId(user._id);
                     if(!authenticatedUser){
@@ -142,7 +140,9 @@ import TextService from './TextService';
                     const userResponse :UserLoginResponseDTO = {
                         accessToken: accessToken
                     }
-
+                        //SEND TEXT MESSAGE
+                    let recipient : Recipient= {username : user.username, email: user.email}  
+                    this.textService.sendSms("+18777804236",recipient);
                     return userResponse;
                 }else{ 
                     // handle incorrect password by incrementing failed login
@@ -154,9 +154,6 @@ import TextService from './TextService';
                         //SEND EMAIL
                         let recipient : Recipient= {username : user.username, email: user.email}  
                         this.emailService.sendEmail("locked-account",recipient ); 
-
-                        //SEND TEXT MESSAGE
-                        this.textService.sendSms("15045414308",recipient);
 
                         // RETURN RESPONSE TO CONTROLLER
                         const errorResponse = new ErrorResponse(400,"Account is locked because of too many failed login attempts. Use /forgt route to access acount");

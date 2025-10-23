@@ -10,6 +10,7 @@ class TextService {
   }        
 
 sendSms = (recipientPhoneNumber : string, recipient : Recipient)=>{
+  console.log("calling phone service......................................................")
 
   twilioClient
   .messages
@@ -25,8 +26,7 @@ sendSms = (recipientPhoneNumber : string, recipient : Recipient)=>{
       console.error(`Error sending SMS: ${error}`);
     });
 
-}
- 
+} 
 }    
 
 export default TextService;

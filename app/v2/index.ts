@@ -20,6 +20,7 @@ app.use("/api/v2/users", require("./src/routes/userRoutes"));
 app.use(errorHandler);
 app.use(cors(corsOptions)) 
 
+
 app.get('/', (req: Request, res : Response) => {
   res.send({message:"home"});
 });
