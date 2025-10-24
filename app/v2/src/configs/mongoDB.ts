@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { connect } from "mongoose";
 /**
  * Connects to a MongoDB database using the provided MongoDB URL.
  * Logs the connection details upon successful connection.
@@ -12,10 +12,13 @@ export const connectMongoDB = async ( mongoURL : string) => {
 
   try {
   const connect = await mongoose.connect(mongoURL);
-  //console.log(  "Database connected: ",  connect.connection.host, connect.connection.name  );
+  console.log(  "Database connected: ",  connect.connection.host, connect.connection.name  );
+  return connect;
   } catch (err ) {
     //console.log(err);
     process.exit(1);
+  }finally{
+    
   }
     
 };

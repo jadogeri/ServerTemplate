@@ -8,7 +8,7 @@
     "test": "jest --runInBand --detectOpenHandles --colors",
     "unit": "jest --testPathPattern=unit.test.ts$ --colors",
     "integration": "jest --detectOpenHandles --testPathPattern=integration.test.ts$ --colors --watchAll --no-cache --runInBand --verbose",
-    "e2e": "jest --testPathPattern=e2e.test.ts$",
+    "e2e": "jest --testPathPattern=e2e.test.ts$ --detectOpenHandles",
     "start": "node index.ts",
     "prod": "nodemon index.ts",
     "dev": "ts-node-dev index.ts",

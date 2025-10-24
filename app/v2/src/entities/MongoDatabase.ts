@@ -2,8 +2,8 @@ import { connectMongoDB } from '../configs/mongoDB'
 
 export class MongoDatabase {
    private static _database: MongoDatabase | null = null;
-   private constructor() {
-        const dbUrl = process.env.MONGODB_URI
+   private constructor(databaseString: string) {
+        const dbUrl = databaseString;
         if(dbUrl) {
              connectMongoDB(dbUrl);
         }
@@ -15,12 +15,12 @@ export class MongoDatabase {
      * @returns {MongoDatabase} The singleton instance of MongoDatabase.
      * @throws {Error} Throws an error if the database connection fails during instantiation.
      */
-   public static getInstance() : MongoDatabase {
+   public static getInstance(connection: string) : MongoDatabase {
         if (this._database != null) {
             return this._database
         }
         else{
-            this._database = new MongoDatabase();
+            this._database = new MongoDatabase(connection);
             return this._database
         }
    }
