@@ -25,7 +25,7 @@ app.get('/', (req: Request, res : Response) => {
   res.send({message:"home"});
 });
 const mongoUri = process.env.MONGODB_URI as string
-MongoDatabase.getInstance(mongoUri);
+//MongoDatabase.getInstance(mongoUri);
 
 if (process.env.NODE_ENV !== 'test') {
   app.listen(port, ()=> {
