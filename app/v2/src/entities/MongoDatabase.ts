@@ -1,11 +1,18 @@
-import { connectMongoDB } from '../configs/mongoDB'
+import mongoose, { Connection } from 'mongoose';
+import { connectMongoDB } from '../configs/mongoDB';
+import { MongoDBContainer, StartedMongoDBContainer } from "@testcontainers/mongodb";
+require('dotenv').config({ path: process.env.NODE_ENV === 'test' ? '.test.env' : '.env' });
+
+let mongoContainer: StartedMongoDBContainer;
 
 export class MongoDatabase {
-   private static _database: MongoDatabase | null = null;
-   private constructor(databaseString: string) {
-        const dbUrl = databaseString;
+   private _database: MongoDatabase | null = null;
+   private _connection : any ;
+   public constructor() {
+        const dbUrl = process.env.MONGODB_URI
         if(dbUrl) {
-             connectMongoDB(dbUrl);
+            // this._connection = connectMongoDB(dbUrl);
+            this.connectDB()
         }
     }
 /**
@@ -15,14 +22,46 @@ export class MongoDatabase {
      * @returns {MongoDatabase} The singleton instance of MongoDatabase.
      * @throws {Error} Throws an error if the database connection fails during instantiation.
      */
-   public static getInstance(connection: string) : MongoDatabase {
+   public getInstance() : MongoDatabase {
         if (this._database != null) {
             return this._database
         }
         else{
-            this._database = new MongoDatabase(connection);
+            this._database = new MongoDatabase();
             return this._database
         }
    }
+
+   async connectDB() {
+  if (process.env.NODE_ENV === 'test') {
+    // For E2E tests, start a new MongoDB container
+    mongoContainer = await new MongoDBContainer('mongo:latest').start();
+    const uri = mongoContainer.getConnectionString();
+    await mongoose.connect(uri);
+    console.log('Connected to Testcontainers MongoDB');
+  } else {
+    // For production/development, connect using the .env file
+    await mongoose.connect(process.env.MONGODB_URI as string);
+    console.log('Connected to MongoDB');
+  }
+}
+
+async disconnectDB() {
+  await mongoose.disconnect();
+  if (mongoContainer) {
+    await mongoContainer.stop();
+  }
+}
+
+async dropCollections() {
+  if (process.env.NODE_ENV === 'test') {
+    const collections = mongoose.connection.collections;
+    for (const key in collections) {
+      const collection = collections[key];
+      await collection.deleteMany({});
+    }
+  }
+}
+
 }
 

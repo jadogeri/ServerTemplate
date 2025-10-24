@@ -24,8 +24,8 @@ app.use(cors(corsOptions))
 app.get('/', (req: Request, res : Response) => {
   res.send({message:"home"});
 });
-const mongoUri = process.env.MONGODB_URI as string
-//MongoDatabase.getInstance(mongoUri);
+const mongoDatabase = new MongoDatabase();
+//mongoDatabase.getInstance()
 
 if (process.env.NODE_ENV !== 'test') {
   app.listen(port, ()=> {
@@ -33,3 +33,4 @@ if (process.env.NODE_ENV !== 'test') {
   })
 }
 
+module.exports = app;
