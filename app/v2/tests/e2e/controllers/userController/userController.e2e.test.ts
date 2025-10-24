@@ -1,13 +1,5 @@
-// import { LocalStorage } from "node-localstorage";
-// import * as db from "../../MongoMemoryServer"
-// import { registerUserTest } from "./registerUserTest";
-// import { loginUserTest } from "./loginUserTest";
-// import { currentUserTest } from "./currentUserTest";
-// import { logoutUserTest } from "./logoutUserTest";
-// import { forgotUserTest } from "./forgotUserTest";
-// import { resetUserTest } from "./resetUserTest";
-// import {deactivateUserTest } from "./deactivateUserTest";
-const request = require('supertest'); 
+import { getController } from "../../../../src/controllers/getController";
+import request from 'supertest'; 
 import { GenericContainer, StartedTestContainer } from "testcontainers";
 import { MongoClient } from "mongodb";
 
@@ -15,23 +7,25 @@ const app = require("../../../../index")
 
 const { ObjectId } = require('mongodb');
 
+const BASE_URL= "http://localhost:6000/api/v2"
 
-class UserController {
-  usersCollection: any;
-  constructor(db: { collection: (arg0: string) => any; }) {
-    this.usersCollection = db.collection('users');
-  }
 
-  async createUser(userData: any) {
-    const result = await this.usersCollection.insertOne(userData);
-    return result.insertedId;
-  }
+// class UserController {
+//   usersCollection: any;
+//   constructor(db: { collection: (arg0: string) => any; }) {
+//     this.usersCollection = db.collection('users');
+//   }
 
-  async getUserById(id: any) {
-    const user = await this.usersCollection.findOne({ _id: new ObjectId(id) });
-    return user;
-  }
-}
+//   async createUser(userData: any) {
+//     const result = await this.usersCollection.insertOne(userData);
+//     return result.insertedId;
+//   }
+
+//   async getUserById(id: any) {
+//     const user = await this.usersCollection.findOne({ _id: new ObjectId(id) });
+//     return user;
+//   }
+// }
 
 
 let mongoContainer: StartedTestContainer;
@@ -39,7 +33,7 @@ let mongoClient: MongoClient;
 let db: any;
 
 describe('testing user e2e requests', () => {
-  let userController: UserController;
+  let userController =  getController();
     
   beforeAll(async () => {
     mongoContainer = await new GenericContainer("mongo:latest")
@@ -56,31 +50,34 @@ describe('testing user e2e requests', () => {
   beforeEach(async () => {
     // Clear the collection before each test
     await db.collection('users').deleteMany({});
-    userController = new UserController(db); // Initialize controller with the test DB
+    
   });
 
   it('should create a new user and retrieve it', async () => {
-    const userData = { name: 'John Doe', email: 'john.doe@example.com' };
+    const userData = 
+    { username: 'John1@0Doe', email: 'josephadogeridev@gmail.com',password:'J0h1n@D0e1'};
 
     // Simulate API call to create user
     const createResponse = await request(app)
-      .post('/users')
+      .post(BASE_URL + '/register')
       .send(userData)
       .expect(201); // Assuming 201 Created on success
 
     const userId = createResponse.body.id; // Get the ID from the response
 
     // Verify user in the database directly (optional, but good for E2E)
-    const storedUser = await userController.getUserById(userId);
+    const storedUser = await userController.loginUser(userId);
     expect(storedUser).toMatchObject(userData);
 
     // Simulate API call to get user
     const getResponse = await request(app)
-      .get(`/users/${userId}`)
+      .get(BASE_URL + `/login`)
+      .send(userData)
+
       .expect(200);
 
     expect(getResponse.body).toMatchObject(userData);
-  });
+  },10000);
         
     //await db.connect()
 
