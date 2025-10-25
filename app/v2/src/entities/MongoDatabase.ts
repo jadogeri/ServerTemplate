@@ -37,7 +37,10 @@ export class MongoDatabase {
     // For E2E tests, start a new MongoDB container
     mongoContainer = await new MongoDBContainer('mongo:latest').start();
     const uri = mongoContainer.getConnectionString();
-    await mongoose.connect(uri);
+    await mongoose.connect(uri, {
+        connectTimeoutMS: 60000, // Increase connection timeout to 60 seconds
+        serverSelectionTimeoutMS: 60000, // Increase server selection timeout to 60 seconds
+      });
     console.log('Connected to Testcontainers MongoDB');
   } else {
     // For production/development, connect using the .env file
