@@ -4,10 +4,11 @@ import { Recipient } from "../types/Recipient"
 import { loadTemplate } from "../tools/mail/utils/loadTemplate"
 import transportMail from "../tools/mail/utils/transportMail"
 import { EmailContext } from "../entities/EmailContext"
+import { IEmailService } from "../interfaces/IEmailService"
 
 // import { sendSms } from "../../tools/phone/sendSms";
  
-class EmailService {
+class EmailService implements IEmailService{
 
   private emailContext: EmailContext;
   constructor(){

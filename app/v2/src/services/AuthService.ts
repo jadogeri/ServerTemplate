@@ -1,37 +1,15 @@
     // src/services/user.service.ts
     import mongoose from 'mongoose';
-import { UserRegisterRequestDTO } from '../dtos/request/UserRegisterRequestDTO';
-import { UserRegisterResponseDTO } from '../dtos/response/UserRegisterResponseDTO';
-import { ErrorResponse } from '../entities/ErrorResponse';
-import { IUser } from '../interfaces/IUser';
-import UserRepository from '../repositories/UserRepository';
-import {hash} from "bcrypt";
-import { UserLoginResponseDTO } from '../dtos/response/UserLoginResponseDTO';
-import { UserLoginRequestDTO } from '../dtos/request/UserLoginRequestDTO';
-import * as bcrypt from "bcrypt";
-import * as  jwt from "jsonwebtoken";
 import { IAuth } from '../interfaces/IAuth';
-import AuthRepository from '../repositories/AuthRepository';
-import { UserForgotRequestDTO } from '../dtos/request/UserForgotRequestDTO';
-import { UserForgotResponseDTO } from '../dtos/response/UserForgotResponseDTO';
-import BcryptService from './BcryptService';
-import EmailService from './EmailService';
-import { Recipient } from '../types/Recipient';
-import { IJwtPayload } from '../interfaces/IJWTPayload';
-import { UserLogoutResponseDTO } from '../dtos/response/UserLogoutResponseDTO';
+import { IAuthService } from '../interfaces/IAuthService';
+import { IAuthRepository } from '../interfaces/IAuthRepository';
 
 
+    class AuthService implements IAuthService{
 
-
-// import { Recipient } from "../../types/Recipient";
-// import { sendEmail } from "../../tools/mail/utils/sendEmail";
-// import { sendSms } from "../../tools/phone/sendSms";
- 
-    class AuthService {
-
-        private authRepository: AuthRepository;
+        private authRepository: IAuthRepository;
         
-        constructor(authRepository: AuthRepository){
+        constructor(authRepository: IAuthRepository){
 
             this.authRepository = authRepository
         }

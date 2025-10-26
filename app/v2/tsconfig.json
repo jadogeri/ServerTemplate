@@ -111,6 +111,6 @@
   },
   "include": [
     "./**/*.ts", "./*.ts", "./**/**.*.ts","./**/**.*.ts"
-, "jest.config.ts","src/**/*.ts", "src/@types/**/*.d.ts", "tests/e2e/controllers/userController/container.e2e.tesxt.ts"  ],
+, "jest.config.ts","src/**/*.ts", "src/@types/**/*.d.ts", "tests/e2e/controllers/UserController/container.e2e.tesxt.ts"  ],
   "exclude": ["./node_modules/*","node_modules"],
 }

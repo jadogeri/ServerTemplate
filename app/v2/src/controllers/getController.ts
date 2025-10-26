@@ -7,13 +7,15 @@ import BcryptService from "../services/BcryptService";
 import AuthService from "../services/AuthService";
 import CredentialValidatorService from "../services/CredentialValidatorService";
 import TextService from "../services/TextService";
+import UserModel from "../models/UserModel";
+import AuthModel from "../models/AuthModel";
 
 export const getController = ()=>{
     const emailService = new EmailService();
     const textService = new TextService();
     const credentialValidatorService = new CredentialValidatorService();
-    const userRepository = new UserRepository();
-    const authRepository = new AuthRepository();
+    const userRepository = new UserRepository(UserModel);
+    const authRepository = new AuthRepository(AuthModel);
     const authService = new AuthService(authRepository);
 
     const bcryptService = new BcryptService();
@@ -22,3 +24,4 @@ export const getController = ()=>{
 
     return userController;
 }
+

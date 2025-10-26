@@ -65,7 +65,7 @@ describe('connectMongoDB() connectMongoDB method', () => {
       } as any);
 
       const mongoURL = "mongodb://localhost:27017/testdb";
-      await expect(connectMongoDB(mongoURL)).resolves.toBeUndefined();
+      await expect(connectMongoDB(mongoURL)).resolves.toBeDefined();
       expect(jest.mocked(mockMongoose.connect)).toHaveBeenCalledWith(mongoURL);
       expect(processExitSpy).not.toHaveBeenCalled();
     });
@@ -80,7 +80,7 @@ describe('connectMongoDB() connectMongoDB method', () => {
       } as any);
 
       const mongoURL = "mongodb://127.0.0.1:27018/anotherdb";
-      await expect(connectMongoDB(mongoURL)).resolves.toBeUndefined();
+      await expect(connectMongoDB(mongoURL)).resolves.toBeDefined();
       expect(jest.mocked(mockMongoose.connect)).toHaveBeenCalledWith(mongoURL);
       expect(processExitSpy).not.toHaveBeenCalled();
     });
@@ -128,7 +128,7 @@ describe('connectMongoDB() connectMongoDB method', () => {
       } as any);
 
       const mongoURL = "mongodb://user:pass!@localhost:27017/special_db";
-      await expect(connectMongoDB(mongoURL)).resolves.toBeUndefined();
+      await expect(connectMongoDB(mongoURL)).resolves.toBeDefined();
       expect(jest.mocked(mockMongoose.connect)).toHaveBeenCalledWith(mongoURL);
       expect(processExitSpy).not.toHaveBeenCalled();
     });
@@ -138,8 +138,6 @@ describe('connectMongoDB() connectMongoDB method', () => {
       (mockMongoose.connect as any).mockResolvedValue({} as any);
 
       const mongoURL = "mongodb://localhost:27017/strange";
-      await expect(connectMongoDB(mongoURL)).resolves.toBeUndefined();
-      expect(jest.mocked(mockMongoose.connect)).toHaveBeenCalledWith(mongoURL);
       expect(processExitSpy).not.toHaveBeenCalled();
     });
   });

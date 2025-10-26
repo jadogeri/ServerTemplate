@@ -1,9 +1,10 @@
+import { IBcryptService } from "../interfaces/IBcryptService";
 import { generateRandomUUID } from "../utils/generateRandonUUID";
 import * as bcrypt from "bcrypt";
 
 
  
-class BcryptService {
+class BcryptService implements IBcryptService{
 
   private size : number;    
   private uuid: string | null;

@@ -1,10 +1,11 @@
 
 import { Recipient } from "../types/Recipient"
 import { twilioClient, twilioPhoneNumber } from "../configs/twilio";
+import { ITextService } from "../interfaces/ITextService";
 //import { MessageInstance } from "twilio/lib/rest/api/v2010/account/message";
 
  
-class TextService {
+class TextService implements ITextService{
 
   constructor(){
   }        
