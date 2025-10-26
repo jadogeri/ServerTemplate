@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "test": "jest --runInBand --detectOpenHandles --colors",
-    "unit": "jest --testPathPattern=unit.test.ts$ --colors",
+    "test": "jest --runInBand --config=jest.config.unit.ts --detectOpenHandles --colors",
+    "unit": "jest --config=jest.config.unit.ts --testPathPattern=\"\\.unit\\.test\\.ts$\" --colors --verbose --detectOpenHandles --runInBand --forceExit",
     "integration": "jest --detectOpenHandles --testPathPattern=integration.test.ts$ --colors --watchAll --no-cache --runInBand --verbose",
     "e2e": "cross-env NODE_ENV=test jest --testPathPattern=e2e.test.ts$ ---detectOpenHandles --forceExit",
     "start": "node index.ts",

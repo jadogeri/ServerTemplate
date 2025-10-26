@@ -2,7 +2,7 @@ import { IAuth } from "../../src/interfaces/IAuth"
 import { ObjectId } from 'mongodb'; // For ES Modules
 
 
-const auths: IAuth[] = [
+export const auths: IAuth[] = [
     {
         id: new ObjectId(),
         token : "karamkauamoamr405qmoa"
@@ -25,4 +25,3 @@ const auths: IAuth[] = [
 
 ]
 
-module.exports = auths

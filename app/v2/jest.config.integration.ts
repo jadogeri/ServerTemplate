@@ -1,4 +1,3 @@
-
  import { createDefaultPreset } from "ts-jest";
 
 const tsJestTransformCfg = createDefaultPreset().transform;
@@ -10,16 +9,17 @@ export default {
     ...tsJestTransformCfg,
     "^.+\\.(js|jsx|ts|tsx)$": "babel-jest",
   },
-//   transformIgnorePatterns: ["/node_modules/(?!(@josephadogeridev/auth-credential-validator-ts)/)"],
-  globalTeardown: '<rootDir>/tests/__configurations__/global-teardown-unit.ts',
-  setupFilesAfterEnv: ['<rootDir>/tests/__configurations__/setupFilesAfterEnv-unit.ts'],
-  globalSetup: '<rootDir>/tests/__configurations__/global-setup-unit.ts',
+  transformIgnorePatterns: ["/node_modules/(?!(@josephadogeridev/auth-credential-validator-ts)/)"],
+  globalTeardown: '<rootDir>/src/tests/global-teardown-unit.ts',
+  setupFilesAfterEnv: ['<rootDir>/setup.integration.ts'],
+  globalSetup: '<rootDir>/src/tests/global-teardown.ts',
   testRunner: "jest-circus/runner",
   workerIdleMemoryLimit: "512MB",
   coveragePathIgnorePatterns: [
-      "<rootDir>/tests/"
+      "<rootDir>/src/tests/"
   ]
 
 };
 
        
+
