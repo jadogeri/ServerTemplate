@@ -65,10 +65,12 @@ function logRoutes(application: Application) {
     }
   });
 
-  console.log('Registered Routes:');
+  // console.log('Registered Routes:');
   routes.forEach((route) => {
-    console.log(`- ${route.method}: ${route.path}`);
+    //console.log(`- ${route.method}: ${route.path}`);
   });
 }
 
 export default app
+
+module.exports = app

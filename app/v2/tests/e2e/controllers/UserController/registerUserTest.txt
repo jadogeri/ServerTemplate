@@ -1,0 +1,68 @@
+import {  test, describe,  expect } from '@jest/globals';
+import request from 'supertest';
+import { users } from '../../../__mocks__/users';
+import { IUser } from '../../../../src/interfaces/IUser';
+//import app from "../../../../index"
+import * as db from '../,./../../../MongoTestServer'; // Import your database setup file
+
+const app = require("../../../../index")
+// beforeAll(async () => await db.connect());
+// afterEach(async () => await db.clearDatabase()); // Clear data after each test
+// afterAll(async () => await db.closeDatabase());
+
+export const registerUserTests = () => {
+  describe('Register User Tests', () => {
+
+    test('should create a new user', async () => {
+      const newUser = users[0]
+      const res = await request(app).post('/register').send(newUser as IUser)   
+      console.log("the value of res is ", res)
+      //add new json file to __mocks__ directory
+      console.log("response object === ", res.body)
+      //expect(res.body).toHaveProperty('id');
+      expect(res.body.failedLogins).toBe(undefined);
+      expect(res.body.email).toBe(undefined);
+
+
+      // Verify data in the database
+      // const createdUser = await getRepository(User).findOne({ where: { email: newUser.email } });
+      //expect(createdUser).toBeDefined();
+      //expect(createdUser?.name).toBe(newUser.name);
+    },6000);
+
+  /*
+    test('should reject duplicate email user accounts grafecully', async () => {
+      const newUser = users[1]
+      const res = await request(app)
+      .post('/register')
+      .send(newUser as IUser)
+      const text = JSON.parse(res.text);
+      expect(text?.title).toBe("Server Error");
+      expect(res.status).toBe(500);
+    },6000);
+
+
+
+    test('should reject duplicate username user accounts grafecully', async () => {
+      const newUser = users[2]
+      const res = await request(app)
+      .post('/users/register')
+      .send(newUser as IUser)
+      const text = JSON.parse(res.text);
+      expect(text?.title).toBe("Server Error");
+      expect(text?.message).toContain("SQLITE_CONSTRAINT");
+      expect(text?.message).toContain("UNIQUE constraint failed: user.username");
+      expect(res.status).toBe(500);
+    },6000);
+
+     */
+
+  });
+
+ 
+  
+};
+
+
+
+
