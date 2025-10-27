@@ -1,0 +1,98 @@
+//import { registerUserTest } from "./registerUserTest";
+// import { loginUserTest } from "./loginUserTest";
+// import { currentUserTest } from "./currentUserTest";
+// import { logoutUserTest } from "./logoutUserTest";
+// import { forgotUserTest } from "./forgotUserTest";
+// import { resetUserTest } from "./resetUserTest";
+// import {deactivateUserTest } from "./deactivateUserTest";
+import {  test } from '@jest/globals';
+import { users } from '../../../__mocks__/users';
+import request from "supertest";
+//const {BASE_URL}  = require("../../constants")
+import app  from "../../../../index";
+import {log } from "console"
+import { UserRegisterRequestDTO } from "../../../../src/dtos/request/UserRegisterRequestDTO";
+    import mongoose from 'mongoose';
+    import { MongoMemoryServer } from 'mongodb-memory-server';
+
+    let mongoServer: MongoMemoryServer;
+
+
+
+describe('testing user and contact api requests', () => {
+  // afterAll(async () => {
+  //   await db.closeDatabase()
+  //   await db.closeDatabase()
+  // }, 20000);
+
+    
+  // beforeAll(async () => {
+  //   log("calling before all...........................................................");
+  //   await db.connect()
+  // });
+
+  
+    beforeAll(async () => {
+      mongoServer = await MongoMemoryServer.create();
+      const mongoUri = mongoServer.getUri();
+      await mongoose.connect(mongoUri);
+    });
+
+    afterAll(async () => {
+    log("calling after all...........................................................");
+
+      await mongoose.disconnect();
+      await mongoServer.stop();
+    });
+
+
+  // beforeEach(async () => {
+    
+  //   await db.connect()
+  // });
+  // afterEach(async () => {
+  //   await db.clearDatabase()
+  // });
+
+
+  test('registers user Tesing in isolation', async () => {
+
+    try{
+
+    //   console.log(__dirname)
+    //   let path  : string = __dirname + "/../__mocks__/user.json"
+         
+
+
+      let mockObj : UserRegisterRequestDTO= {
+        username: "josephadogeridev",
+        password: "@Awolfscry1",
+        email: "josephadogeridev@gmail.com",
+        phone : "15041234567"
+      }
+      const res = await request(app).post('/api/v2/users/register')
+      
+      .set({"content-type":"application/json"})
+      .send( (JSON.stringify(mockObj)))
+
+      log("data retrieved from test == ",JSON.stringify(res))
+      const data = res.body;
+      console.log("data*********************************8 ", data)
+
+      expect(res.body.username).toBe("josephadogeridev")
+      expect(res.statusCode).toEqual(201);
+    }catch(e: unknown){
+      if(e instanceof Error){
+        console.log("message: ", e.message)
+                console.log("name: ", e.name)
+                        console.log("stack: ", e.stack)
+
+
+      }
+    }    
+ 
+  }, 10000)
+
+
+
+});

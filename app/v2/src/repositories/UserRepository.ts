@@ -1,11 +1,15 @@
-import mongoose from "mongoose";
-import User from "../models/UserModel";
+import mongoose, { Model } from "mongoose";
 import { IUser } from "../interfaces/IUser";
 import { UserRegisterRequestDTO } from "../dtos/request/UserRegisterRequestDTO";
+import { IUserRepository } from "../interfaces/IUserRepository";
 
-class UserRepository{
+class UserRepository implements IUserRepository{
 
-    constructor(){
+    private userModel:  Model<IUser>
+
+    constructor(userModel : Model<IUser>){
+
+        this.userModel = userModel;
         
     }
     /**
@@ -15,7 +19,9 @@ class UserRepository{
      * @throws Throws an error if the database query fails.
      */
     async findByEmail(email : string) {
-        return User.findOne({ email : email });
+            console.log(" calling find by email .................................................")
+
+        return this.userModel.findOne({ email : email });
     }
 
     /**
@@ -25,7 +31,7 @@ class UserRepository{
      * @throws Throws an error if the database query fails.
      */
     async findByUsername(username : string) {
-        return User.findOne({ username : username });
+        return this.userModel.findOne({ username : username });
     }
 
     /**
@@ -35,8 +41,9 @@ class UserRepository{
      * @throws Throws an error if the user creation fails due to validation or database issues.
      */
     async create(user : UserRegisterRequestDTO) {
+    console.log(" repository data .................................................")
 
-        return  User.create(user as IUser);
+        return  this.userModel.create(user as IUser);
     }
 
     /**
@@ -46,7 +53,7 @@ class UserRepository{
      * @throws MongooseError if there is an issue with the database operation.
      */
     async delete(_id :  mongoose.Types.ObjectId) {
-        return User.findByIdAndDelete(_id);
+        return this.userModel.findByIdAndDelete(_id);
     }
 
     /**
@@ -58,7 +65,7 @@ class UserRepository{
      * @throws MongooseError if the update operation fails.
      */
     async update(_id :  mongoose.Types.ObjectId, user : IUser) {
-        return User.findOneAndUpdate({ _id: _id }, {$set: user},{upsert: true});
+        return this.userModel.findOneAndUpdate({ _id: _id }, {$set: user},{upsert: true});
     }
 
         /**
@@ -68,7 +75,7 @@ class UserRepository{
      * @throws MongooseError if there is an issue with the database operation.
      */
     async remove(_id :  mongoose.Types.ObjectId) {
-    return User.findByIdAndDelete(_id);
+    return this.userModel.findByIdAndDelete(_id);
     }
 
 }

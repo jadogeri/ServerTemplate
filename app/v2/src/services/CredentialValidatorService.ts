@@ -5,11 +5,11 @@ import { UserRegisterRequestDTO } from "../dtos/request/UserRegisterRequestDTO";
 import { UserResetRequestDTO } from "../dtos/request/UserResetRequestDTO";
 import { ErrorResponse } from "../entities/ErrorResponse";
 import { ValidationResponse } from "../entities/ValidationResponse";
+import { ICredentialValidatorService } from "../interfaces/ICredentialValidatorService";
 import { IJwtPayload } from "../interfaces/IJWTPayload";
 import {isValidEmail, isValidPassword, isValidUsername, isValidatePhoneNumber} from "../utils/inputValidation"
 
-class CredentialValidatorService{
-
+class CredentialValidatorService implements ICredentialValidatorService{
 
     constructor(){
 

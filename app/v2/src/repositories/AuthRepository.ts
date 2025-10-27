@@ -1,13 +1,18 @@
-import mongoose from "mongoose";
-import Auth from "../models/AuthModel";
+import mongoose, { Model } from "mongoose";
 import { IAuth } from "../interfaces/IAuth";
+import { IAuthRepository } from "../interfaces/IAuthRepository";
 
 
-class AuthRepository{
+class AuthRepository implements IAuthRepository{
 
-  constructor(){
-      
-  }
+    private authModel:  Model<IAuth>
+
+    constructor(authModel : Model<IAuth>){
+
+        this.authModel = authModel;
+        
+    }
+
   /**
      * Retrieves an authentication record by its unique identifier.
      * @param id - The unique identifier of the authentication record (ObjectId).
@@ -15,7 +20,7 @@ class AuthRepository{
      * @throws Throws an error if the database query fails.
      */
   async findByUserId(id : mongoose.Types.ObjectId) {
-      return Auth.findOne({ id : id });
+      return this.authModel.findOne({ id : id });
     }
   /**
    * Retrieves an authentication record by the provided token.
@@ -24,7 +29,7 @@ class AuthRepository{
    * @throws Throws an error if the database query fails.
    */
   async findByToken(token : string) {
-    return Auth.findOne({ token : token });
+    return this.authModel.findOne({ token : token });
   }
 
   /**
@@ -34,7 +39,7 @@ class AuthRepository{
    * @throws Throws an error if the user creation fails due to validation or database issues.
    */
   async create(auth : IAuth) {
-    return  Auth.create(auth);
+    return  this.authModel.create(auth);
   }
 
   /**
@@ -47,7 +52,7 @@ class AuthRepository{
    */
   async update(auth : IAuth ) {
 
-      return Auth.updateOne({ id : auth.id}, // Filter
+      return this.authModel.updateOne({ id : auth.id}, // Filter
                             {$set: {token : auth.token }}, // Update
                             {upsert: true});
   }
@@ -59,7 +64,7 @@ class AuthRepository{
    * @throws MongooseError if there is an issue with the database operation.
    */
   async remove(auth : IAuth) {
-    return Auth.findOneAndDelete(auth);
+    return this.authModel.findOneAndDelete(auth);
   }
 }
 

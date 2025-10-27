@@ -4,44 +4,37 @@ import { UserRegisterRequestDTO } from '../dtos/request/UserRegisterRequestDTO';
 import { UserRegisterResponseDTO } from '../dtos/response/UserRegisterResponseDTO';
 import { ErrorResponse } from '../entities/ErrorResponse';
 import { IUser } from '../interfaces/IUser';
-import UserRepository from '../repositories/UserRepository';
 import {hash} from "bcrypt";
 import { UserLoginResponseDTO } from '../dtos/response/UserLoginResponseDTO';
 import { UserLoginRequestDTO } from '../dtos/request/UserLoginRequestDTO';
 import * as bcrypt from "bcrypt";
 import * as  jwt from "jsonwebtoken";
 import { IAuth } from '../interfaces/IAuth';
-import AuthRepository from '../repositories/AuthRepository';
 import { UserForgotRequestDTO } from '../dtos/request/UserForgotRequestDTO';
 import { UserForgotResponseDTO } from '../dtos/response/UserForgotResponseDTO';
-import BcryptService from './BcryptService';
-import EmailService from './EmailService';
 import { Recipient } from '../types/Recipient';
 import { IJwtPayload } from '../interfaces/IJWTPayload';
 import { UserLogoutResponseDTO } from '../dtos/response/UserLogoutResponseDTO';
-import AuthService from './AuthService';
 import { UserDeactivateRequestDTO } from '../dtos/request/UserDeactivateRequestDTO';
 import { UserDeactivateResponseDTO } from '../dtos/response/UserDeactivateResponseDTO';
 import { UserResetResponseDTO } from '../dtos/response/UserResetResponseDTO';
 import { UserResetRequestDTO } from '../dtos/request/UserResetRequestDTO';
-import TextService from './TextService';
+import { IUserService } from '../interfaces/IUserService';
+import { IAuthService } from '../interfaces/IAuthService';
+import { IBcryptService } from '../interfaces/IBcryptService';
+import { IEmailService } from '../interfaces/IEmailService';
+import { ITextService } from '../interfaces/ITextService';
+import { IUserRepository } from '../interfaces/IUserRepository';
 
+    class UserService implements IUserService{
 
-
-
-// import { Recipient } from "../../types/Recipient";
-// import { sendEmail } from "../../tools/mail/utils/sendEmail";
-// import { sendSms } from "../../tools/phone/sendSms";
- 
-    class UserService {
-
-        private userRepository: UserRepository;
-        private authService: AuthService;
-        private bcryptService : BcryptService;
-        private emailService: EmailService;
-        private textService: TextService;
+        private userRepository: IUserRepository;
+        private authService: IAuthService;
+        private bcryptService : IBcryptService;
+        private emailService: IEmailService;
+        private textService: ITextService;
         
-        constructor(userRepository: UserRepository, authService: AuthService, bcryptService: BcryptService, emailService: EmailService, textService: TextService){
+        constructor(userRepository: IUserRepository, authService: IAuthService, bcryptService: IBcryptService, emailService: IEmailService, textService: ITextService){
 
             this.userRepository = userRepository;
             this.authService = authService;
@@ -50,9 +43,13 @@ import TextService from './TextService';
             this.textService = textService;
         }        
         async registerUser(reqUser: UserRegisterRequestDTO): Promise<UserRegisterResponseDTO | ErrorResponse>  {
+            try{
+         console.log(" service layer data .................................................", reqUser)
 
             const { username, email, password } = reqUser;
             const userByEmailAvailable  = await this.userRepository.findByEmail(email as string);
+
+            console.log("email user: ", userByEmailAvailable)
             if (userByEmailAvailable) {
                 return new ErrorResponse(409, "Email already taken!");
             }
@@ -67,7 +64,10 @@ import TextService from './TextService';
             console.log("Hashed Password: ", hashedPassword);
             //update password with hashed password
             reqUser.password = hashedPassword;
-            const createdUser : IUser = await this.userRepository.create(reqUser)      
+            const createdUser : IUser = await this.userRepository.create(reqUser)   
+            
+                console.log(" service create data .................................................", createdUser)
+
 
             console.log("created user: " + createdUser)
             const userResponse : UserRegisterResponseDTO ={
@@ -81,10 +81,22 @@ import TextService from './TextService';
                 updatedAt: createdUser.updatedAt              
             }
             // SEND EMAIL
+            if(process.env.NODE_ENV !== "tesr"){
+         console.log("*****************************************************88")
+                  console.log("environment :", process.env.NODE_ENV)
+         console.log("*****************************************************88")
+
             let recipient : Recipient= {username : userResponse.username, email: userResponse.email}  
             this.emailService.sendEmail('register-account', recipient);
+            }
             // SEND RESPONSE
             return userResponse;
+        }catch(e: unknown){
+            console.log("error in service layer ", e)
+            return new ErrorResponse(500,"mongo error!");
+
+
+        }
         }
         async loginUser(reqUser: UserLoginRequestDTO): Promise<UserLoginResponseDTO | ErrorResponse> {
               console.log("calling user login service......................................................")

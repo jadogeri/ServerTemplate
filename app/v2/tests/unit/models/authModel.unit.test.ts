@@ -5,7 +5,7 @@ import { IAuth } from '../../../src/interfaces/IAuth';
 import { validateStringEquality, validateNotEmpty } from '../../validators';
 import { ObjectId } from 'mongodb';
 
-const auths = require("../../__mocks__/auths")
+import { auths} from "../../__mocks__/auths"
 
 describe('Auth Model', () => {
     // Create

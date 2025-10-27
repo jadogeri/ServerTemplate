@@ -7,7 +7,6 @@
 const asyncHandler = require("express-async-handler");
 import { Response, Request } from 'express';
 import { errorBroadcaster } from "../utils/errorBroadcaster";
-import UserService from '../services/UserService';
 import { UserRegisterRequestDTO } from '../dtos/request/UserRegisterRequestDTO';
 import { UserRegisterResponseDTO } from '../dtos/response/UserRegisterResponseDTO';
 import { ErrorResponse } from '../entities/ErrorResponse';
@@ -21,8 +20,10 @@ import { UserDeactivateRequestDTO } from '../dtos/request/UserDeactivateRequestD
 import { UserDeactivateResponseDTO } from '../dtos/response/UserDeactivateResponseDTO';
 import { UserResetRequestDTO } from '../dtos/request/UserResetRequestDTO';
 import { UserResetResponseDTO } from '../dtos/response/UserResetResponseDTO';
-import CredentialValidatorService from '../services/CredentialValidatorService';
 import { ValidationResponse } from '../entities/ValidationResponse';
+import { IUserService } from '../interfaces/IUserService';
+import { ICredentialValidatorService } from '../interfaces/ICredentialValidatorService';
+import { IUserController } from '../interfaces/IUserController';
 
 /**
 *@desc Current user info
@@ -30,12 +31,12 @@ import { ValidationResponse } from '../entities/ValidationResponse';
 *@access private
 */
 
-class UserController{
+class UserController implements IUserController{
 
-  private userService : UserService;
-  private credentialValidatorService: CredentialValidatorService
+  private userService : IUserService;
+  private credentialValidatorService: ICredentialValidatorService
 
-  constructor(userService: UserService, credentialValidatorService: CredentialValidatorService){
+  constructor(userService: IUserService, credentialValidatorService: ICredentialValidatorService){
 
     this.userService = userService;
     this.credentialValidatorService = credentialValidatorService;
@@ -44,8 +45,8 @@ class UserController{
   registerUser = asyncHandler(async (req: Request<{}, {}, UserRegisterRequestDTO>, res: Response) : Promise<void> => {
 
     const userRequest : UserRegisterRequestDTO = req.body 
+    console.log(" controller data .................................................")
     console.log(userRequest)
-    const { username, email, password, phone } = userRequest;
     // calling validation service
     const validation : ValidationResponse = this.credentialValidatorService.validateRegistration(userRequest);
     if(!validation.isValid()){
