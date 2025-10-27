@@ -1,1 +1,3 @@
 https://mayallo.com/unit-integration-e2e-testing-using-jest/
+
+https://stackoverflow.com/questions/79692939/jest-test-timeout-with-express-app-and-mongodb-memory-server-cannot-log-after
