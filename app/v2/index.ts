@@ -9,7 +9,7 @@ const { errorHandler } = require("./src/middlewares/errorHandler");
 const {corsOptions} = require("./src/configs/cors")
 const cors = require("cors");
 
-export const app = express();
+const app = express();
 
 const port = process.env.PORT || 6000;
 
