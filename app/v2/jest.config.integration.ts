@@ -10,13 +10,13 @@ export default {
     "^.+\\.(js|jsx|ts|tsx)$": "babel-jest",
   },
   transformIgnorePatterns: ["/node_modules/(?!(@josephadogeridev/auth-credential-validator-ts)/)"],
-  globalTeardown: '<rootDir>/src/tests/global-teardown-unit.ts',
-  setupFilesAfterEnv: ['<rootDir>/setup.integration.ts'],
-  globalSetup: '<rootDir>/src/tests/global-teardown.ts',
+  globalTeardown: '<rootDir>/tests/__configurations__/global-teardown-integration.ts',
+  setupFilesAfterEnv: ['<rootDir>/tests/__configurations__/setupFilesAfterEnv-integration.ts'],
+  globalSetup: '<rootDir>/tests/__configurations__/global-setup-integration.ts',
   testRunner: "jest-circus/runner",
   workerIdleMemoryLimit: "512MB",
   coveragePathIgnorePatterns: [
-      "<rootDir>/src/tests/"
+      "<rootDir>/tests/"
   ]
 
 };

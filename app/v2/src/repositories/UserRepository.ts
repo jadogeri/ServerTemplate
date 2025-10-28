@@ -19,7 +19,6 @@ class UserRepository implements IUserRepository{
      * @throws Throws an error if the database query fails.
      */
     async findByEmail(email : string) {
-            console.log(" calling find by email .................................................")
 
         return this.userModel.findOne({ email : email });
     }
@@ -41,7 +40,6 @@ class UserRepository implements IUserRepository{
      * @throws Throws an error if the user creation fails due to validation or database issues.
      */
     async create(user : UserRegisterRequestDTO) {
-    console.log(" repository data .................................................")
 
         return  this.userModel.create(user as IUser);
     }

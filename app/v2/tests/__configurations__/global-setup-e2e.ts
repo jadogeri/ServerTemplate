@@ -1,5 +1,5 @@
 import fs from "fs";
-export  default function globalTeardown() {
+export  default function globalSetup() {
     console.log(`running global teardown.`);
 
     const filePath =  "testDB.sqlite"

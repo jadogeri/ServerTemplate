@@ -44,12 +44,10 @@ import { IUserRepository } from '../interfaces/IUserRepository';
         }        
         async registerUser(reqUser: UserRegisterRequestDTO): Promise<UserRegisterResponseDTO | ErrorResponse>  {
             try{
-         console.log(" service layer data .................................................", reqUser)
 
             const { username, email, password } = reqUser;
             const userByEmailAvailable  = await this.userRepository.findByEmail(email as string);
 
-            console.log("email user: ", userByEmailAvailable)
             if (userByEmailAvailable) {
                 return new ErrorResponse(409, "Email already taken!");
             }
@@ -66,10 +64,6 @@ import { IUserRepository } from '../interfaces/IUserRepository';
             reqUser.password = hashedPassword;
             const createdUser : IUser = await this.userRepository.create(reqUser)   
             
-                console.log(" service create data .................................................", createdUser)
-
-
-            console.log("created user: " + createdUser)
             const userResponse : UserRegisterResponseDTO ={
                 username: createdUser.username,
                 email: createdUser.email,
@@ -80,12 +74,9 @@ import { IUserRepository } from '../interfaces/IUserRepository';
                 createdAt: createdUser.createdAt,
                 updatedAt: createdUser.updatedAt              
             }
+            // If in production environment send email
             // SEND EMAIL
-            if(process.env.NODE_ENV !== "tesr"){
-         console.log("*****************************************************88")
-                  console.log("environment :", process.env.NODE_ENV)
-         console.log("*****************************************************88")
-
+            if(process.env.NODE_ENV !== "test"){
             let recipient : Recipient= {username : userResponse.username, email: userResponse.email}  
             this.emailService.sendEmail('register-account', recipient);
             }
@@ -164,8 +155,11 @@ import { IUserRepository } from '../interfaces/IUserRepository';
                         user.isEnabled = false;
                         await this.userRepository.update(user._id, user)
                         //SEND EMAIL
-                        let recipient : Recipient= {username : user.username, email: user.email}  
-                        this.emailService.sendEmail("locked-account",recipient ); 
+                        if(process.env.NODE_ENV !== "test"){
+
+                            let recipient : Recipient= {username : user.username, email: user.email}  
+                            this.emailService.sendEmail("locked-account",recipient ); 
+                        }
 
                         // RETURN RESPONSE TO CONTROLLER
                         const errorResponse = new ErrorResponse(400,"Account is locked because of too many failed login attempts. Use /forgt route to access acount");
@@ -211,7 +205,10 @@ import { IUserRepository } from '../interfaces/IUserRepository';
                 email : user.email,
                 password : uuid
             }
-            this.emailService.sendEmail("forgot-password",recipient);
+            if(process.env.NODE_ENV !== "test"){
+
+                this.emailService.sendEmail("forgot-password",recipient);
+            }
 
             //SEND RESPONSE
             const userResponse : UserForgotResponseDTO =  {
@@ -268,7 +265,11 @@ import { IUserRepository } from '../interfaces/IUserRepository';
                 username : registeredUser.username,
                 email : email,
             }
-            this.emailService.sendEmail("forgot-password",recipient);
+
+            if(process.env.NODE_ENV !== "test"){
+
+                this.emailService.sendEmail("forgot-password",recipient);
+            }
 
             //SEND RESPONSE
             const userResponse : UserDeactivateResponseDTO = {

@@ -1,7 +1,7 @@
 import fs from 'fs';
 
 export  default function globalTeardown() {
-    console.log(`running global teardown. 2`);
+    console.log(`running global integation teardown...............................`);
 
     const filePath =  "testDB.sqlite"
 

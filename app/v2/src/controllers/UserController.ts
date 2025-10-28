@@ -45,8 +45,6 @@ class UserController implements IUserController{
   registerUser = asyncHandler(async (req: Request<{}, {}, UserRegisterRequestDTO>, res: Response) : Promise<void> => {
 
     const userRequest : UserRegisterRequestDTO = req.body 
-    console.log(" controller data .................................................")
-    console.log(userRequest)
     // calling validation service
     const validation : ValidationResponse = this.credentialValidatorService.validateRegistration(userRequest);
     if(!validation.isValid()){

@@ -22,7 +22,7 @@ class CredentialValidatorService implements ICredentialValidatorService{
             return new ValidationResponse(false, new ErrorResponse(400,"All fields are mandatory!"));
         }
         if(!isValidEmail(email as string)){
-            return new ValidationResponse(false, new ErrorResponse(400,"not a  valid email"));
+            return new ValidationResponse(false, new ErrorResponse(400,"not a valid email"));
         }
         if(!isValidUsername(username as string)){
             return new ValidationResponse(false, new ErrorResponse(400,"not a valid username"));

@@ -1,6 +1,6 @@
 
 export  default function globalSetup() {
-    console.log(`unit test - global setup............................... `);
+    console.log(`all tests - global setup............................... `);
 
 }
 

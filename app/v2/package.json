@@ -5,9 +5,10 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "test": "jest --runInBand --config=jest.config.unit.ts --detectOpenHandles --colors",
+    "test": "cross-env NODE_ENV=test jest --config=jest.config.ts --coverage  --testPathPatterns=tests/ --runInBand --colors --verbose --detectOpenHandles",
     "unit": "jest --config=jest.config.unit.ts --testPathPattern=\"\\.unit\\.test\\.ts$\" --colors --verbose --detectOpenHandles --runInBand --forceExit",
-    "integration": "jest --detectOpenHandles --testPathPattern=integration.test.ts$ --colors --watchAll --no-cache --runInBand --verbose",
+    "integration": "jest --detectOpenHandles --testPathPattern=integration.test.ts$ --colors --no-cache --runInBand --verbose",
+    "integration-old": "jest --detectOpenHandles --testPathPattern=integration.test.ts$ --colors --watchAll --no-cache --runInBand --verbose",
     "e2e": "cross-env NODE_ENV=test jest --testPathPattern=e2e.test.ts$ ---detectOpenHandles --forceExit",
     "start": "node index.ts",
     "prod": "nodemon index.ts",

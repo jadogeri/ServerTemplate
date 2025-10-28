@@ -5,7 +5,7 @@ import { users } from './__mocks__/users';
 import UserModel from '../src/models/UserModel';
 import {log} from "console"
 
-// let mongoServer: MongoMemoryServer;
+let mongoServer: MongoMemoryServer;
 
 // export const connect = async () => {
 //   log("callling connect to services: ......................................")
@@ -45,30 +45,16 @@ import {log} from "console"
 //   return db;
 // };
 
-const mongoServer = MongoMemoryServer.create();
     
 export const connect = async () => {
+  mongoServer = await MongoMemoryServer.create();
 
-   const uri = (await mongoServer).getUri();
-   log("uri: ", uri)
- 
-  //  let connection = mongoose.connect(uri, {
-  //   //    dbName: 'testDB',
-  //      // by default create in temp directory
-  //      // add more config if you need
-  //  }); 
-
-  //  return connection;
-  const db = await mongoose.createConnection(uri, {
-
-    //reconnectInterval: 5000,
-    //reconnectTries: 60
-    // add more config if you need
-  });
-  db.on(`error`, console.error.bind(console, `connection error:`));
-  db.once(`open`, function () {
+      const mongoUri = mongoServer.getUri();
+      const db = await mongoose.connect(mongoUri);
+  db.connection.on(`error`, console.error.bind(console, `connection error:`));
+  db.connection.once(`open`, function () {
     // we`re connected!
-    log(`MongoDB connected on "  ${uri}`);
+    log(`MongoDB connected on "  ${mongoUri}`);
   });
 
   return db;
@@ -81,7 +67,7 @@ export const closeDatabase = async () => {
   await mongoose.connection.dropDatabase();
   await mongoose.connection.close();
   await mongoose.disconnect()
-  await (await mongoServer).stop();
+  await mongoServer.stop();
 };
 
 export const clearDatabase = async () => {
@@ -95,6 +81,10 @@ export const clearDatabase = async () => {
 };
 
 export const seedDatabase = async () => {
+  console.log("running e2e global setup........................");
+  jest.resetAllMocks();
+  jest.restoreAllMocks();
+  jest.setTimeout(15000);
     log("callling add data to mongo memory server: ......................................")
 
   // Implement your seeding logic here
