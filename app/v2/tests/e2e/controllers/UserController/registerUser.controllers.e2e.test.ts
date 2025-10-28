@@ -29,9 +29,6 @@ describe('UserController.registerUser()  register a user', () => {
     try{
 
       const datares = await User.find();
-      console.log("data in mongo db*********************************8 ", datares)
-
-
       let mockObj : UserRegisterRequestDTO= {
         username: "josephadogeridev",
         password: "jo53phAd0@1",
@@ -45,7 +42,6 @@ describe('UserController.registerUser()  register a user', () => {
 
       log("data retrieved from test == ",JSON.stringify(res))
       const data = res.body;
-      console.log("data*********************************8 ", data)
 
       expect(res.body.username).toBe("josephadogeridev")
       expect(res.statusCode).toEqual(201);
@@ -54,7 +50,6 @@ describe('UserController.registerUser()  register a user', () => {
         console.log("message: ", e.message)
                 console.log("name: ", e.name)
                         console.log("stack: ", e.stack)
-
 
       }
     }    
@@ -68,9 +63,6 @@ describe('UserController.registerUser()  register a user', () => {
     try{
 
       const datares = await User.find();
-      console.log("data in mongo db*********************************8 ", datares)
-
-
       let mockObj : UserRegisterRequestDTO= {
         username: "josephadogeridev",
         password: "jo53phAd0@1",
@@ -83,8 +75,6 @@ describe('UserController.registerUser()  register a user', () => {
 
       log("data retrieved from test == ",JSON.stringify(res))
       const data = res.body;
-      console.log("data*********************************8 ", data)
-
       expect(res.body.username).toBe("josephadogeridev")
       expect(res.statusCode).toEqual(201);
     }catch(e: unknown){
@@ -92,8 +82,6 @@ describe('UserController.registerUser()  register a user', () => {
         console.log("message: ", e.message)
                 console.log("name: ", e.name)
                         console.log("stack: ", e.stack)
-
-
       }
     }    
  
