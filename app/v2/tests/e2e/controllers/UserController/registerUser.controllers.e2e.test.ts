@@ -1,10 +1,4 @@
-//import { registerUserTest } from "./registerUserTest";
-// import { loginUserTest } from "./loginUserTest";
-// import { currentUserTest } from "./currentUserTest";
-// import { logoutUserTest } from "./logoutUserTest";
-// import { forgotUserTest } from "./forgotUserTest";
-// import { resetUserTest } from "./resetUserTest";
-// import {deactivateUserTest } from "./deactivateUserTest";
+
 import {  test } from '@jest/globals';
 import { users } from '../../../__mocks__/users';
 import request from "supertest";
@@ -39,8 +33,6 @@ describe('UserController.registerUser()  register a user', () => {
     
       .set({"content-type":"application/json"})
       .send( (JSON.stringify(mockObj)))
-
-      log("data retrieved from test == ",JSON.stringify(res))
       const data = res.body;
 
       expect(res.body.username).toBe("josephadogeridev")
@@ -73,7 +65,6 @@ describe('UserController.registerUser()  register a user', () => {
       .set({"content-type":"application/json"})
       .send( (JSON.stringify(mockObj)))
 
-      log("data retrieved from test == ",JSON.stringify(res))
       const data = res.body;
       expect(res.body.username).toBe("josephadogeridev")
       expect(res.statusCode).toEqual(201);
@@ -118,7 +109,6 @@ describe('UserController.registerUser()  register a user', () => {
 
       .send(JSON.stringify(newUser) )
       const e = await JSON.parse(res.text)
-      console.log("error parsed ", e)
       expect(e.title).toEqual('Conflict');
       expect(e.message).toBe('Email already taken!');
       expect(e.stackTrace).toContain('Error: Email already taken!');
@@ -149,7 +139,6 @@ describe('UserController.registerUser()  register a user', () => {
       const res = await request(app)
       .post('/api/v2/users/register')
       .set({"content-type":"application/json"})
-
       .send(JSON.stringify(newUser) )
       const e = await JSON.parse(res.text)
       expect(e.title).toEqual('Validation Failed');

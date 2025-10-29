@@ -9,7 +9,7 @@
     "unit": "jest --config=jest.config.unit.ts --testPathPattern=\"\\.unit\\.test\\.ts$\" --colors --verbose --detectOpenHandles --runInBand --forceExit",
     "integration": "jest --detectOpenHandles --testPathPattern=integration.test.ts$ --colors --no-cache --runInBand --verbose",
     "integration-old": "jest --detectOpenHandles --testPathPattern=integration.test.ts$ --colors --watchAll --no-cache --runInBand --verbose",
-    "e2e": "cross-env NODE_ENV=test jest --testPathPattern=e2e.test.ts$ ---detectOpenHandles --forceExit",
+    "e2e": "cross-env NODE_ENV=test jest  --config=jest.config.e2e.ts --testPathPattern=e2e.test.ts$ --colors --verbose ---detectOpenHandles --runInBand --forceExit",
     "start": "node index.ts",
     "prod": "nodemon index.ts",
     "dev": "ts-node-dev index.ts",

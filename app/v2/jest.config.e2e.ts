@@ -12,7 +12,7 @@ export default {
   },
   transformIgnorePatterns: ["/node_modules/(?!(@josephadogeridev/auth-credential-validator-ts)/)"],
   globalTeardown: '<rootDir>/tests/__configurations__/global-teardown-e2e.ts',
-  setupFilesAfterEnv: ['<rootDir>/tests/__configurations__/setupFilesAfterEnv-e2d.ts'],
+  setupFilesAfterEnv: ['<rootDir>/tests/__configurations__/setupFilesAfterEnv-e2e.ts'],
   globalSetup: '<rootDir>/tests/__configurations__/global-setup-e2e.ts',
   testRunner: "jest-circus/runner",
   workerIdleMemoryLimit: "512MB",

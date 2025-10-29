@@ -8,7 +8,7 @@ import { UserLoginRequestDTO } from '../../../../src/dtos/request/UserLoginReque
 
   import * as db from "../../../MongoTestServer"
 
-describe('UserController.loginUser() login a user', () => {
+describe('UserController.logoutUser() logout a user', () => {
   beforeAll(async () => await db.connect());
   beforeEach(async () => await db.seedDatabase());
   afterEach(async () => await db.clearDatabase()); // Clear data after each test
@@ -16,7 +16,7 @@ describe('UserController.loginUser() login a user', () => {
   
   describe('Happy Paths',  () => {
 
-      test('should login user successfully', async () => {
+      test('should logout an authenticated user successfully', async () => {
 
     try{
 
@@ -24,13 +24,20 @@ describe('UserController.loginUser() login a user', () => {
         password : users[2].password as string,
         email: users[2].email as string
       } 
-      const res = await request(app).post('/api/v2/users/login')    
+      const loginResponse = await request(app).post('/api/v2/users/login')    
       .set({"content-type":"application/json"})
       .send( (JSON.stringify(authUser)))
-
-      const data = res.body;
-      expect(res.body.accessToken).toBeDefined();
+      //retriece token and use to logout
+      const accessToken = loginResponse.body.accessToken as string;
+      const res = await request(app).post('/api/v2/users/logout')    
+      .set({"content-type":"application/json"})
+      .set('Authorization', `Bearer ${accessToken}`)
+      expect(res.body).toBeDefined();
+      expect(res.body).toHaveProperty("message")
+      expect(res.body.message).toBe("logged out");      
       expect(res.statusCode).toEqual(200);
+
+
     }catch(e: unknown){
       if(e instanceof Error){
         console.log("message: ", e.message)
@@ -43,42 +50,11 @@ describe('UserController.loginUser() login a user', () => {
  
   }, 10000)
 
-    test('should reject missing email grafecully', async () => {
-      const authUser : UserLoginRequestDTO = {
-        password : users[2].password as string,
-        email: ""
-      } 
-      const res = await request(app)
-      .post('/api/v2/users/login')
-      .set({"content-type":"application/json"})
-      .send(JSON.stringify(authUser) )
-      const e = await JSON.parse(res.text)
-      expect(e.title).toEqual('Validation Failed');
-      expect(e.message).toBe('All fields are mandatory!');
-      expect(e.stackTrace).toContain('Error: All fields are mandatory!');
-      expect(e).toBeDefined();
-      expect(res.status).toBe(400);
-    },6000);
 
-     test('should reject missing password grafecully', async () => {
-      const authUser : UserLoginRequestDTO = {
-        password : "",
-        email: users[2].password as string,
-      } 
-      const res = await request(app)
-      .post('/api/v2/users/login')
-      .set({"content-type":"application/json"})
-
-      .send(JSON.stringify(authUser) )
-      const e = await JSON.parse(res.text)
-      expect(e.title).toEqual('Validation Failed');
-      expect(e.message).toBe('All fields are mandatory!');
-      expect(e.stackTrace).toContain('Error: All fields are mandatory!');
-      expect(e).toBeDefined();
-      expect(res.status).toBe(400);
-    },6000);
 
 })
+
+/*
   describe('Edge cases',  () => {
 
     test('should reject unregistered email gracecully', async () => {
@@ -171,6 +147,8 @@ describe('UserController.loginUser() login a user', () => {
 
 
     });
+
+    */
 
 });
 
