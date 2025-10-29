@@ -124,7 +124,6 @@ describe('UserController.registerUser()  register a user', () => {
      test('should reject duplicate email user accounts grafecully', async () => {
       const newUser = users[0]
       newUser.username = "start" + newUser.username
-      console.log("newUser: in email test ", newUser)
       const res = await request(app)
       .post('/api/v2/users/register')
       .set({"content-type":"application/json"})
@@ -139,22 +138,35 @@ describe('UserController.registerUser()  register a user', () => {
       expect(res.status).toBe(409);
     },6000);
 
-
-
-    test('should reject invalid email format grafecully', async () => {
+    test('should reject invalid email format gracecully', async () => {
       const newUser = users[0]
       newUser.email = "@email@mail.com"
-      console.log("newUser: in email test ", newUser)
       const res = await request(app)
       .post('/api/v2/users/register')
       .set({"content-type":"application/json"})
 
       .send(JSON.stringify(newUser) )
       const e = await JSON.parse(res.text)
-      console.log("error parsed ", e)
       expect(e.title).toEqual('Validation Failed');
       expect(e.message).toBe('not a valid email');
       expect(e.stackTrace).toContain('Error: not a valid email');
+      expect(e).toBeDefined();
+      expect(res.status).toBe(400);
+    },6000);
+
+
+    test('should reject invalid password format gracecully', async () => {
+      const newUser = users[1]
+      newUser.password = "yrtyhgg"
+      const res = await request(app)
+      .post('/api/v2/users/register')
+      .set({"content-type":"application/json"})
+
+      .send(JSON.stringify(newUser) )
+      const e = await JSON.parse(res.text)
+      expect(e.title).toEqual('Validation Failed');
+      expect(e.message).toBe('not a valid password');
+      expect(e.stackTrace).toContain('Error: not a valid password');
       expect(e).toBeDefined();
       expect(res.status).toBe(400);
     },6000);

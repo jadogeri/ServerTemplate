@@ -1,6 +1,5 @@
-import { Request } from "express";
 
-export interface UserLoginRequestDTO extends Request{
+export interface UserLoginRequestDTO {
     email: string;
     password : string,
 }
