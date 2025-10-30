@@ -15,13 +15,10 @@ export const validateToken = asyncHandler(async (req : IJwtPayload, res: Respons
   console.log("authheader = ", authHeader)
   
   if (!authHeader || !authHeader.startsWith("Bearer")|| !authHeader.split(" ")[1].trim()) {
-    console.log("authheader = if  ")
 
     res.status(401).json("User not authorized or token missing");
   }
   else{
-    console.log("authheader = else  ")
-
 
     token = authHeader.split(" ")[1];  
     console.log('isExpired is:', isJwtTokenExpired(token));
@@ -52,7 +49,7 @@ export const validateToken = asyncHandler(async (req : IJwtPayload, res: Respons
 
   }
 }catch(e){
-  console.log(e)
+  console.log("line 52 in middleware" + e)
 }
 });
 
