@@ -1,11 +1,11 @@
 import fs from "fs";
 export  default function globalTeardown() {
-    console.log(`running global e2e teardown..............................`);
+    //console.log(`running global e2e teardown..............................`);
 
     const filePath =  "testDB.sqlite"
     
 
-    console.log(`${filePath} was deleted successfully.`);
+    //console.log(`${filePath} was deleted successfully.`);
 }
 
 // Example usage:

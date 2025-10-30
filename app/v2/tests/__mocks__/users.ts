@@ -14,17 +14,26 @@ export const users: IUser[] = [
         "password" : "ckent@1234",
         "phone" : "01987654321"
 
-    },    {
+    },   
+     {
         "username" : "Peter1Parker",
         "email" :  "PeterParker@gmail.com",
         "password" : "sp1deyS@nse",
         "phone" : "19876543210"
 
-    },    {
+    },   
+     {
         "username" : "Tony1Stark",
         "email" :  "TonyStark@gmail.com",
         "password" : "robD0wn@yJR1",
         "phone" : "1345609879",
+
+    },   
+     {
+        username : "Hulk15mash",
+        email :  "davidbanner@gmail.com",
+        password : "fh@2fdJ1F",
+        phone : "1345609879",
 
     }
 

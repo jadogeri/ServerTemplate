@@ -45,7 +45,6 @@ class CredentialValidatorService implements ICredentialValidatorService{
 
     validateLogin(userRequest: UserLoginRequestDTO): ValidationResponse{
         const { email, password  } = userRequest;
-        console.log(userRequest)
         if (!email || !password) {
             return new ValidationResponse(false, new ErrorResponse(400,"All fields are mandatory!"));
         }

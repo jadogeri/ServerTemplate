@@ -22,7 +22,6 @@ describe('UserController.registerUser()  register a user', () => {
 
     try{
 
-      const datares = await User.find();
       let mockObj : UserRegisterRequestDTO= {
         username: "josephadogeridev",
         password: "jo53phAd0@1",
@@ -33,7 +32,6 @@ describe('UserController.registerUser()  register a user', () => {
     
       .set({"content-type":"application/json"})
       .send( (JSON.stringify(mockObj)))
-      const data = res.body;
 
       expect(res.body.username).toBe("josephadogeridev")
       expect(res.statusCode).toEqual(201);

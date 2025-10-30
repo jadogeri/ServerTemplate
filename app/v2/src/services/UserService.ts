@@ -89,9 +89,18 @@ import { IUserRepository } from '../interfaces/IUserRepository';
 
         }
         }
+/**
+     * Authenticates a user by validating their email and password, 
+     * generates an access token if successful, and handles account lockout 
+     * scenarios based on failed login attempts.
+     * 
+     * @param reqUser - The user login request containing email and password.
+     * @returns A promise that resolves to a UserLoginResponseDTO containing the access token, 
+     *          or an ErrorResponse indicating the failure reason.
+     * @throws ErrorResponse for various authentication failures, including 
+     *         non-existent email, locked accounts, and incorrect password.
+     */
         async loginUser(reqUser: UserLoginRequestDTO): Promise<UserLoginResponseDTO | ErrorResponse> {
-              console.log("calling user login service......................................................")
-
             const { email, password } = reqUser;
 
             const user  = await this.userRepository.findByEmail(email);
@@ -179,6 +188,14 @@ import { IUserRepository } from '../interfaces/IUserRepository';
             }
         }
 
+/**
+     * Handles the forgot password request by generating a new password for the user,
+     * updating the user's record in the database, and sending an email with the new password.
+     * 
+     * @param {UserForgotRequestDTO} reqUser - The request object containing the user's email.
+     * @returns {Promise<UserForgotResponseDTO | ErrorResponse>} - A promise that resolves to the response DTO containing the new password or an error response if the email is invalid.
+     * @throws {ErrorResponse} - Throws an error response if the provided email does not match any user in the database.
+     */
     async forgotUser(reqUser: UserForgotRequestDTO): Promise<UserForgotResponseDTO | ErrorResponse> {
         const { email } = reqUser;
         const user  = await this.userRepository.findByEmail(email);
@@ -221,7 +238,15 @@ import { IUserRepository } from '../interfaces/IUserRepository';
 
     }
 
+/**
+     * Logs out a user by removing their authentication token and returning a logout response.
+     * @param jwtPayload - The JWT payload containing user information and token.
+     * @returns A promise that resolves to a UserLogoutResponseDTO on successful logout or an ErrorResponse if the user is already logged out.
+     * @throws ErrorResponse if the user is not authenticated (already logged out).
+     */
     async logoutUser(jwtPayload: IJwtPayload): Promise<UserLogoutResponseDTO | ErrorResponse> {
+                      console.log("calling user logout service......................................................")
+
         const token = jwtPayload?.token 
         const {username} = jwtPayload.user
         const authenticatedUser = await this.authService.findByToken(token as string);

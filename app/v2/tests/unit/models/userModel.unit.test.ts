@@ -75,7 +75,7 @@ describe('User Model', () => {
       const foundUsers  = await User.find();
 
       //Assert
-      expect(foundUsers.length).toBe(4)
+      expect(foundUsers.length).toBe(5)
       expect(foundUsers).toBeDefined()
       
   

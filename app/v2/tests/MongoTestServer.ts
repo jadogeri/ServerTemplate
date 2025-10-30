@@ -62,7 +62,7 @@ export const connect = async () => {
 }
 
 export const closeDatabase = async () => {
-   log("callling close services: ......................................")
+   //log("callling close services: ......................................")
 
   await mongoose.connection.dropDatabase();
   await mongoose.connection.close();
@@ -71,7 +71,7 @@ export const closeDatabase = async () => {
 };
 
 export const clearDatabase = async () => {
-    log("callling clear data and services: ......................................")
+    //log("callling clear data and services: ......................................")
 
   const collections = mongoose.connection.collections;
   for (const key in collections) {
@@ -81,11 +81,11 @@ export const clearDatabase = async () => {
 };
 
 export const seedDatabase = async () => {
-  console.log("running e2e global setup........................");
+  //console.log("running e2e global setup........................");
   jest.resetAllMocks();
   jest.restoreAllMocks();
   jest.setTimeout(15000);
-    log("callling add data to mongo memory server: ......................................")
+  //log("callling add data to mongo memory server: ......................................")
 
   // Implement your seeding logic here
   // For example, create some users:

@@ -7,37 +7,50 @@ import {log } from "console"
 import { UserLoginRequestDTO } from '../../../../src/dtos/request/UserLoginRequestDTO';
 
   import * as db from "../../../MongoTestServer"
+import { UserRegisterRequestDTO } from '../../../../src/dtos/request/UserRegisterRequestDTO';
 
-describe('UserController.logoutUser() logout a user', () => {
+      let mockObj : UserRegisterRequestDTO= {
+        username: "josephadogeridev",
+        password: "jo53phAd0@1",
+        email: "josephadogeridev@gmail.com",
+        phone : "15041234567"
+      }
+describe('UserController.loginUser() login a user', () => {
   beforeAll(async () => await db.connect());
   beforeEach(async () => await db.seedDatabase());
   afterEach(async () => await db.clearDatabase()); // Clear data after each test
   afterAll(async () => await db.closeDatabase());
   
+
   describe('Happy Paths',  () => {
 
-      test('should logout an authenticated user successfully', async () => {
+
+      test('should login user successfully', async () => {
 
     try{
 
+       await request(app).post('/api/v2/users/register')    
+      .set({"content-type":"application/json"})
+      .send( (JSON.stringify(mockObj)))
+
       const authUser : UserLoginRequestDTO = {
-        password : users[2].password as string,
-        email: users[2].email as string
+        password : mockObj.password,
+        email: mockObj.email
       } 
-      const loginResponse = await request(app).post('/api/v2/users/login')    
+      const res = await request(app).post('/api/v2/users/login')    
       .set({"content-type":"application/json"})
       .send( (JSON.stringify(authUser)))
+      const {accessToken} = res.body;
+      console.log("token:::::::::::::::::::::::::::::::::::::::::::: ", accessToken);
+
       //retriece token and use to logout
-      const accessToken = loginResponse.body.accessToken as string;
-      const res = await request(app).post('/api/v2/users/logout')    
+      const logoutRes = await request(app).post('/api/v2/users/logout')    
       .set({"content-type":"application/json"})
       .set('Authorization', `Bearer ${accessToken}`)
-      expect(res.body).toBeDefined();
-      expect(res.body).toHaveProperty("message")
-      expect(res.body.message).toBe("logged out");      
-      expect(res.statusCode).toEqual(200);
-
-
+      expect(logoutRes.body).toBeDefined();
+      expect(logoutRes.body).toHaveProperty("message")
+      expect(logoutRes.body.message).toBe("Successfully logged out user josephadogeridev");      
+      expect(logoutRes.statusCode).toEqual(200);
     }catch(e: unknown){
       if(e instanceof Error){
         console.log("message: ", e.message)
@@ -53,102 +66,57 @@ describe('UserController.logoutUser() logout a user', () => {
 
 
 })
-
-/*
   describe('Edge cases',  () => {
 
-    test('should reject unregistered email gracecully', async () => {
-      const authUser : UserLoginRequestDTO = {
-        password : users[2].password as string,
-        email: "fakeemail@mail.com"
-      } 
+      test('should reject invalid token', async () => {
 
-      const res = await request(app)
-      .post('/api/v2/users/login')
+    try{
+
+       await request(app).post('/api/v2/users/register')    
       .set({"content-type":"application/json"})
-      .send(JSON.stringify(authUser) )
-      const e = await JSON.parse(res.text)
-      expect(e.title).toEqual('Validation Failed');
-      expect(e.message).toBe('email does not exist');
-      expect(e.stackTrace).toContain('Error: email does not exist');
-      expect(e).toBeDefined();
-      expect(res.status).toBe(400);
-    },6000);
+      .send( (JSON.stringify(mockObj)))
 
-
-    test('should reject invalid password format gracecully', async () => {
-      const newUser = users[1]
-      newUser.password = "yrtyhgg"
-      const res = await request(app)
-      .post('/api/v2/users/login')
+      const authUser : UserLoginRequestDTO = {
+        password : mockObj.password,
+        email: mockObj.email
+      } 
+      const res = await request(app).post('/api/v2/users/login')    
       .set({"content-type":"application/json"})
+      .send( (JSON.stringify(authUser)))
+      let accessToken = res.body.accessToken;
+      console.log("token:::::::::::::::::::::::::::::::::::::::::::: ", accessToken);
 
-      .send(JSON.stringify(newUser) )
-      const e = await JSON.parse(res.text)
-      expect(e.title).toEqual('Validation Failed');
-      expect(e.message).toBe('email or password is incorrect');
-      expect(e.stackTrace).toContain('Error: email or password is incorrect');
-      expect(e).toBeDefined();
-      expect(res.status).toBe(400);
-    },6000);
+      accessToken = accessToken + "addedscript";
 
-    test('should lock account with 3 failed login attempts', async () => {
-      const authUser : UserLoginRequestDTO = {
-        password : "invalid password",
-        email: users[2].email as string,
-      } 
-      //FIRST REQUEST
-      await request(app).post('/api/v2/users/login').set({"content-type":"application/json"})
-      .send(JSON.stringify(authUser) )
-      //SECOND REQUEST
-      await request(app).post('/api/v2/users/login').set({"content-type":"application/json"})
-      .send(JSON.stringify(authUser) )
-      //THIRD REQUEST
-      await request(app).post('/api/v2/users/login').set({"content-type":"application/json"})
-      .send(JSON.stringify(authUser) )
-      //FOURTH REQUEST
-     const res =  await request(app).post('/api/v2/users/login').set({"content-type":"application/json"})
-      .send(JSON.stringify(authUser) )
-      const e = await JSON.parse(res.text)
-      expect(e.title).toEqual('Validation Failed');
-      expect(e.message).toBe('Account is locked because of too many failed login attempts. Use /forgt route to access acount');
-      expect(e.stackTrace).toContain('Account is locked');
-      expect(e).toBeDefined();
-      expect(res.status).toBe(400);
-    },6000);
+            console.log("token:::::::::::::::::::::::::::::::::::::::::::: ", accessToken);
 
-    test('should return http response of locked account', async () => {
-      const authUser : UserLoginRequestDTO = {
-        password : "invalid password",
-        email: users[2].email as string,
-      } 
-      //FIRST REQUEST
-      await request(app).post('/api/v2/users/login').set({"content-type":"application/json"})
-      .send(JSON.stringify(authUser) )
-      //SECOND REQUEST
-      await request(app).post('/api/v2/users/login').set({"content-type":"application/json"})
-      .send(JSON.stringify(authUser) )
-      //THIRD REQUEST
-      await request(app).post('/api/v2/users/login').set({"content-type":"application/json"})
-      .send(JSON.stringify(authUser) )
-      //FOURTH REQUEST
-      await request(app).post('/api/v2/users/login').set({"content-type":"application/json"})
-      .send(JSON.stringify(authUser) )
-      //FIFTH REQUEST
-     const res =  await request(app).post('/api/v2/users/login').set({"content-type":"application/json"})
-      .send(JSON.stringify(authUser) )
-      const e = await JSON.parse(res.text)
-      expect(e.title).toEqual('Locked account');
-      expect(e.message).toBe('Account is locked, use forget account to access acount');
-      expect(e.stackTrace).toContain('Account is locked');
-      expect(e).toBeDefined();
-      expect(res.status).toBe(423);
-    },6000);
+
+      //retriece token and use to logout
+      const logoutRes = await request(app).post('/api/v2/users/logout')    
+      .set({"content-type":"application/json"})
+      .set('Authorization', `Bearer ${accessToken}`);
+
+      expect(logoutRes.error).toBeDefined();
+      expect(logoutRes.error).toContain("JsonWebTokenError");
+      expect(logoutRes.error).toContain("invalid signature");
+          expect(logoutRes.error).toHaveProperty("message")
+      expect(logoutRes.body).toHaveProperty("name")
+
+      expect(logoutRes.statusCode).toEqual(200);
+    }catch(e: unknown){
+      if(e instanceof Error){
+        console.log("message: ", e.message)
+                console.log("name: ", e.name)
+                        console.log("stack: ", e.stack)
+
+
+      }
+    }    
+ 
+  }, 10000)
 
 
     });
-
-    */
 
 });
 
