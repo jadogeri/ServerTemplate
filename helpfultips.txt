@@ -1,3 +1,8 @@
 https://mayallo.com/unit-integration-e2e-testing-using-jest/
 
 https://stackoverflow.com/questions/79692939/jest-test-timeout-with-express-app-and-mongodb-memory-server-cannot-log-after
+
+
+https://ahmedbejaoui.medium.com/implement-swagger-and-tsoa-to-an-existing-node-application-using-webpack-and-pm2-12512d32a504
+
+https://medium.com/@gavinhaynes_58103/how-to-add-a-swagger-ui-to-a-ts-expressjs-app-using-tsoa-573a2235083
