@@ -27,7 +27,7 @@ describe('UserController.loginUser() login a user', () => {
       expect(token).toBeDefined();
 
  
-  }, 20000)
+  }, 10000)
 
     test('should reject missing email grafecully', async () => {
       const authUser : UserLoginRequestDTO = {
