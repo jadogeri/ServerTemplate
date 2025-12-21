@@ -1,42 +1,41 @@
 
 
 import express,{ Application, Request, Response } from 'express';
-import MongoDatabase from './src/entities/MongoDatabase';
+// Use require for the JSON file as ES modules may have issues with static imports of JSON
+import router from './src/routes/userRoutes';
 
-const dotenv = require("dotenv")
+
+
+
+import dotenv from "dotenv";
 dotenv.config();
-const { errorHandler } = require("./src/middlewares/errorHandler");
-const {corsOptions} = require("./src/configs/cors")
-const cors = require("cors");
+import { errorHandler } from "./src/middlewares/errorHandler";
+import cors from "cors";
 import * as bodyParser from "body-parser"
+import { corsOptions } from './src/configs/cors';
 
 const app = express();
 
-const port = process.env.PORT || 6000;
-
 app.use(express.json());
 
-app.use("/api/v2/users", require("./src/routes/userRoutes"));
 
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json())
-app.use(errorHandler);
-app.use(cors(corsOptions)) 
 
+app.use(cors(corsOptions)) 
 
 
 app.get('/', (req: Request, res : Response) => {
   res.send({message:"home"});
 });
 
+app.use("/api/v2/users", router);
+
+app.use(errorHandler); //add error handler middleware as last middleware
+
+// Log all registered routes
+
 logRoutes(app)
-
-MongoDatabase.getInstance()
-
-if (process.env.NODE_ENV !== 'test') {
-  app.listen(port, ()=> {
-    console.log(`Backend is running on http://localhost:${port}`)
-  })
-}
 
 // Function to log all registered routes
 function logRoutes(application: Application) {
@@ -73,4 +72,4 @@ function logRoutes(application: Application) {
 
 export default app
 
-module.exports = app
+

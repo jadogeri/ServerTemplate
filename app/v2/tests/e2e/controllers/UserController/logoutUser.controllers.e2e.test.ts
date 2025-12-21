@@ -66,51 +66,6 @@ describe('UserController.loginUser() login a user', () => {
 
 
 })
-  describe('Edge cases',  () => {
-
-      test('should reject undefined token', async () => {
-
-    try{
-
-       await request(app).post('/api/v2/users/register')    
-      .set({"content-type":"application/json"})
-      .send( (JSON.stringify(mockObj)))
-
-      const authUser : UserLoginRequestDTO = {
-        password : mockObj.password,
-        email: mockObj.email
-      } 
-       await request(app).post('/api/v2/users/login')    
-      .set({"content-type":"application/json"})
-      .send( (JSON.stringify(authUser)))
-
-      const accessToken = undefined;
-
-            console.log("token:::::::::::::::::::::::::::::::::::::::::::: ", accessToken);
-
-
-      //retriece token and use to logout
-      const logoutRes = await request(app).post('/api/v2/users/logout')    
-      .set({"content-type":"application/json"})
-      .set('Authorization', `Bearer ${accessToken}`);
-
-      console.log("logoutRes::::::::::::::::::::::::::::::::::::: ", logoutRes.body, logoutRes.error)
-      expect(logoutRes).toBeUndefined();
-      expect(logoutRes.statusCode).toEqual(200);
-    }catch(e: unknown){
-      if(e instanceof Error){
-        console.log("message: ", e.message)
-                console.log("name: ", e.name)
-                        console.log("stack: ", e.stack)
-
-
-      }
-    }    
- 
-  }, 10000)
-
-
-    });
 
 });
 

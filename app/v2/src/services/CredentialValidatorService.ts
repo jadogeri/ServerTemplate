@@ -58,9 +58,7 @@ class CredentialValidatorService implements ICredentialValidatorService{
     }
 
     validateForgotPassword(userRequest: UserForgotRequestDTO): ValidationResponse{
-        console.log(userRequest)
         const { email } = userRequest;
-        console.log(email)
 
         if(!email){
             return new ValidationResponse(false, new ErrorResponse(400,"Email is mandatory!"));
@@ -74,9 +72,7 @@ class CredentialValidatorService implements ICredentialValidatorService{
     }
 
     validateLogout(userRequest: IJwtPayload): ValidationResponse{
-        console.log(userRequest)
         const token = userRequest.token as string
-        console.log("token==================", token)
         if(!token){ 
             return new ValidationResponse(false, new ErrorResponse(400,"field token is mandatory"));
         } 
@@ -85,7 +81,6 @@ class CredentialValidatorService implements ICredentialValidatorService{
 
     validateResetPassword(userRequest: UserResetRequestDTO): ValidationResponse{
         const { email, oldPassword, newPassword, confirmNewPassword } = userRequest;
-        console.log(email ,oldPassword, newPassword, confirmNewPassword)
         if (!email || !oldPassword || !newPassword || !confirmNewPassword) {
           return new ValidationResponse(false, new ErrorResponse(400 ,"All fields are mandatory!"));
     
@@ -106,7 +101,6 @@ class CredentialValidatorService implements ICredentialValidatorService{
     validateDeactivate(userRequest: UserDeactivateRequestDTO): ValidationResponse{
         const { email, password, confirm} : UserDeactivateRequestDTO  = userRequest
         if (!email || !password || confirm == undefined) {
-            console.log(email,password,confirm)
             return new ValidationResponse(false, new ErrorResponse(400,"All fields are mandatory!"));
         }
         if(!isValidEmail(email )){

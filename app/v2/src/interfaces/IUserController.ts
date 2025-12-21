@@ -8,6 +8,15 @@ import { IJwtPayload } from "./IJWTPayload";
     import { Request, Response }  from "express"    
 
 export interface IUserController {
+      /**
+   * GET /users/{id}
+   * @summary Retrieve a user by ID
+   * @tags Users
+   * @param {string} id - The unique ID of the user
+   * @return {object} 200 - success response - application/json
+   * @example response id, name: 'Specific User'
+   */
+  // Add explicit return type Promise<Response<User>> for clarity
 
     registerUser(req: Request<{}, {}, UserRegisterRequestDTO>, res: Response) : Promise<void>;
     
@@ -15,6 +24,15 @@ export interface IUserController {
 
     forgotUser(req: Request<{}, {}, UserForgotRequestDTO>, res: Response) : Promise<void>;
 
+      /**
+   * GET /users/{id}
+   * @summary Retrieve a user by ID
+   * @tags Users
+   * @param {string} id - The unique ID of the user
+   * @return {object} 200 - success response - application/json
+   * @example response id, name: 'Specific User'
+   */
+  // Add explicit return type Promise<Response<User>> for clarity
     currentUser (req : IJwtPayload , res: Response) : Promise<any | undefined>;
 
     logoutUser(req: Request<{}, {}, IJwtPayload>, res: Response) : Promise<void>;

@@ -41,4 +41,4 @@ router.post("/forgot", userController.forgotUser);
 
 router.delete("/deactivate",userController. deactivateUser);
 
-module.exports = router;
+export default router;

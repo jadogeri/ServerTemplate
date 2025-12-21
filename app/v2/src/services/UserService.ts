@@ -42,6 +42,16 @@ import { IUserRepository } from '../interfaces/IUserRepository';
             this.emailService = emailService;
             this.textService = textService;
         }        
+/**
+     * Registers a new user by validating the provided username and email,
+     * hashing the password, and creating a user record in the database.
+     * Sends a registration email if not in a test environment.
+     * 
+     * @param reqUser - The user registration request containing username, email, and password.
+     * @returns A promise that resolves to a UserRegisterResponseDTO or an ErrorResponse.
+     * @throws ErrorResponse with status 409 if email or username is already taken, 
+     *         or status 500 for database errors.
+     */
         async registerUser(reqUser: UserRegisterRequestDTO): Promise<UserRegisterResponseDTO | ErrorResponse>  {
             try{
 
@@ -154,7 +164,7 @@ import { IUserRepository } from '../interfaces/IUserRepository';
                     }
                         //SEND TEXT MESSAGE
                     let recipient : Recipient= {username : user.username, email: user.email}  
-                    this.textService.sendSms("+18777804236",recipient);
+                    //this.textService.sendSms("+18777804236",recipient);
                     return userResponse;
                 }else{ 
                     // handle incorrect password by incrementing failed login
@@ -268,6 +278,14 @@ import { IUserRepository } from '../interfaces/IUserRepository';
 
 
 
+/**
+     * Deactivates a user account by verifying the provided email and password,
+     * removing the user from the repository, and sending a notification email.
+     * 
+     * @param reqUser - The request object containing user email, password, and confirmation.
+     * @returns A promise that resolves to a UserDeactivateResponseDTO or an ErrorResponse.
+     * @throws ErrorResponse if the email does not exist or the password is invalid.
+     */
     async deactivateUser(reqUser: UserDeactivateRequestDTO): Promise<UserDeactivateResponseDTO | ErrorResponse> {
             
             const {email, password, confirm} = reqUser;
@@ -305,6 +323,14 @@ import { IUserRepository } from '../interfaces/IUserRepository';
 
         }
 
+/**
+     * Resets the user's password if the provided old password is valid.
+     * Sends a confirmation email upon successful password reset.
+     * 
+     * @param reqUser - The request object containing user's email, old password, and new password.
+     * @returns A promise that resolves to a UserResetResponseDTO on success or an ErrorResponse on failure.
+     * @throws ErrorResponse if the email is invalid or the old password does not match.
+     */
         async resetUser(reqUser: UserResetRequestDTO): Promise<UserResetResponseDTO | ErrorResponse> {
             const { email, oldPassword, newPassword } = reqUser;
 

@@ -42,6 +42,14 @@ class UserController implements IUserController{
     this.credentialValidatorService = credentialValidatorService;
   }
 
+    /**
+   * GET /users/{id}
+   * @summary Retrieve a user by ID
+   * @tags Users
+   * @param {string} id - The unique ID of the user
+   * @return {object} 200 - success response - application/json
+   * @example response id, name: 'Specific User'
+   */
   registerUser = asyncHandler(async (req: Request<{}, {}, UserRegisterRequestDTO>, res: Response) : Promise<void> => {
 
     const userRequest : UserRegisterRequestDTO = req.body 
@@ -62,6 +70,14 @@ class UserController implements IUserController{
     }
   });
 
+    /**
+   * GET /users/{id}
+   * @summary Retrieve a user by ID
+   * @tags Users
+   * @param {string} id - The unique ID of the user
+   * @return {object} 200 - success response - application/json
+   * @example response id, name: 'Specific User'
+   */
   loginUser = asyncHandler(async (req: Request<{}, {}, UserLoginRequestDTO>, res: Response): Promise<void>  => {
     const userRequest : UserLoginRequestDTO = req.body 
 

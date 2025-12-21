@@ -14,6 +14,7 @@ import { IAuthRepository } from '../interfaces/IAuthRepository';
             this.authRepository = authRepository
         }
 
+
     async findByUserId(userID: mongoose.Types.ObjectId): Promise<IAuth| null>{
 
       return await this.authRepository.findByUserId(userID);
@@ -42,6 +43,12 @@ import { IAuthRepository } from '../interfaces/IAuthRepository';
       return await this.authRepository.findByToken(token)
     }
 
+/**
+     * Removes the authentication token from the repository.
+     * @param token - The authentication token to be removed.
+     * @returns A promise that resolves to the result of the removal operation.
+     * @throws Throws an error if the removal operation fails.
+     */
     async remove(token: string){
       const auth : IAuth = {
         token : token
@@ -50,6 +57,12 @@ import { IAuthRepository } from '../interfaces/IAuthRepository';
       return await this.authRepository.remove(auth)
     }
 
+/**
+   * Removes an authentication record by the specified user ID.
+   * @param userID - The ObjectId of the user whose authentication record is to be removed.
+   * @returns A promise that resolves to the result of the removal operation.
+   * @throws Throws an error if the removal operation fails.
+   */
     async removeByUserID(userID: mongoose.Types.ObjectId){
       const auth : IAuth = {
         id : userID

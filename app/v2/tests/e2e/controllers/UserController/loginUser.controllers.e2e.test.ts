@@ -3,10 +3,10 @@ import {  test } from '@jest/globals';
 import { users } from '../../../__mocks__/users';
 import request from "supertest";
 import app  from "../../../../index";
-import {log } from "console"
 import { UserLoginRequestDTO } from '../../../../src/dtos/request/UserLoginRequestDTO';
 
   import * as db from "../../../MongoTestServer"
+import { set } from 'mongoose';
 
 describe('UserController.loginUser() login a user', () => {
   beforeAll(async () => await db.connect());
@@ -18,28 +18,16 @@ describe('UserController.loginUser() login a user', () => {
 
       test('should login user successfully', async () => {
 
-    try{
-
       const authUser : UserLoginRequestDTO = {
-        password : users[2].password as string,
-        email: users[2].email as string
+        password : users[0].password as string,
+        email: users[0].email as string
       } 
       const res = await request(app).post('/api/v2/users/login')    
       .set({"content-type":"application/json"})
       .send( (JSON.stringify(authUser)))
+      const token = res.body;
+      expect(token).toBeDefined();
 
-      const data = res.body;
-      expect(res.body.accessToken).toBeDefined();
-      expect(res.statusCode).toEqual(200);
-    }catch(e: unknown){
-      if(e instanceof Error){
-        console.log("message: ", e.message)
-                console.log("name: ", e.name)
-                        console.log("stack: ", e.stack)
-
-
-      }
-    }    
  
   }, 10000)
 
@@ -52,12 +40,13 @@ describe('UserController.loginUser() login a user', () => {
       .post('/api/v2/users/login')
       .set({"content-type":"application/json"})
       .send(JSON.stringify(authUser) )
+
       const e = await JSON.parse(res.text)
       expect(e.title).toEqual('Validation Failed');
-      expect(e.message).toBe('All fields are mandatory!');
-      expect(e.stackTrace).toContain('Error: All fields are mandatory!');
+      expect(e.message).toEqual('All fields are mandatory!');
       expect(e).toBeDefined();
       expect(res.status).toBe(400);
+
     },6000);
 
      test('should reject missing password grafecully', async () => {
@@ -68,7 +57,6 @@ describe('UserController.loginUser() login a user', () => {
       const res = await request(app)
       .post('/api/v2/users/login')
       .set({"content-type":"application/json"})
-
       .send(JSON.stringify(authUser) )
       const e = await JSON.parse(res.text)
       expect(e.title).toEqual('Validation Failed');

@@ -4,11 +4,11 @@ import { users } from '../../../__mocks__/users';
 import request from "supertest";
 //const {BASE_URL}  = require("../../constants")
 import app  from "../../../../index";
-import {log } from "console"
 import { UserRegisterRequestDTO } from "../../../../src/dtos/request/UserRegisterRequestDTO";
 
   import * as db from "../../../MongoTestServer"
 import User from '../../../../src/models/UserModel';
+import { IUser } from '../../../../src/interfaces/IUser';
 
 describe('UserController.registerUser()  register a user', () => {
   beforeAll(async () => await db.connect());
@@ -38,8 +38,8 @@ describe('UserController.registerUser()  register a user', () => {
     }catch(e: unknown){
       if(e instanceof Error){
         console.log("message: ", e.message)
-                console.log("name: ", e.name)
-                        console.log("stack: ", e.stack)
+        console.log("name: ", e.name)
+        console.log("stack: ", e.stack)
 
       }
     }    
@@ -63,14 +63,13 @@ describe('UserController.registerUser()  register a user', () => {
       .set({"content-type":"application/json"})
       .send( (JSON.stringify(mockObj)))
 
-      const data = res.body;
       expect(res.body.username).toBe("josephadogeridev")
       expect(res.statusCode).toEqual(201);
     }catch(e: unknown){
       if(e instanceof Error){
         console.log("message: ", e.message)
-                console.log("name: ", e.name)
-                        console.log("stack: ", e.stack)
+        console.log("name: ", e.name)
+        console.log("stack: ", e.stack)
       }
     }    
  
@@ -81,16 +80,19 @@ describe('UserController.registerUser()  register a user', () => {
   describe('Edge cases',  () => {
 
     test('should reject duplicate username user accounts grafecully', async () => {
-      const newUser = users[0]
-      newUser.email = "start" + newUser.email
-            // console.log("newUser: in username test ", newUser)
+      const newUser : IUser = {
+        username: users[0].username,
+          password: users[0].password,
+          email: "start" + users[0].email,
+          phone : "15041234567"
+        
+      } 
 
       const res = await request(app)
       .post('/api/v2/users/register')
       .set({"content-type":"application/json"})
       .send(JSON.stringify(newUser) )
       const e = await JSON.parse(res.text)
-      // console.log("error parsed ", e)
       expect(e.title).toEqual('Conflict');
       expect(e.message).toBe('Username already taken!');
       expect(e.stackTrace).toContain('Error: Username already taken!');
@@ -99,8 +101,13 @@ describe('UserController.registerUser()  register a user', () => {
     },6000);
 
      test('should reject duplicate email user accounts grafecully', async () => {
-      const newUser = users[0]
-      newUser.username = "start" + newUser.username
+        const newUser : IUser = {
+        username: "start" + users[0].username,
+          password: users[0].password,
+          email: users[0].email,
+          phone : users[0].phone
+        
+      } 
       const res = await request(app)
       .post('/api/v2/users/register')
       .set({"content-type":"application/json"})
@@ -115,8 +122,13 @@ describe('UserController.registerUser()  register a user', () => {
     },6000);
 
     test('should reject invalid email format gracecully', async () => {
-      const newUser = users[0]
-      newUser.email = "@email@mail.com"
+        const newUser : IUser = {
+        username: users[0].username,
+          password: users[0].password,
+          email: "@email@mail.com",
+          phone : users[0].phone
+        
+      } 
       const res = await request(app)
       .post('/api/v2/users/register')
       .set({"content-type":"application/json"})
@@ -132,7 +144,13 @@ describe('UserController.registerUser()  register a user', () => {
 
 
     test('should reject invalid password format gracecully', async () => {
-      const newUser = users[1]
+        const newUser : IUser = {
+        username: users[0].username,
+          password: "yrtyhgg",
+          email: users[0].email,
+          phone : users[0].phone
+        
+      } 
       newUser.password = "yrtyhgg"
       const res = await request(app)
       .post('/api/v2/users/register')

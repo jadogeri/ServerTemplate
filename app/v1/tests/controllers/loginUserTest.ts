@@ -1,4 +1,4 @@
-import {  test } from '@jest/globals';
+import {  expect, test } from '@jest/globals';
 const request = require('supertest');
 const {BASE_URL}  = require("../constants")
 
