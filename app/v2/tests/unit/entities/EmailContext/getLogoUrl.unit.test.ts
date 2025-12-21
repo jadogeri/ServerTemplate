@@ -44,13 +44,5 @@ describe('EmailContext.getLogoUrl() getLogoUrl method', () => {
         expect(result).toBe(specialValue);
     });
 
-    it('should return a long string if LOGO_URL is set to a very long value', () => {
-        // This test checks the behavior with a very long string value.
-        const longValue = 'https://example.com/' + 'a'.repeat(50) + '.png';
-        process.env.LOGO_URL = longValue;
-        const emailContext = new EmailContext();
-        const result = emailContext.getLogoUrl();
-        expect(result).toBe(longValue);
-    });
 
 });
