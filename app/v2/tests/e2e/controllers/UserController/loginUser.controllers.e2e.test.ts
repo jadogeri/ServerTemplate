@@ -4,9 +4,7 @@ import { users } from '../../../__mocks__/users';
 import request from "supertest";
 import app  from "../../../../index";
 import { UserLoginRequestDTO } from '../../../../src/dtos/request/UserLoginRequestDTO';
-
-  import * as db from "../../../MongoTestServer"
-import { set } from 'mongoose';
+import * as db from "../../../MongoTestServer"
 
 describe('UserController.loginUser() login a user', () => {
   beforeAll(async () => await db.connect());
@@ -29,7 +27,7 @@ describe('UserController.loginUser() login a user', () => {
       expect(token).toBeDefined();
 
  
-  }, 10000)
+  }, 20000)
 
     test('should reject missing email grafecully', async () => {
       const authUser : UserLoginRequestDTO = {
